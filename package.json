@@ -4,8 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && cp dist/fbmini/browser/* docs/",
+    "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "deploy": "ng build && cp dist/fbmini/browser/* docs/ && git add . && git commit && git push",
     "test": "ng test"
   },
   "private": true,
