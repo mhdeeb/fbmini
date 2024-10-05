@@ -1,0 +1,6 @@
+@fbmini.Server_HostAddress = https://localhost:4200
+
+GET {{fbmini.Server_HostAddress}}/api/Test
+Accept: application/json
+
+###

@@ -1,0 +1,25 @@
+/* app.component.css */
+
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+button {
+  width: 100%;
+  margin-top: 16px;
+}
+
+table {
+    overflow-y: auto;
+    height: 500px;
+    display: block;
+}

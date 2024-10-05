@@ -1,0 +1,30 @@
+<!-- app.component.html -->
+
+<div class="form-container">
+  <form [formGroup]="basicForm" (ngSubmit)="onSubmit()">
+    <!-- Name Input -->
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Enter Name" formControlName="name">
+      <mat-error *ngIf="basicForm.get('name')?.hasError('required')">Name is required</mat-error>
+    </mat-form-field>
+
+    <!-- Submit Button -->
+    <button mat-raised-button color="primary" type="submit" [disabled]="basicForm.invalid">Submit</button>
+  </form>
+
+  <table *ngIf="db">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let d of db">
+            <td>{{ d.id }}</td>
+            <td>{{ d.name }}</td>
+        </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/app.component.css"],
-  "sourcesContent": [".main {\r\n  background: seagreen;\r\n}\r\n"],
-  "mappings": ";AAAA,CAAC;AACC,cAAY;AACd;",
-  "names": []
-}
