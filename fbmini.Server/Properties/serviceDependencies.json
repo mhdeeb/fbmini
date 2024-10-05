@@ -4,12 +4,17 @@
       "type": "secrets",
       "dynamicId": null
     },
-    "mssql1": {
-      "type": "mssql",
-      "connectionId": "ConnectionStrings:fbminiServerContext1"
-    },
     "apis1": {
       "type": "apis"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:fbminiServerContext2"
+    },
+    "secrets2": {
+      "type": "secrets",
+      "connectionId": "VaultUri",
+      "dynamicId": null
     }
   }
 }
