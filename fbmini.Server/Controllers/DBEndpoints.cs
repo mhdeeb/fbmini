@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.OpenApi;
-using fbmini.Server;
 using fbmini.Server.Data;
 namespace fbmini.Server.Controllers;
 
@@ -59,6 +57,15 @@ public static class DBEndpoints
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
         .WithName("DeleteDB")
+        .WithOpenApi();
+
+        group = routes.MapGroup("/api/Products").WithTags(nameof(Products));
+
+        group.MapGet("/", async (fbminiServerContext db) =>
+        {
+            return await db.Products.ToListAsync();
+        })
+        .WithName("GetAllProducts")
         .WithOpenApi();
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using fbmini.Server;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace fbmini.Server.Data
 {
@@ -16,5 +11,6 @@ namespace fbmini.Server.Data
 
         public DbSet<fbmini.Server.Test> Test { get; set; } = default!;
         public DbSet<fbmini.Server.DB> DB { get; set; } = default!;
+        public DbSet<fbmini.Server.Products> Products { get; set; } = default!;
     }
 }
