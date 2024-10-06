@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
 
 builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+Console.WriteLine(builder.Configuration.GetConnectionString("fbminiServerContext"));
 builder.Services.AddDbContext<fbminiServerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("fbminiServerContext") ?? throw new InvalidOperationException("Connection string 'fbminiServerContext' not found.")));
 
