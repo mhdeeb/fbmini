@@ -1,60 +1,48 @@
-<div class="heading">
-  <h2>Login / Signup with Local Storage</h2>
-</div>
+<div class="container" [formGroup]="form">
+    <h2>{{ title }}</h2>
 
-<div class="loginsignup-container">
-  <!-- REGISTER FORM -->
-  <form *ngIf="activeForm === 'register'" (ngSubmit)="registerForm()">
-    <h2>REGISTER</h2>
-    <div class="form-group">
-      <input type="text" name="name" [(ngModel)]="registerObj.name" placeholder="Name" required>
-    </div>
-    <div class="form-group">
-      <input type="email" name="email" [(ngModel)]="registerObj.email" placeholder="Email" required>
-      <div *ngIf="emailError" class="error-message">
-        Please enter a valid email address.
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="password-wrapper">
-        <input type="{{ showPassword ? 'text' : 'password' }}" name="password" [(ngModel)]="registerObj.password" placeholder="Password" required minlength="6">
-        <i class="toggle-password" (click)="togglePasswordVisibility()">
-          {{ showPassword ? '🙈' : '👁️' }}
-        </i>
-      </div>
-      <div *ngIf="passwordError" class="error-message">
-        Password must contain at least one uppercase letter and one number.
-      </div>
-    </div>
-    <button type="submit">Register</button>
-    <p (click)="toggleForm('login')">
-      Already have an account? <span class="highlighted">LOGIN</span>
-    </p>
-  </form>
+    <form (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Email or Phone Number</mat-label>
+            <input matInput
+                   formControlName="email"
+                   placeholder="Enter Email or Phone Number" />
+            <mat-error *ngIf="form.get('email')?.hasError('required')">Email is required</mat-error>
+            <mat-error *ngIf="form.get('email')?.hasError('email')">Email needs to be valid</mat-error>
+        </mat-form-field>
 
-  <!-- LOGIN FORM -->
-  <form *ngIf="activeForm === 'login'" (ngSubmit)="loginForm()">
-    <h2>LOGIN</h2>
-    <div class="form-group">
-      <input type="email" name="email" [(ngModel)]="loginObj.email" placeholder="Email" required>
-      <div *ngIf="emailError" class="error-message">
-        Please enter a valid email address.
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="password-wrapper">
-        <input type="{{ showPassword ? 'text' : 'password' }}" name="password" [(ngModel)]="loginObj.password" placeholder="Password" required>
-        <i class="toggle-password" (click)="togglePasswordVisibility()">
-          {{ showPassword ? '🙈' : '👁️' }}
-        </i>
-      </div>
-      <div *ngIf="passwordError" class="error-message">
-        Password must contain at least one uppercase letter and one number.
-      </div>
-    </div>
-    <button type="submit">Login</button>
-    <p (click)="toggleForm('register')">
-      Don't have an account? <span class="highlighted">REGISTER</span>
-    </p>
-  </form>
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Password</mat-label>
+            <input matInput
+                   [type]="showPassword ? 'text' : 'password'"
+                   placeholder="Enter Password"
+                   formControlName="password" />
+            <mat-error *ngIf="form.get('password')?.hasError('required')">Password is required</mat-error>
+            <mat-error *ngIf="form.get('password')?.hasError('pattern')">
+                Password needs to be valid:
+                <ul>
+                    <li *ngIf="form.get('password')?.errors?.['pattern']['count']">count must be above 8</li>
+                    <li *ngIf="form.get('password')?.errors?.['pattern']['number']">must contain number</li>
+                    <li *ngIf="form.get('password')?.errors?.['pattern']['special']">must contain a special character</li>
+                    <li *ngIf="form.get('password')?.errors?.['pattern']['upper']">must contain an upper character</li>
+                    <li *ngIf="form.get('password')?.errors?.['pattern']['lower']">must contain a lower character</li>
+                </ul>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-checkbox [checked]="showPassword"
+                      (change)="showPassword = !showPassword">
+            Show Password
+        </mat-checkbox>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+            Sign In
+        </button>
+        <button mat-raised-button color="primary" type="button" (click)="check()">
+            Check
+        </button>
+        <p id="toggleForm">
+            <span class="link" id="toggleLink">Sign Up</span>
+        </p>
+    </form>
 </div>

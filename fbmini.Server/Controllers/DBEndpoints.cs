@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.HttpResults;
-using fbmini.Server.Data;
+using fbmini.Server.Models;
 namespace fbmini.Server.Controllers;
 
 public static class DBEndpoints

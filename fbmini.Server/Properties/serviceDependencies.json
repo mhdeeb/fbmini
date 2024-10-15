@@ -1,19 +1,12 @@
 {
   "dependencies": {
-    "secrets1": {
-      "type": "secrets",
-      "dynamicId": null
-    },
-    "apis1": {
-      "type": "apis"
-    },
-    "mssql2": {
-      "type": "mssql",
-      "connectionId": "ConnectionStrings:fbminiServerContext2"
-    },
-    "secrets2": {
+    "secrets": {
       "type": "secrets",
       "connectionId": "VaultUri",
+      "dynamicId": null
+    },
+    "secrets1": {
+      "type": "secrets",
       "dynamicId": null
     }
   }

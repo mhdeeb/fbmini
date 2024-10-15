@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using fbmini.Server.Data;
 using fbmini.Server.Controllers;
 using Azure.Identity;
+using fbmini.Server.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

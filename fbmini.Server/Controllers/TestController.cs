@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using fbmini.Server.Models;
 
 namespace fbmini.Server.Controllers
 {

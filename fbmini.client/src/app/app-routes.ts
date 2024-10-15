@@ -7,6 +7,10 @@ import { FormComponent } from '../components/form/form.component';
 export const routes: Routes = [
   {
     path: '',
+    component: LoginSignupComponent
+  },
+  {
+    path: '',
     component: LayoutComponent,
     children:
       [
@@ -15,10 +19,6 @@ export const routes: Routes = [
           component: DashboardComponent
         }
       ]
-  },
-  {
-    path: 'loginsignup',
-    component: LoginSignupComponent
   },
   {
     path: 'form',

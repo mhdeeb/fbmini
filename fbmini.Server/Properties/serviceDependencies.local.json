@@ -1,21 +1,14 @@
 {
   "dependencies": {
-    "secrets1": {
-      "type": "secrets.user",
-      "dynamicId": null
-    },
-    "mssql2": {
-      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ServiceLinker/locations/canadacentral/connectors/ConnectionStringsfbminiServerContext2_3E378484C6",
-      "secretStore": "AzureKeyVault",
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/fbmini/databases/fbmini-database",
-      "type": "mssql.azure",
-      "connectionId": "ConnectionStrings:fbminiServerContext2"
-    },
-    "secrets2": {
+    "secrets": {
       "secretStore": null,
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/fbminiServervault",
       "type": "secrets.keyVault",
       "connectionId": "VaultUri",
+      "dynamicId": null
+    },
+    "secrets1": {
+      "type": "secrets.user",
       "dynamicId": null
     }
   }

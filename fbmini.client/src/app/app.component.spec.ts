@@ -28,7 +28,7 @@ describe('AppComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should retrieve weather forecasts from the server', () => {
+  it('should retrieve weather forecasts from the Server', () => {
     const mockForecasts = [
       { date: '2021-10-01', temperatureC: 20, temperatureF: 68, summary: 'Mild' },
       { date: '2021-10-02', temperatureC: 25, temperatureF: 77, summary: 'Warm' }

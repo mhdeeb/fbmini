@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "fbmini.client": {
+    "fbmini.Client": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/fbmini.client",
+            "outputPath": "dist/fbmini.Client",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "fbmini.client:build:production"
+              "buildTarget": "fbmini.Client:build:production"
             },
             "development": {
-              "buildTarget": "fbmini.client:build:development"
+              "buildTarget": "fbmini.Client:build:development"
             }
           },
           "defaultConfiguration": "development",

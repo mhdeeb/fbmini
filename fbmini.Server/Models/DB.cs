@@ -1,4 +1,4 @@
-﻿namespace fbmini.Server
+﻿namespace fbmini.Server.Models
 {
     public class DB
     {
