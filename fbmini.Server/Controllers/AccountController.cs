@@ -1,6 +1,7 @@
 ﻿using fbmini.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -22,7 +23,7 @@ public class AccountController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var user = new User { UserName = model.Email, Email = model.Password };
+        var user = new User { UserName = model.Email, Email = model.Email };
         var result = await _userManager.CreateAsync(user, model.Password);
 
         if (result.Succeeded)
@@ -54,6 +55,14 @@ public class AccountController : ControllerBase
     {
         await _signInManager.SignOutAsync();
         return Ok(new { Message = "Logged out successfully" });
+    }
+
+    [HttpGet("check")]
+    public IActionResult AuthCheck()
+    {
+        if (_signInManager.IsSignedIn(User))
+            return Ok(true);
+        return Ok(false);
     }
 }
 

@@ -105,9 +105,7 @@ export class SignupComponent {
       this.form.get('password')?.value
     ).subscribe({
       next: (res) => {
-        console.log(res);
-        localStorage.setItem('loggedIn', '1');
-        this.router.navigate(['/profile']);
+        this.router.navigate(['/login']);
       },
       error: (err) => {
         console.log(err);

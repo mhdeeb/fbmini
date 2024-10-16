@@ -92,16 +92,12 @@ export class LoginComponent {
       .login(this.form.get('email')?.value, this.form.get('password')?.value)
       .subscribe({
         next: (response) => {
-          localStorage.setItem('loggedIn', '1');
           this.router.navigate(['/home']);
         },
         error: (error) => {
           console.error('Login failed', error);
         },
       });
-  }
-  check() {
-    console.log(this.form.get('password')?.errors?.['pattern']['count']);
   }
 
   onFocus(isFocused: boolean): void {

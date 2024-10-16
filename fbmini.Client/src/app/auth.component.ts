@@ -17,12 +17,12 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    localStorage.setItem('loggedIn', '0');
     return this.http.post(`/api/account/logout`, {}, { withCredentials: true });
   }
 
-  isAuthenticated(): boolean {
-    const loggedIn = localStorage.getItem('loggedIn') === '1';
-    return loggedIn;
+  isAuthenticated() {
+    return this.http.get<boolean>(`/api/account/check`, {
+      withCredentials: true,
+    });
   }
 }
