@@ -1,19 +1,18 @@
-const { Console } = require('console');
-const { env } = require('process');
+const { Console } = require("console");
+const { env } = require("process");
 
-const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
-  env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7223';
-
-console.log(target);
+const target = env.ASPNETCORE_HTTPS_PORT
+  ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}`
+  : env.ASPNETCORE_URLS
+  ? env.ASPNETCORE_URLS.split(";")[0]
+  : "https://localhost:7223";
 
 const PROXY_CONFIG = [
   {
-    context: [
-      "/api",
-    ],
+    context: ["/api"],
     target,
-    secure: false
-  }
-]
+    secure: false,
+  },
+];
 
 module.exports = PROXY_CONFIG;

@@ -5,15 +5,8 @@ namespace fbmini.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TestController : ControllerBase
+    public class TestController(ILogger<TestController> logger) : ControllerBase
     {
-        private readonly ILogger<TestController> _logger;
-
-        public TestController(ILogger<TestController> logger)
-        {
-            _logger = logger;
-        }
-
         [HttpGet(Name = "GetTest")]
         public IEnumerable<Test> Get()
         {

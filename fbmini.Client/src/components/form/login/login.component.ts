@@ -1,15 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormField, MatInputModule } from '@angular/material/input';
+import { AuthService } from '../../../app/auth.component';
+import { Router } from '@angular/router';
 
 //const uppercasePattern = /[A-Z]/;
 //const numberPattern = /[0-9]/;
 //const specialPattern = /[!@#\$%\^\&*\)\(+=._-]+/;
 //const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const passwordPattern = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
+const passwordPattern =
+  /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
 
 //type RegisterModel = {
 //  name: string;
@@ -27,8 +36,6 @@ const passwordPattern = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@
 //  Register = 'REGISTER'
 //}
 
-
-
 function validateInput(c: FormControl) {
   const COUNT_REGEX = /.{8,}/;
   const NUMBER_REGEX = /\d/;
@@ -42,17 +49,15 @@ function validateInput(c: FormControl) {
     special: !SPECIAL_REGEX.test(c.value),
     upper: !UPPER_REGEX.test(c.value),
     lower: !LOWER_REGEX.test(c.value),
-  }
+  };
 
-  for (const b of Object.values(pattern))
-    if (b) return {pattern};
- 
+  for (const b of Object.values(pattern)) if (b) return { pattern };
 
   return null;
 }
 
 @Component({
-  selector: 'app-login-signup',
+  selector: 'app-login',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -62,14 +67,20 @@ function validateInput(c: FormControl) {
     MatCheckboxModule,
     MatButtonModule,
   ],
-  templateUrl: './login-signup.component.html',
-  styleUrls: ['./login-signup.component.css']
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
 })
-export class LoginSignupComponent {
+export class LoginComponent {
   title = 'Sign In';
   form: FormGroup;
   showPassword: boolean = false;
-  constructor(private fb: FormBuilder) {
+  isInputFocused: boolean = false;
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, validateInput]],
@@ -77,10 +88,24 @@ export class LoginSignupComponent {
   }
 
   onSubmit(): void {
-    console.log("submitted")
+    this.authService
+      .login(this.form.get('email')?.value, this.form.get('password')?.value)
+      .subscribe({
+        next: (response) => {
+          localStorage.setItem('loggedIn', '1');
+          this.router.navigate(['/home']);
+        },
+        error: (error) => {
+          console.error('Login failed', error);
+        },
+      });
   }
   check() {
     console.log(this.form.get('password')?.errors?.['pattern']['count']);
+  }
+
+  onFocus(isFocused: boolean): void {
+    this.isInputFocused = isFocused;
   }
   //public Form = Form;
 

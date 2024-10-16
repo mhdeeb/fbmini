@@ -1,0 +1,78 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+  <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+    <h2 class="text-3xl font-bold mb-6 text-center">Create an Account</h2>
+    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+      <mat-form-field class="w-full">
+        <mat-label>email</mat-label>
+        <input matInput formControlName="email" placeholder="Enter email" />
+        <mat-error *ngIf="form.get('email')?.hasError('required')"
+          >email is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Enter Password"
+          formControlName="password"
+          (focus)="onFocus(true)"
+          (blur)="onFocus(false)"
+        />
+        <mat-error *ngIf="form.get('password')?.hasError('required')"
+          >Password is required</mat-error
+        >
+      </mat-form-field>
+
+      <div class="min-h-20">
+        <ul
+          class="error-list"
+          *ngIf="
+            isInputFocused &&
+            !form.get('password')?.hasError('required') &&
+            form.get('password')?.hasError('pattern')
+          "
+        >
+          <li *ngIf="form.get('password')?.errors?.['pattern']['count']">
+            count must be above 8
+          </li>
+          <li *ngIf="form.get('password')?.errors?.['pattern']['number']">
+            must contain number
+          </li>
+          <li *ngIf="form.get('password')?.errors?.['pattern']['special']">
+            must contain a special character
+          </li>
+          <li *ngIf="form.get('password')?.errors?.['pattern']['upper']">
+            must contain an upper character
+          </li>
+          <li *ngIf="form.get('password')?.errors?.['pattern']['lower']">
+            must contain a lower character
+          </li>
+        </ul>
+      </div>
+
+      <mat-checkbox
+        class="w-full"
+        [checked]="showPassword"
+        (change)="showPassword = !showPassword"
+      >
+        Show Password
+      </mat-checkbox>
+
+      <button
+        class="w-full mb-5"
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="form.invalid"
+      >
+        Sign Up
+      </button>
+
+      <a href="login" class="text-blue-600 underline hover:text-blue-400"
+        >Log In</a
+      >
+    </form>
+  </div>
+</div>

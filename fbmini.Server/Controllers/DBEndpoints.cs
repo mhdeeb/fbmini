@@ -1,11 +1,57 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.HttpResults;
 using fbmini.Server.Models;
+
 namespace fbmini.Server.Controllers;
 
 public static class DBEndpoints
 {
+    
     public static void MapDBEndpoints (this IEndpointRouteBuilder routes)
+    {
+        MapUser(routes);
+
+        MapDB(routes);
+
+        MapProducts(routes);
+    }
+
+    private static void MapUser(this IEndpointRouteBuilder routes)
+    {
+        var group = routes.MapGroup("/api/User").WithTags(nameof(User));
+
+        group.MapPost("/", async (User user, fbminiServerContext context) =>
+        {
+            bool success;
+
+            try
+            {
+                context.User.Add(user);
+                await context.SaveChangesAsync();
+                success = true;
+            } catch (Exception) {
+                success = false;
+            }
+
+            return (IResult) (success ? 
+            TypedResults.Accepted("Creation Successful"):
+            TypedResults.BadRequest("Failed to create user"));
+        })
+        .WithName("CreateUser")
+        .WithOpenApi();
+
+        //group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int id, fbminiServerContext db) =>
+        //{
+        //    var affected = await db.User
+        //        .Where(model => model.ID == id)
+        //        .ExecuteDeleteAsync();
+        //    return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
+        //})
+        //.WithName("DeleteUser")
+        //.WithOpenApi();
+    }
+
+    private static void MapDB(IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/DB").WithTags(nameof(DB));
 
@@ -44,7 +90,7 @@ public static class DBEndpoints
         {
             db.DB.Add(dB);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/DB/{dB.ID}",dB);
+            return TypedResults.Created($"/api/DB/{dB.ID}", dB);
         })
         .WithName("CreateDB")
         .WithOpenApi();
@@ -58,8 +104,11 @@ public static class DBEndpoints
         })
         .WithName("DeleteDB")
         .WithOpenApi();
+    }
 
-        group = routes.MapGroup("/api/Products").WithTags(nameof(Products));
+    private static void MapProducts(this IEndpointRouteBuilder routes)
+    {
+        var group = routes.MapGroup("/api/Products").WithTags(nameof(Products));
 
         group.MapGet("/", async (fbminiServerContext db) =>
         {
