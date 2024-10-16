@@ -19,7 +19,6 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterModel model)
     {
-        Console.WriteLine(ModelState.IsValid);
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 

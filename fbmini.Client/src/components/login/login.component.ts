@@ -87,7 +87,6 @@ export class LoginComponent {
             duration: 3000,
             panelClass: 'snack-bar',
           });
-          console.error('Login failed', error);
           dialogRef.close();
         },
         complete: () => {

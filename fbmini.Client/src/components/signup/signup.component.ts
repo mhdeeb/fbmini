@@ -101,7 +101,6 @@ export class SignupComponent {
                   duration: 3000,
                   panelClass: 'snack-bar',
                 });
-                console.error(error);
                 dialogRef.close();
               },
               complete: () => {
@@ -110,13 +109,12 @@ export class SignupComponent {
             });
         },
         error: (error: HttpErrorResponse) => {
-          this._snackBar.open(error.error.message, '', {
+          this._snackBar.open(error.error[0].description, '', {
             horizontalPosition: 'center',
             verticalPosition: 'top',
             duration: 3000,
             panelClass: 'snack-bar',
           });
-          console.log(error);
           dialogRef.close();
         },
         complete: () => {
