@@ -10,6 +10,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { routes } from './app-routes';
 import { provideHttpClient } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { provideHttpClient } from '@angular/common/http';
     provideRouter(routes),
     provideAnimations(),
     provideHttpClient(),
+    provideAnimationsAsync(),
   ],
   bootstrap: [AppComponent]
 })

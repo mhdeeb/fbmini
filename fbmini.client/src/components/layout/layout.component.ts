@@ -18,7 +18,10 @@ type User = {
   styleUrl: './layout.component.css',
 })
 export class LayoutComponent {
-  constructor(private readonly http: HttpClient, private readonly authService: AuthService) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly authService: AuthService
+  ) {}
 
   public profile: User = {
     userName: '',
@@ -28,7 +31,6 @@ export class LayoutComponent {
   listProfile() {
     this.http.get<User>('api/User').subscribe({
       next: (result) => {
-        console.log(result);
         this.profile = result;
       },
       error: (error) => {

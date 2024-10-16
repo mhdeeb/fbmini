@@ -17,8 +17,8 @@
           [type]="showPassword ? 'text' : 'password'"
           placeholder="Enter Password"
           formControlName="password"
-          (focus)="onFocus(true)"
-          (blur)="onFocus(false)"
+          (focus)="isInputFocused = true"
+          (blur)="isInputFocused = false"
         />
         <mat-error *ngIf="form.get('password')?.hasError('required')"
           >Password is required</mat-error
