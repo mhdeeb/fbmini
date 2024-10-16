@@ -1,0 +1,12 @@
+.custom-dialog-container .mat-dialog-container {
+  background: transparent;
+  box-shadow: none;
+}
+
+.backdrop-dialog-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: white;
+}

@@ -3,7 +3,9 @@ import { LayoutComponent } from '../components/layout/layout.component';
 import { LoginComponent } from '../components/login/login.component';
 import { SignupComponent } from '../components/signup/signup.component';
 import { ProfileComponent } from '../components/profile/profile.component';
-import { AuthGuard } from './AuthGuard';
+import { AuthGuard, NoAuthGuard } from './AuthGuard';
+import { BackdropComponent } from '../components/backdrop/backdrop.component';
+import { notFoundComponent } from '../components/not-found/not-found.component';
 
 export const routes: Routes = [
   {
@@ -24,9 +26,16 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+    canActivate: [NoAuthGuard],
   },
   {
     path: 'signup',
     component: SignupComponent,
+    canActivate: [NoAuthGuard],
   },
+  {
+    path: 'test',
+    component: BackdropComponent
+  },
+  { path: '**', component: notFoundComponent }
 ];

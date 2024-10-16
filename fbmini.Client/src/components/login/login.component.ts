@@ -14,6 +14,8 @@ import { AuthService } from '../../app/auth.component';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { BackdropDialogComponent } from '../backdrop/backdrop.component';
+import { MatDialog } from '@angular/material/dialog';
 
 function validateInput(c: FormControl) {
   const COUNT_REGEX = /.{8,}/;
@@ -58,7 +60,8 @@ export class LoginComponent {
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
+    public dialog: MatDialog
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -67,6 +70,10 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
+    const dialogRef = this.dialog.open(BackdropDialogComponent, {
+      disableClose: true,
+      panelClass: 'custom-dialog-container',
+    });
     this.authService
       .login(this.form.get('email')?.value, this.form.get('password')?.value)
       .subscribe({
@@ -81,7 +88,11 @@ export class LoginComponent {
             panelClass: 'snack-bar',
           });
           console.error('Login failed', error);
+          dialogRef.close();
         },
+        complete: () => {
+          dialogRef.close();
+        }
       });
   }
 }

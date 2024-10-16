@@ -22,3 +22,22 @@ export class AuthGuard implements CanActivate {
     );
   }
 }
+
+@Injectable({
+  providedIn: 'root',
+})
+export class NoAuthGuard implements CanActivate {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) { }
+  canActivate(): Observable<boolean | UrlTree> {
+    return this.authService.isAuthenticated().pipe(
+      map((response) => !(response) || this.router.createUrlTree(['/home'])),
+      catchError((error) => {
+        console.log(error);
+        return of(this.router.createUrlTree(['/login']));
+      })
+    );
+  }
+}
