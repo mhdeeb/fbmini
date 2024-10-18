@@ -3,7 +3,6 @@ import { pop_up, PopUp } from '../../utility/popup';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../auth/auth.component';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { BackdropDialogComponent } from '../backdrop/backdrop.component';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -17,7 +16,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class TestComponent {
   constructor(
     private readonly authService: AuthService,
-    private readonly router: Router,
     public dialog: MatDialog
   ) {}
   snackbar = inject(MatSnackBar);
@@ -27,6 +25,12 @@ export class TestComponent {
   }
   info() {
     pop_up(this.snackbar, 'Long Information Message', PopUp.INFO);
+  }
+  warning() {
+    pop_up(this.snackbar, 'Long Warning Message', PopUp.WARNING);
+  }
+  default() {
+    pop_up(this.snackbar, 'Long Default Message', PopUp.DEFAULT);
   }
   error() {
     pop_up(this.snackbar, 'Long Error Message!', PopUp.ERROR);

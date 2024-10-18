@@ -1,8 +1,24 @@
 <div class="h-screen">
   <div class="flex flex-col gap-5 px-20 pt-52">
     <div class="flex gap-5">
+      <button
+        mat-raised-button
+        class="grow"
+        color="primary"
+        (click)="default()"
+      >
+        Default
+      </button>
       <button mat-raised-button class="grow" color="primary" (click)="info()">
         Info
+      </button>
+      <button
+        mat-raised-button
+        class="grow"
+        color="primary"
+        (click)="warning()"
+      >
+        Warning
       </button>
       <button
         mat-raised-button

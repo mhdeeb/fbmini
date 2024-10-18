@@ -1,6 +1,8 @@
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 export enum PopUp {
+  DEFAULT = 'snack-bar--default',
+  WARNING = 'snack-bar--warning',
   ERROR = 'snack-bar--error',
   SUCCESS = 'snack-bar--success',
   INFO = 'snack-bar--info',

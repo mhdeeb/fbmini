@@ -19,7 +19,13 @@
   &.snack-bar--success {
     --mdc-snackbar-container-color: #37933c;
   }
-  &.snack-bar--info {}
+  &.snack-bar--info {
+    --mdc-snackbar-container-color: #1495db;
+  }
+  &.snack-bar--default {}
+  &.snack-bar--warning {
+    --mdc-snackbar-container-color: #e78012;
+  }
 }
 
 html {
