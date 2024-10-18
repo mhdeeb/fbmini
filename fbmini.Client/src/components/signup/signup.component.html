@@ -39,19 +39,19 @@
           "
         >
           <li *ngIf="form.get('password')?.errors?.['pattern']['count']">
-            count must be above 8
+            Must be at least 6 characters
           </li>
           <li *ngIf="form.get('password')?.errors?.['pattern']['number']">
-            must contain number
+            Must have at least one digit ('0'-'9')
           </li>
           <li *ngIf="form.get('password')?.errors?.['pattern']['special']">
-            must contain a special character
+            Must have at least one non alphanumeric character
           </li>
           <li *ngIf="form.get('password')?.errors?.['pattern']['upper']">
-            must contain an upper character
+            Must have at least one uppercase ('A'-'Z')
           </li>
           <li *ngIf="form.get('password')?.errors?.['pattern']['lower']">
-            must contain a lower character
+            Must have at least one lowercase ('a'-'z')
           </li>
         </ul>
       </div>

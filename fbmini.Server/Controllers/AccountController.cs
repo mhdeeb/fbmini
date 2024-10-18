@@ -35,6 +35,9 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
+        if (_signInManager.IsSignedIn(User))
+            return Unauthorized(new { Message = "User already logged in" });
+
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
@@ -55,7 +58,7 @@ public class AccountController : ControllerBase
         return Ok(new { Message = "Logged out successfully" });
     }
 
-    [HttpGet("check")]
+    [HttpGet("isAuth")]
     public IActionResult AuthCheck()
     {
         if (_signInManager.IsSignedIn(User))

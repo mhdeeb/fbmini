@@ -19,7 +19,7 @@ import { BackdropDialogComponent } from '../backdrop/backdrop.component';
 import { pop_up, PopUp } from '../../utility/popup';
 
 function validateInput(c: FormControl) {
-  const COUNT_REGEX = /.{8,}/;
+  const COUNT_REGEX = /.{6,}/;
   const NUMBER_REGEX = /\d/;
   const SPECIAL_REGEX = /[^A-Za-z0-9]/;
   const UPPER_REGEX = /[A-Z]/;

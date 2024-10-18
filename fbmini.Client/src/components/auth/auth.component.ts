@@ -37,7 +37,7 @@ export class AuthService {
   }
 
   isAuthenticated() {
-    return this.http.get<boolean>(`/api/account/check`, {
+    return this.http.get<boolean>(`/api/account/isAuth`, {
       withCredentials: true,
     });
   }

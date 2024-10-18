@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+  </head>
+  <body>
+    <div class="container">
+      <h2 id="usernameDisplay">User Name</h2>
+      <div class="cover-photo" id="coverPhotoContainer">
+        <img id="coverPhoto" class="cover-photo" src="" alt="Cover Photo" />
+      </div>
+      <div class="profile-pic" id="profilePicContainer">
+        <img id="profilePic" class="profile-pic" src="" alt="Profile Picture" />
+      </div>
+      <input type="file" id="uploadCoverInput" class="hidden" />
+      <input type="file" id="uploadProfileInput" class="hidden" />
+      <button id="uploadCoverBtn">Upload Cover Photo</button>
+      <button id="uploadProfileBtn">Upload Profile Picture</button>
+      <h3>Profile Information</h3>
+      <!-- عناصر لعرض الاسم والبريد الإلكتروني أو الرقم -->
+      <div>
+        <h4>Name: <span id="displayName"></span></h4>
+        <h4>Email/Contact: <span id="displayContact"></span></h4>
+      </div>
+      <div id="profileInfo"></div>
+      <button id="editProfileBtn">Edit Profile</button>
+      <div id="editProfileFields" class="hidden">
+        <input type="text" id="nameInput" placeholder="Enter new name" /><br />
+        <input
+          type="text"
+          id="collegeInput"
+          placeholder="Enter your college"
+        /><br />
+        <input
+          type="text"
+          id="genderInput"
+          placeholder="Enter your gender"
+        /><br />
+        <input
+          type="date"
+          id="birthDateInput"
+          placeholder="Enter birth date"
+        /><br />
+        <input
+          type="text"
+          id="socialStatusInput"
+          placeholder="Marital Status"
+        /><br />
+        <input type="text" id="workPlaceInput" placeholder="Work Place" /><br />
+        <input type="text" id="residenceInput" placeholder="Residence" /><br />
+        <input type="text" id="jobTypeInput" placeholder="Job Type" /><br />
+        <input
+          type="text"
+          id="contactInput"
+          placeholder="Email or Phone"
+        /><br />
+        <button id="saveProfileBtn">Save</button>
+      </div>
+      <button id="changePasswordBtn">Change Password</button>
+      <div id="changePasswordField" class="hidden">
+        <input
+          type="password"
+          id="newPasswordInput"
+          placeholder="Enter new password"
+        /><br />
+        <button id="savePasswordBtn">Save Password</button>
+      </div>
+      <button id="logoutBtn">Logout</button>
+      <button id="deleteProfileBtn" style="background-color: #f44336">
+        Delete Profile
+      </button>
+    </div>
+  </body>
+</html>
+<!-- ///////////////////////////////////// -->
