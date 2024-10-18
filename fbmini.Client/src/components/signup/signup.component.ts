@@ -65,7 +65,7 @@ export class SignupComponent {
     public dialog: MatDialog
   ) {
     this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required]],
       password: ['', [Validators.required, validateInput]],
     });
   }
@@ -77,13 +77,17 @@ export class SignupComponent {
     });
 
     this.authService
-      .register(this.form.get('email')?.value, this.form.get('password')?.value)
+      .register(
+        this.form.get('username')?.value,
+        this.form.get('password')?.value
+      )
       .subscribe({
         next: (res) => {
           this.authService
             .login(
-              this.form.get('email')?.value,
-              this.form.get('password')?.value
+              this.form.get('username')?.value,
+              this.form.get('password')?.value,
+              true
             )
             .subscribe({
               next: (response) => {

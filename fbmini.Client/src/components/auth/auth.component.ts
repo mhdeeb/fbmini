@@ -8,18 +8,22 @@ import { Observable } from 'rxjs';
 export class AuthService {
   constructor(private readonly http: HttpClient) {}
 
-  login(email: string, password: string): Observable<any> {
+  login(
+    username: string,
+    password: string,
+    rememberMe: boolean
+  ): Observable<any> {
     return this.http.post(
       `/api/account/login?useCookies=true&useSessionCookies=true`,
-      { email, password },
+      { username, password, rememberMe },
       { withCredentials: true }
     );
   }
 
-  register(email: string, password: string) {
+  register(username: string, password: string) {
     const url = '/api/account/register';
     const body = {
-      email,
+      username,
       password,
     };
     const headers = new HttpHeaders({

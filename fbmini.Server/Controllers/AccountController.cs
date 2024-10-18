@@ -1,7 +1,6 @@
 ﻿using fbmini.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -22,7 +21,7 @@ public class AccountController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var user = new User { UserName = model.Email, Email = model.Email };
+        var user = new User { UserName = model.Username };
         var result = await _userManager.CreateAsync(user, model.Password);
 
         if (result.Succeeded)
@@ -39,7 +38,7 @@ public class AccountController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+        var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
 
         if (result.Succeeded)
         {
@@ -68,13 +67,13 @@ public class AccountController : ControllerBase
 
 public class LoginModel
 {
-    public required string Email { get; set; }
+    public required string Username { get; set; }
     public required string Password { get; set; }
     public bool RememberMe { get; set; }
 }
 
 public class RegisterModel
 {
-    public required string Email { get; set; }
+    public required string Username { get; set; }
     public required string Password { get; set; }
 }

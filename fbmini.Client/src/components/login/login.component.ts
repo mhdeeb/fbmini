@@ -34,6 +34,7 @@ import { pop_up, PopUp } from '../../utility/popup';
 export class LoginComponent {
   form: FormGroup;
   showPassword: boolean = false;
+  rememberMe: boolean = false;
   isInputFocused: boolean = false;
   private readonly _snackBar = inject(MatSnackBar);
 
@@ -44,18 +45,22 @@ export class LoginComponent {
     public dialog: MatDialog
   ) {
     this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required]],
       password: ['', [Validators.required]],
+      remember_me: [false],
     });
   }
 
   onSubmit(): void {
     const dialogRef = this.dialog.open(BackdropDialogComponent, {
       disableClose: true,
-      panelClass: 'custom-dialog-container',
     });
     this.authService
-      .login(this.form.get('email')?.value, this.form.get('password')?.value)
+      .login(
+        this.form.get('username')?.value,
+        this.form.get('password')?.value,
+        this.form.get('remember_me')?.value
+      )
       .subscribe({
         next: (response) => {
           this.router.navigate(['/home']);

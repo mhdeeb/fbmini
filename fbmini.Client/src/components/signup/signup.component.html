@@ -3,10 +3,14 @@
     <h2 class="text-3xl font-bold mb-6 text-center">Create an Account</h2>
     <form (ngSubmit)="onSubmit()" [formGroup]="form">
       <mat-form-field class="w-full">
-        <mat-label>email</mat-label>
-        <input matInput formControlName="email" placeholder="Enter email" />
-        <mat-error *ngIf="form.get('email')?.hasError('required')"
-          >email is required
+        <mat-label>Username</mat-label>
+        <input
+          matInput
+          formControlName="username"
+          placeholder="Enter Username"
+        />
+        <mat-error *ngIf="form.get('username')?.hasError('required')"
+          >Username is required
         </mat-error>
       </mat-form-field>
 

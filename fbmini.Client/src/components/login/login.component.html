@@ -3,10 +3,14 @@
     <h2 class="text-3xl font-bold mb-6 text-center">Sign In</h2>
     <form (ngSubmit)="onSubmit()" [formGroup]="form">
       <mat-form-field class="w-full">
-        <mat-label>email</mat-label>
-        <input matInput formControlName="email" placeholder="Enter email" />
-        <mat-error *ngIf="form.get('email')?.hasError('required')"
-          >email is required
+        <mat-label>Username</mat-label>
+        <input
+          matInput
+          formControlName="username"
+          placeholder="Enter username"
+        />
+        <mat-error *ngIf="form.get('username')?.hasError('required')"
+          >Username is required
         </mat-error>
       </mat-form-field>
 
@@ -31,6 +35,9 @@
         (change)="showPassword = !showPassword"
       >
         Show Password
+      </mat-checkbox>
+      <mat-checkbox class="w-full" formControlName="remember_me">
+        Remember Me
       </mat-checkbox>
 
       <button
