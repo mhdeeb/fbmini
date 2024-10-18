@@ -16,6 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BackdropDialogComponent } from '../backdrop/backdrop.component';
 import { MatDialog } from '@angular/material/dialog';
 import { pop_up, PopUp } from '../../utility/popup';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +28,7 @@ import { pop_up, PopUp } from '../../utility/popup';
     MatFormField,
     MatCheckboxModule,
     MatButtonModule,
+    MatIconModule,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
@@ -49,6 +51,11 @@ export class LoginComponent {
       password: ['', [Validators.required]],
       remember_me: [false],
     });
+  }
+
+  toggleHide(event: MouseEvent) {
+    this.showPassword = !this.showPassword;
+    event.stopPropagation();
   }
 
   onSubmit(): void {

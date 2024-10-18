@@ -13,6 +13,7 @@ import { MatFormField, MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { BackdropDialogComponent } from '../backdrop/backdrop.component';
@@ -48,6 +49,7 @@ function validateInput(c: FormControl) {
     MatFormField,
     MatCheckboxModule,
     MatButtonModule,
+    MatIconModule,
   ],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css'],
@@ -68,6 +70,11 @@ export class SignupComponent {
       username: ['', [Validators.required]],
       password: ['', [Validators.required, validateInput]],
     });
+  }
+
+  toggleHide(event: MouseEvent) {
+    this.showPassword = !this.showPassword;
+    event.stopPropagation();
   }
 
   onSubmit(): void {

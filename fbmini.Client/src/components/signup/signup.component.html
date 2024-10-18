@@ -24,12 +24,23 @@
           (focus)="isInputFocused = true"
           (blur)="isInputFocused = false"
         />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="toggleHide($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="showPassword"
+          type="button"
+        >
+          <mat-icon>{{
+            showPassword ? "visibility" : "visibility_off"
+          }}</mat-icon>
+        </button>
         <mat-error *ngIf="form.get('password')?.hasError('required')"
           >Password is required</mat-error
         >
       </mat-form-field>
-
-      <div class="min-h-20">
+      <div class="min-h-24">
         <ul
           class="error-list"
           *ngIf="
@@ -55,15 +66,6 @@
           </li>
         </ul>
       </div>
-
-      <mat-checkbox
-        class="w-full"
-        color="primary"
-        [checked]="showPassword"
-        (change)="showPassword = !showPassword"
-      >
-        Show Password
-      </mat-checkbox>
 
       <button
         class="w-full mb-5"
