@@ -1,15 +1,32 @@
-<div class="bg-gray-200 h-screen">
+<div class="h-screen">
   <div class="flex flex-col gap-5 px-20 pt-52">
     <div class="flex gap-5">
-      <button mat-raised-button color="primary" (click)="info()">Info</button>
-      <button mat-raised-button color="primary" (click)="success()">
+      <button mat-raised-button class="grow" color="primary" (click)="info()">
+        Info
+      </button>
+      <button
+        mat-raised-button
+        class="grow"
+        color="primary"
+        (click)="success()"
+      >
         Success
       </button>
-      <button mat-raised-button color="primary" (click)="error()">Error</button>
+      <button mat-raised-button class="grow" color="primary" (click)="error()">
+        Error
+      </button>
     </div>
-    <a mat-raised-button color="primary" href="home">Home</a>
+    <div class="flex gap-5">
+      <a mat-raised-button class="grow" color="primary" href="home">Home</a>
+      <a mat-raised-button class="grow" color="primary" href="signup"
+        >Register</a
+      >
+      <a mat-raised-button class="grow" color="primary" href="profile"
+        >Profile</a
+      >
+    </div>
     <button mat-raised-button color="primary" (click)="preview()">
-      Preview
+      Preview login
     </button>
   </div>
 </div>
