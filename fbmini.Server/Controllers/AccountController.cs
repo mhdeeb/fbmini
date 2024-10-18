@@ -54,6 +54,9 @@ public class AccountController : ControllerBase
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
+        if (!_signInManager.IsSignedIn(User))
+            return Unauthorized(new { Message = "User not logged in" });
+
         await _signInManager.SignOutAsync();
         return Ok(new { Message = "Logged out successfully" });
     }

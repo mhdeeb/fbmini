@@ -25,8 +25,13 @@
         >Profile</a
       >
     </div>
-    <button mat-raised-button color="primary" (click)="preview()">
-      Preview login
-    </button>
+    <div class="flex gap-5">
+      <button mat-raised-button class="grow" color="primary" (click)="login()">
+        Preview login
+      </button>
+      <button mat-raised-button class="grow" color="primary" (click)="logout()">
+        Preview logout
+      </button>
+    </div>
   </div>
 </div>

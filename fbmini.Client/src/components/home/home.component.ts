@@ -11,13 +11,13 @@ type User = {
 };
 
 @Component({
-  selector: 'app-layout',
+  selector: 'app-home',
   standalone: true,
   imports: [RouterOutlet, MatButtonModule, CommonModule],
-  templateUrl: './layout.component.html',
-  styleUrl: './layout.component.css',
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.css',
 })
-export class LayoutComponent {
+export class HomeComponent {
   constructor(
     private readonly http: HttpClient,
     private readonly authService: AuthService

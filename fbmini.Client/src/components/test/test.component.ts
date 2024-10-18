@@ -32,13 +32,13 @@ export class TestComponent {
     pop_up(this.snackbar, 'Long Error Message!', PopUp.ERROR);
   }
 
-  preview(): void {
+  login(): void {
     const dialogRef = this.dialog.open(BackdropDialogComponent, {
       disableClose: true,
     });
     this.authService.login('admin', 'Admin@0', true).subscribe({
       next: (response) => {
-        this.router.navigate(['/home']);
+        dialogRef.close();
         pop_up(this.snackbar, 'Successfully logged in', PopUp.SUCCESS);
       },
       error: (error: HttpErrorResponse) => {
@@ -47,6 +47,17 @@ export class TestComponent {
       },
       complete: () => {
         dialogRef.close();
+      },
+    });
+  }
+
+  logout(): void {
+    this.authService.logout().subscribe({
+      error: (error) => {
+        pop_up(this.snackbar, error.error.message, PopUp.ERROR);
+      },
+      complete: () => {
+        pop_up(this.snackbar, 'Successfully logged out', PopUp.SUCCESS);
       },
     });
   }
