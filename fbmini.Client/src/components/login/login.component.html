@@ -31,12 +31,17 @@
 
       <mat-checkbox
         class="w-full"
+        color="primary"
         [checked]="showPassword"
         (change)="showPassword = !showPassword"
       >
         Show Password
       </mat-checkbox>
-      <mat-checkbox class="w-full" formControlName="remember_me">
+      <mat-checkbox
+        class="w-full"
+        color="primary"
+        formControlName="remember_me"
+      >
         Remember Me
       </mat-checkbox>
 
