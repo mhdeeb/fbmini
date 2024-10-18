@@ -3,8 +3,8 @@ import { LayoutComponent } from '../components/layout/layout.component';
 import { LoginComponent } from '../components/login/login.component';
 import { SignupComponent } from '../components/signup/signup.component';
 import { ProfileComponent } from '../components/profile/profile.component';
-import { AuthGuard, NoAuthGuard } from './AuthGuard';
-import { BackdropComponent } from '../components/backdrop/backdrop.component';
+import { AuthGuard, NoAuthGuard } from '../components/auth/AuthGuard';
+import { TestComponent } from '../components/test/test.component';
 import { notFoundComponent } from '../components/not-found/not-found.component';
 
 export const routes: Routes = [
@@ -35,7 +35,7 @@ export const routes: Routes = [
   },
   {
     path: 'test',
-    component: BackdropComponent
+    component: TestComponent,
   },
-  { path: '**', component: notFoundComponent }
+  { path: '**', component: notFoundComponent },
 ];

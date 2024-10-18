@@ -25,33 +25,6 @@
         >
       </mat-form-field>
 
-      <div class="min-h-20">
-        <ul
-          class="error-list"
-          *ngIf="
-            isInputFocused &&
-            !form.get('password')?.hasError('required') &&
-            form.get('password')?.hasError('pattern')
-          "
-        >
-          <li *ngIf="form.get('password')?.errors?.['pattern']['count']">
-            count must be above 8
-          </li>
-          <li *ngIf="form.get('password')?.errors?.['pattern']['number']">
-            must contain number
-          </li>
-          <li *ngIf="form.get('password')?.errors?.['pattern']['special']">
-            must contain a special character
-          </li>
-          <li *ngIf="form.get('password')?.errors?.['pattern']['upper']">
-            must contain an upper character
-          </li>
-          <li *ngIf="form.get('password')?.errors?.['pattern']['lower']">
-            must contain a lower character
-          </li>
-        </ul>
-      </div>
-
       <mat-checkbox
         class="w-full"
         [checked]="showPassword"

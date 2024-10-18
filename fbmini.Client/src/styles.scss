@@ -2,3 +2,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.mat-mdc-snack-bar-container {
+  // --mdc-snackbar-container-shape: 4px;
+  // --mdc-snackbar-container-color: #333333;
+  // --mat-snack-bar-button-color: #ffd740;
+  // --mdc-snackbar-supporting-text-color: #fff;
+  --mdc-snackbar-supporting-text-font: Arial, Helvetica, sans-serif;
+  // --mdc-snackbar-supporting-text-line-height: 20px;
+  --mdc-snackbar-supporting-text-size: 16px;
+  // --mdc-snackbar-supporting-text-weight: bold;
+  &.snack-bar--error {
+    --mdc-snackbar-container-color: #c92323;
+
+  }
+  &.snack-bar--success {
+    --mdc-snackbar-container-color: #37933c;
+  }
+  &.snack-bar--info {}
+}

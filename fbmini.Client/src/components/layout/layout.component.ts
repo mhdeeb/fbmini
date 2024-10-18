@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterOutlet } from '@angular/router';
-import { AuthService } from '../../app/auth.component';
+import { AuthService } from '../auth/auth.component';
 import { CommonModule } from '@angular/common';
 
 type User = {

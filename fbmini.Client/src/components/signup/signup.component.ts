@@ -11,11 +11,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormField, MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
-import { AuthService } from '../../app/auth.component';
+import { AuthService } from '../auth/auth.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { BackdropDialogComponent } from '../backdrop/backdrop.component';
+import { pop_up, PopUp } from '../../utility/popup';
 
 function validateInput(c: FormControl) {
   const COUNT_REGEX = /.{8,}/;
@@ -87,39 +88,24 @@ export class SignupComponent {
             .subscribe({
               next: (response) => {
                 this.router.navigate(['/profile']);
-                this._snackBar.open('Account Created', '', {
-                  horizontalPosition: 'center',
-                  verticalPosition: 'top',
-                  duration: 3000,
-                  panelClass: 'snack-bar',
-                });
+                pop_up(this._snackBar, 'Account Created', PopUp.SUCCESS);
               },
               error: (error: HttpErrorResponse) => {
-                this._snackBar.open(error.error.message, '', {
-                  horizontalPosition: 'center',
-                  verticalPosition: 'top',
-                  duration: 3000,
-                  panelClass: 'snack-bar',
-                });
                 dialogRef.close();
+                pop_up(this._snackBar, error.error.message, PopUp.ERROR);
               },
               complete: () => {
                 dialogRef.close();
-              }
+              },
             });
         },
         error: (error: HttpErrorResponse) => {
-          this._snackBar.open(error.error[0].description, '', {
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            duration: 3000,
-            panelClass: 'snack-bar',
-          });
           dialogRef.close();
+          pop_up(this._snackBar, error.error[0].description, PopUp.ERROR);
         },
         complete: () => {
           dialogRef.close();
-        }
+        },
       });
   }
 }
