@@ -1,77 +1,125 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profile</title>
-  </head>
-  <body>
-    <div class="container">
-      <h2 id="usernameDisplay">User Name</h2>
-      <div class="cover-photo" id="coverPhotoContainer">
-        <img id="coverPhoto" class="cover-photo" src="" alt="Cover Photo" />
+<section class="min-h-[40rem] bg-[var(--bg-header)] mt-0 pt-px text-white">
+  <div
+    class="mx-10 rounded-md bg-cover bg-center relative h-96 mt-10 bg-gradient-to-r from-[var(--bg-gradient2-from)] to-[var(--bg-gradient2-to)] container"
+  >
+    <div class="flex gap-5 absolute z-10 -bottom-32 left-5">
+      <div class="rounded-full p-2 bg-[var(--bg-header)] relative">
+        <img
+          class="object-cover rounded-full aspect-square w-40 hover:backdrop-filter"
+          src="blank-profile-picture.webp"
+          alt="Profile"
+        />
+        <div
+          class="p-1 rounded-full bg-[var(--bg-header)] absolute right-4 bottom-0"
+        >
+          <button
+            aria-label="Edit"
+            class="bg-gray-400 rounded-full aspect-square w-10"
+          >
+            <mat-icon class="translate-y-1">edit</mat-icon>
+          </button>
+        </div>
       </div>
-      <div class="profile-pic" id="profilePicContainer">
-        <img id="profilePic" class="profile-pic" src="" alt="Profile Picture" />
-      </div>
-      <input type="file" id="uploadCoverInput" class="hidden" />
-      <input type="file" id="uploadProfileInput" class="hidden" />
-      <button id="uploadCoverBtn">Upload Cover Photo</button>
-      <button id="uploadProfileBtn">Upload Profile Picture</button>
-      <h3>Profile Information</h3>
-      <!-- عناصر لعرض الاسم والبريد الإلكتروني أو الرقم -->
-      <div>
-        <h4>Name: <span id="displayName"></span></h4>
-        <h4>Email/Contact: <span id="displayContact"></span></h4>
-      </div>
-      <div id="profileInfo"></div>
-      <button id="editProfileBtn">Edit Profile</button>
-      <div id="editProfileFields" class="hidden">
-        <input type="text" id="nameInput" placeholder="Enter new name" /><br />
-        <input
-          type="text"
-          id="collegeInput"
-          placeholder="Enter your college"
-        /><br />
-        <input
-          type="text"
-          id="genderInput"
-          placeholder="Enter your gender"
-        /><br />
-        <input
-          type="date"
-          id="birthDateInput"
-          placeholder="Enter birth date"
-        /><br />
-        <input
-          type="text"
-          id="socialStatusInput"
-          placeholder="Marital Status"
-        /><br />
-        <input type="text" id="workPlaceInput" placeholder="Work Place" /><br />
-        <input type="text" id="residenceInput" placeholder="Residence" /><br />
-        <input type="text" id="jobTypeInput" placeholder="Job Type" /><br />
-        <input
-          type="text"
-          id="contactInput"
-          placeholder="Email or Phone"
-        /><br />
-        <button id="saveProfileBtn">Save</button>
-      </div>
-      <button id="changePasswordBtn">Change Password</button>
-      <div id="changePasswordField" class="hidden">
-        <input
-          type="password"
-          id="newPasswordInput"
-          placeholder="Enter new password"
-        /><br />
-        <button id="savePasswordBtn">Save Password</button>
-      </div>
-      <button id="logoutBtn">Logout</button>
-      <button id="deleteProfileBtn" style="background-color: #f44336">
-        Delete Profile
-      </button>
+      <span class="content-center text-4xl">{{ profile.userName }}</span>
     </div>
-  </body>
-</html>
-<!-- ///////////////////////////////////// -->
+  </div>
+</section>
+
+<section class="bg-gradient-to-r bg-[var(--bg-body)]">
+  <div class="container">
+    <form class="min-w-40 max-w-96 w-full">
+      <mat-form-field class="w-full">
+        <mat-label>Bio</mat-label>
+        <input
+          matInput
+          #message
+          maxlength="256"
+          placeholder="A passionate hard worker"
+        />
+        <mat-hint align="start"
+          ><strong>What is on your mind?</strong>
+        </mat-hint>
+        <mat-hint align="end">{{ message.value.length }} / 256</mat-hint>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <input type="file" id="uploadCoverInput" />
+  <input type="file" id="uploadProfileInput" />
+  <button id="uploadCoverBtn">Upload Cover Photo</button>
+  <button id="uploadProfileBtn">Upload Profile Picture</button>
+  <h3>Profile Information</h3>
+  <div>
+    <h4>Name: <span id="displayName"></span></h4>
+    <h4>Email/Contact: <span id="displayContact"></span></h4>
+  </div>
+  <div id="profileInfo"></div>
+  <button id="editProfileBtn">Edit Profile</button>
+  <div id="editProfileFields">
+    <input
+      matInput
+      type="text"
+      id="nameInput"
+      placeholder="Enter new name"
+    /><br />
+    <input
+      matInput
+      type="text"
+      id="collegeInput"
+      placeholder="Enter your college"
+    /><br />
+    <input
+      matInput
+      type="text"
+      id="genderInput"
+      placeholder="Enter your gender"
+    /><br />
+    <input
+      type="date"
+      id="birthDateInput"
+      placeholder="Enter birth date"
+    /><br />
+    <input
+      matInput
+      type="text"
+      id="socialStatusInput"
+      placeholder="Marital Status"
+    /><br />
+    <input
+      matInput
+      type="text"
+      id="workPlaceInput"
+      placeholder="Work Place"
+    /><br />
+    <input
+      matInput
+      type="text"
+      id="residenceInput"
+      placeholder="Residence"
+    /><br />
+    <input
+      matInput
+      type="text"
+      id="jobTypeInput"
+      placeholder="Job Type"
+    /><br />
+    <input
+      matInput
+      type="text"
+      id="contactInput"
+      placeholder="Email or Phone"
+    /><br />
+    <button id="saveProfileBtn">Save</button>
+  </div>
+  <button id="changePasswordBtn">Change Password</button>
+  <div id="changePasswordField">
+    <input
+      type="password"
+      id="newPasswordInput"
+      placeholder="Enter new password"
+    /><br />
+    <button id="savePasswordBtn">Save Password</button>
+  </div>
+  <button id="logoutBtn">Logout</button>
+  <button id="deleteProfileBtn">Delete Profile</button>
+</section>
