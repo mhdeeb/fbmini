@@ -102,6 +102,57 @@ namespace fbmini.Server.Controllers
         }
 
         [Authorize]
+        [HttpGet("{username}")]
+        public async Task<ActionResult<UserView>> Get(fbminiServerContext context, string username)
+        {
+            var user = await context.Users.Include(i => i.UserData).FirstOrDefaultAsync(user => user.UserName == username);
+
+            if (user == null || user.UserData == null)
+                return NotFound();
+
+            var view = new UserView
+            {
+                userName = user.UserName,
+                email = user.Email,
+                phoneNumber = user.PhoneNumber,
+                bio = user.UserData.Bio,
+            };
+
+            return Ok(view);
+        }
+
+        [Authorize]
+        [HttpGet("{username}/picture")]
+        public async Task<IActionResult> GetPicture(fbminiServerContext context, string username)
+        {
+            var user = await context.Users.Include(i => i.UserData.Picture).FirstOrDefaultAsync(user => user.UserName == username);
+
+            if (user.UserData.Picture != null)
+            {
+                var stream = new MemoryStream(user.UserData.Picture.FileData);
+
+                return File(stream.ToArray(), user.UserData.Picture.ContentType);
+            }
+
+            return NotFound();
+        }
+
+        [Authorize]
+        [HttpGet("{username}/cover")]
+        public async Task<IActionResult> GetCover(fbminiServerContext context, string username)
+        {
+            var user = await context.Users.Include(i => i.UserData.Cover).FirstOrDefaultAsync(user => user.UserName == username);
+
+            if (user.UserData.Cover != null)
+            {
+                var stream = new MemoryStream(user.UserData.Cover.FileData);
+                return File(stream.ToArray(), user.UserData.Cover.ContentType);
+            }
+
+            return NotFound();
+        }
+
+        [Authorize]
         [HttpPost("")]
         public async Task<IActionResult> UpdateProfile([FromForm] UserEditView userView, fbminiServerContext context)
         {

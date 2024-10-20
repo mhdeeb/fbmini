@@ -8,6 +8,7 @@ import { TestComponent } from '../components/test/test.component';
 import { notFoundComponent } from '../components/not-found/not-found.component';
 import { ProfileEditComponent } from '../components/profile/edit/edit.component';
 import { NgModule } from '@angular/core';
+import { UserComponent } from '../components/profile/user/user.component';
 
 export const routes: Routes = [
   {
@@ -29,6 +30,7 @@ export const routes: Routes = [
     path: 'profile/edit',
     component: ProfileEditComponent,
   },
+  { path: 'user/:username', component: UserComponent },
   {
     path: 'login',
     component: LoginComponent,

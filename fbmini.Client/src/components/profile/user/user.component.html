@@ -1,0 +1,44 @@
+<section class="min-h-[40rem] bg-[var(--bg-header)] pt-10 text-white">
+  <div
+    class="mx-10 rounded-md bg-cover bg-center relative h-96 mt-10 bg-gradient-to-r from-[var(--bg-gradient2-from)] to-[var(--bg-gradient2-to)]"
+  >
+    <div *ngIf="coverUrl">
+      <img
+        [src]="coverUrl"
+        alt="Cover"
+        draggable="false"
+        class="object-cover object-center h-96 w-full rounded-md"
+      />
+    </div>
+    <div class="flex gap-5 absolute z-10 -bottom-32 left-5">
+      <div class="rounded-full p-2 bg-[var(--bg-header)] relative">
+        <div
+          *ngIf="profileUrl; else noImage"
+          class="object-cover rounded-full aspect-square w-40"
+        >
+          <img
+            [src]="profileUrl"
+            alt="Profile"
+            draggable="false"
+            class="object-cover rounded-full aspect-square w-40 select-none"
+          />
+        </div>
+        <ng-template #noImage>
+          <div
+            class="object-cover rounded-full aspect-square w-40 bg-slate-300"
+          ></div>
+        </ng-template>
+      </div>
+      <span class="content-center text-4xl"
+        >{{ profile.userName }}
+        <div class="font-normal text-base opacity-50">
+          {{ profile.bio }}
+        </div>
+      </span>
+    </div>
+  </div>
+</section>
+
+<section class="bg-gradient-to-r bg-[var(--bg-body)]">
+  <div class="container"></div>
+</section>
