@@ -84,9 +84,12 @@ export class UserComponent {
   }
 
   ngOnInit() {
-    this.username = this.route.snapshot.paramMap.get('username');
-    this.getProfile();
-    this.loadCoverImage();
-    this.loadProfileImage();
+    this.route.paramMap.subscribe((params) => {
+      this.username = params.get('username');
+      this.getProfile();
+      this.loadCoverImage();
+      this.loadProfileImage();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   }
 }

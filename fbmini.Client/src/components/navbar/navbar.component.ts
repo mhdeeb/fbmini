@@ -9,6 +9,7 @@ import { AuthService } from '../auth/auth.component';
 import { MatDialog } from '@angular/material/dialog';
 import { BackdropDialogComponent } from '../backdrop/backdrop.component';
 import { pop_up, PopUp } from '../../utility/popup';
+import { SearchBarComponent } from '../search-bar/search-bar.component';
 
 @Component({
   selector: 'app-navbar',
@@ -20,6 +21,7 @@ import { pop_up, PopUp } from '../../utility/popup';
     MatButtonModule,
     MatMenuModule,
     RouterModule,
+    SearchBarComponent,
   ],
   standalone: true,
 })

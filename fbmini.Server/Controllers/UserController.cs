@@ -61,6 +61,17 @@ namespace fbmini.Server.Controllers
         }
 
         [Authorize]
+        [HttpGet("list")]
+        public async Task<IActionResult> GetList(fbminiServerContext context)
+        {
+            var users = await context.Users
+            .Select(u => u.UserName)
+            .ToListAsync();
+
+            return Ok(users);
+        }
+
+        [Authorize]
         [HttpGet("picture")]
         public async Task<IActionResult> GetPicture(fbminiServerContext context)
         {
