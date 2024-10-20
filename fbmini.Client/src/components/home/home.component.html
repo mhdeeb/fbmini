@@ -1,0 +1,14 @@
+<div class="container">
+  <app-post
+    [post]="{
+      user: { name: 'Jane Doe' },
+      date: '2024-10-20T10:00:00',
+      content:
+        'This is an example of a social media post using Angular Material.',
+      imageUrl: 'https://placekitten.com/600/400'
+    }"
+    *ngFor="let i of getRange(0, 10)"
+  >
+    {{ i }} Something
+  </app-post>
+</div>

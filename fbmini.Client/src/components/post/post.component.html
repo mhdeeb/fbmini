@@ -1,0 +1,29 @@
+<mat-card class="social-post">
+  <mat-card-header>
+    <div mat-card-avatar class="user-avatar"></div>
+    <mat-card-title>{{ post.user.name }}</mat-card-title>
+    <mat-card-subtitle>{{ post.date }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <img
+    mat-card-image
+    *ngIf="post.imageUrl"
+    [src]="post.imageUrl"
+    alt="Post image"
+  />
+
+  <mat-card-content>
+    <p>{{ post.content }}</p>
+  </mat-card-content>
+
+  <mat-divider></mat-divider>
+
+  <mat-card-actions>
+    <button mat-button (click)="likePost()">
+      <mat-icon>thumb_up</mat-icon> Like
+    </button>
+    <button mat-button (click)="commentPost()">
+      <mat-icon>comment</mat-icon> Comment
+    </button>
+  </mat-card-actions>
+</mat-card>

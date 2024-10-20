@@ -1,10 +1,5 @@
 .footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  z-index: 1000;
-  height: 64px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #00000080;
 
   a {
     color: white;
