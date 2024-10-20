@@ -9,7 +9,6 @@ namespace fbmini.Server.Controllers
 {
     public class UserEditView()
     {
-        public string? userName { get; set; }
         public string? email { get; set; }
         public string? phoneNumber { get; set; }
         public string? bio { get; set; }
@@ -115,21 +114,6 @@ namespace fbmini.Server.Controllers
 
             if (user == null)
                 return Unauthorized();
-
-            if (userView.userName != null)
-            {
-                var result = await _userManager.SetUserNameAsync(user, userView.userName);
-
-                if (!result.Succeeded)
-                {
-                    foreach (var error in result.Errors)
-                        ModelState.AddModelError(string.Empty, error.Description);
-
-                    return BadRequest(ModelState);
-                }
-
-                await _userManager.UpdateNormalizedUserNameAsync(user);
-            }
 
             if (userView.phoneNumber != null)
             {

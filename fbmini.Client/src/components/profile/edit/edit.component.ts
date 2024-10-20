@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
-import { User } from '../../../utility/types';
+import { UserView, User } from '../../../utility/types';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 // import { AuthService } from '../../auth/auth.component';
 // import { Router } from '@angular/router';
@@ -29,6 +29,8 @@ import { BackdropDialogComponent } from '../../backdrop/backdrop.component';
 export class ProfileEditComponent {
   form: FormGroup;
   snackbar = inject(MatSnackBar);
+  selectedPicture: File | null = null;
+  selectedCover: File | null = null;
 
   constructor(
     private readonly http: HttpClient,
@@ -37,13 +39,14 @@ export class ProfileEditComponent {
     // private readonly router: Router,
     public dialog: MatDialog
   ) {
-    this.form = this.fb.group(new User());
+    this.form = this.fb.group(new UserView());
   }
 
   getProfile() {
     this.http.get<User>('api/User').subscribe({
       next: (result) => {
         this.form.setValue(result);
+        this.form.markAsPristine();
       },
       error: (error) => {
         pop_up(this.snackbar, error.error.message, PopUp.ERROR);
@@ -55,11 +58,12 @@ export class ProfileEditComponent {
     this.getProfile();
   }
 
-  onFileSelect(event: any, name: string): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.form.patchValue({ [name]: file });
-    }
+  onPictureSelect(event: any): void {
+    this.selectedPicture = event.target.files[0];
+  }
+
+  onCoverSelect(event: any): void {
+    this.selectedCover = event.target.files[0];
   }
 
   onSubmit() {
@@ -69,9 +73,12 @@ export class ProfileEditComponent {
     let formData = new FormData();
 
     for (const value in this.form.value)
-      formData.append(value, this.form.get(value)?.value);
+      if (this.form.get(value)?.dirty)
+        formData.append(value, this.form.get(value)?.value);
 
-    console.log(this.form.value, formData);
+    if (this.selectedPicture) formData.append('picture', this.selectedPicture);
+
+    if (this.selectedCover) formData.append('cover', this.selectedCover);
 
     this.http.post('api/User', formData).subscribe({
       next: (result: any) => {

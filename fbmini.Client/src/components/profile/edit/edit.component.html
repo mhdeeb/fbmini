@@ -5,12 +5,12 @@
 >
   <mat-form-field class="w-full">
     <mat-label>Email</mat-label>
-    <input matInput formControlName="email" />
+    <input matInput formControlName="email" placeholder="Email" />
   </mat-form-field>
 
   <mat-form-field class="w-full">
     <mat-label>Phone Number</mat-label>
-    <input matInput formControlName="phoneNumber" />
+    <input matInput formControlName="phoneNumber" placeholder="Phone Number" />
   </mat-form-field>
 
   <mat-form-field class="w-full">
@@ -25,18 +25,26 @@
     <mat-hint align="end">{{ form.get("bio")?.value?.length }} / 256</mat-hint>
   </mat-form-field>
 
-  <input
-    type="file"
-    (change)="onFileSelect($event, 'picture')"
-    accept="image/*"
-    title="picture"
-  />
-  <input
-    type="file"
-    (change)="onFileSelect($event, 'cover')"
-    accept="image/*"
-    title="cover"
-  />
+  <div>
+    <label for="picture">Profile Picture: </label>
+    <input
+      type="file"
+      (change)="onPictureSelect($event)"
+      accept="image/*"
+      id="picture"
+    />
+  </div>
+
+  <div>
+    <label for="cover">Profile Cover: </label>
+    <input
+      type="file"
+      (change)="onCoverSelect($event)"
+      accept="image/*"
+      id="cover"
+    />
+  </div>
+
   <button class="w-full my-5" mat-raised-button color="primary" type="submit">
     Save
   </button>

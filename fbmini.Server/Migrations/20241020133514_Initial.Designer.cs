@@ -12,7 +12,7 @@ using fbmini.Server.Models;
 namespace fbmini.Server.Migrations
 {
     [DbContext(typeof(fbminiServerContext))]
-    [Migration("20241020123503_Initial")]
+    [Migration("20241020133514_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

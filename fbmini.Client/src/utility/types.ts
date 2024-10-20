@@ -6,3 +6,10 @@ export class User {
   picture?: any;
   cover?: any;
 }
+
+export class UserView {
+  userName?: string;
+  email?: string;
+  bio?: string;
+  phoneNumber?: string;
+}
