@@ -2,29 +2,22 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
-
-
-import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
-import { routes } from './app-routes';
+import { AppRoutingModule } from './app-routes.module';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { NavbarComponent } from '../components/navbar/navbar.component';
+import { FooterComponent } from '../components/footer/footer.component';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule, RouterModule
-  ],
+  declarations: [AppComponent],
+  imports: [BrowserModule, NavbarComponent, FooterComponent, AppRoutingModule],
   providers: [
-    provideRouter(routes),
     provideAnimations(),
     provideHttpClient(),
     provideAnimationsAsync(),
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -43,20 +43,4 @@ export class HomeComponent {
   ngOnInit() {
     this.listProfile();
   }
-
-  logout(): void {
-    const dialogRef = this.dialog.open(BackdropDialogComponent, {
-      disableClose: true,
-    });
-    this.authService.logout().subscribe({
-      error: (error) => {
-        dialogRef.close();
-        pop_up(this.snackbar, error.error.message, PopUp.ERROR);
-      },
-      complete: () => {
-        dialogRef.close();
-        location.reload();
-      },
-    });
-  }
 }

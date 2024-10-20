@@ -1,53 +1,32 @@
-<div class="h-screen">
-  <div class="flex flex-col gap-5 px-20 pt-52">
-    <div class="flex gap-5">
-      <button
-        mat-raised-button
-        class="grow"
-        color="primary"
-        (click)="default()"
-      >
-        Default
-      </button>
-      <button mat-raised-button class="grow" color="primary" (click)="info()">
-        Info
-      </button>
-      <button
-        mat-raised-button
-        class="grow"
-        color="primary"
-        (click)="warning()"
-      >
-        Warning
-      </button>
-      <button
-        mat-raised-button
-        class="grow"
-        color="primary"
-        (click)="success()"
-      >
-        Success
-      </button>
-      <button mat-raised-button class="grow" color="primary" (click)="error()">
-        Error
-      </button>
-    </div>
-    <div class="flex gap-5">
-      <a mat-raised-button class="grow" color="primary" href="home">Home</a>
-      <a mat-raised-button class="grow" color="primary" href="signup"
-        >Register</a
-      >
-      <a mat-raised-button class="grow" color="primary" href="profile"
-        >Profile</a
-      >
-    </div>
-    <div class="flex gap-5">
-      <button mat-raised-button class="grow" color="primary" (click)="login()">
-        Preview login
-      </button>
-      <button mat-raised-button class="grow" color="primary" (click)="logout()">
-        Preview logout
-      </button>
-    </div>
+<div class="flex flex-col gap-5 px-20 pt-52">
+  <div class="flex gap-5">
+    <button mat-raised-button class="grow" color="primary" (click)="default()">
+      Default
+    </button>
+    <button mat-raised-button class="grow" color="primary" (click)="info()">
+      Info
+    </button>
+    <button mat-raised-button class="grow" color="primary" (click)="warning()">
+      Warning
+    </button>
+    <button mat-raised-button class="grow" color="primary" (click)="success()">
+      Success
+    </button>
+    <button mat-raised-button class="grow" color="primary" (click)="error()">
+      Error
+    </button>
+  </div>
+  <div class="flex gap-5">
+    <a mat-raised-button class="grow" color="primary" href="home">Home</a>
+    <a mat-raised-button class="grow" color="primary" href="signup">Register</a>
+    <a mat-raised-button class="grow" color="primary" href="profile">Profile</a>
+  </div>
+  <div class="flex gap-5">
+    <button mat-raised-button class="grow" color="primary" (click)="login()">
+      Preview login
+    </button>
+    <button mat-raised-button class="grow" color="primary" (click)="logout()">
+      Preview logout
+    </button>
   </div>
 </div>

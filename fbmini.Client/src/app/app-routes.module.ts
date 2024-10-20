@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from '../components/home/home.component';
 import { LoginComponent } from '../components/login/login.component';
 import { SignupComponent } from '../components/signup/signup.component';
@@ -7,6 +7,7 @@ import { AuthGuard, NoAuthGuard } from '../components/auth/AuthGuard';
 import { TestComponent } from '../components/test/test.component';
 import { notFoundComponent } from '../components/not-found/not-found.component';
 import { ProfileEditComponent } from '../components/profile/edit/edit.component';
+import { NgModule } from '@angular/core';
 
 export const routes: Routes = [
   {
@@ -44,3 +45,9 @@ export const routes: Routes = [
   },
   { path: '**', component: notFoundComponent },
 ];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+})
+export class AppRoutingModule {}

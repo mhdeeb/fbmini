@@ -1,0 +1,43 @@
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.5);
+  transition: background 0.3s, backdrop-filter 0.3s;
+}
+
+.active-link {
+  font-weight: bold;
+  color: #fff;
+  background-color: #673ab7;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.desktop-menu {
+  display: flex;
+  gap: 10px;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-menu {
+    display: none;
+  }
+  .mobile-menu {
+    display: inline-flex;
+  }
+}
