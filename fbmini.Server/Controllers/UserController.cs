@@ -138,6 +138,9 @@ namespace fbmini.Server.Controllers
         {
             var user = await context.Users.Include(i => i.UserData.Picture).FirstOrDefaultAsync(user => user.UserName == username);
 
+            if (user == null)
+                return NotFound();
+
             if (user.UserData.Picture != null)
             {
                 var stream = new MemoryStream(user.UserData.Picture.FileData);
