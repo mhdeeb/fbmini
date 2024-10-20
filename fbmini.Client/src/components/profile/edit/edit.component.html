@@ -1,0 +1,43 @@
+<form
+  (ngSubmit)="onSubmit()"
+  [formGroup]="form"
+  class="container mt-20 p-10 bg-slate-300 rounded"
+>
+  <mat-form-field class="w-full">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" />
+  </mat-form-field>
+
+  <mat-form-field class="w-full">
+    <mat-label>Phone Number</mat-label>
+    <input matInput formControlName="phoneNumber" />
+  </mat-form-field>
+
+  <mat-form-field class="w-full">
+    <mat-label>Bio</mat-label>
+    <input
+      matInput
+      formControlName="bio"
+      maxlength="256"
+      placeholder="A passionate hard worker"
+    />
+    <mat-hint align="start"><strong>What is on your mind?</strong> </mat-hint>
+    <mat-hint align="end">{{ form.get("bio")?.value?.length }} / 256</mat-hint>
+  </mat-form-field>
+
+  <input
+    type="file"
+    (change)="onFileSelect($event, 'picture')"
+    accept="image/*"
+    title="picture"
+  />
+  <input
+    type="file"
+    (change)="onFileSelect($event, 'cover')"
+    accept="image/*"
+    title="cover"
+  />
+  <button class="w-full my-5" mat-raised-button color="primary" type="submit">
+    Save
+  </button>
+</form>

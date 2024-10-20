@@ -13,11 +13,22 @@ namespace fbmini.Server.Models
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<UserData>()
+                .HasOne(u => u.Picture)
+                .WithOne()
+                .HasForeignKey<UserData>(u => u.PictureId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            builder.Entity<UserData>()
+                .HasOne(u => u.Cover)
+                .WithOne()
+                .HasForeignKey<UserData>(u => u.CoverId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
-        public DbSet<User> User { get; set; } = default!;
-        public DbSet<Test> Test { get; set; } = default!;
-        public DbSet<DB> DB { get; set; } = default!;
-        public DbSet<Products> Products { get; set; } = default!;
+        public DbSet<UserData> UserData { get; set; }
+        public DbSet<FileModel> Files { get; set; }
     }
 }

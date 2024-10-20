@@ -9,10 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { pop_up, PopUp } from '../../utility/popup';
 
-type User = {
-  userName: string;
-  email: string;
-};
+import { User } from '../../utility/types';
 
 @Component({
   selector: 'app-home',
@@ -28,10 +25,8 @@ export class HomeComponent {
     public dialog: MatDialog
   ) {}
 
-  public profile: User = {
-    userName: '',
-    email: '',
-  };
+  public profile = <User>{};
+
   snackbar = inject(MatSnackBar);
 
   listProfile() {

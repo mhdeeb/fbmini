@@ -5,121 +5,104 @@
     <div class="flex gap-5 absolute z-10 -bottom-32 left-5">
       <div class="rounded-full p-2 bg-[var(--bg-header)] relative">
         <img
-          class="object-cover rounded-full aspect-square w-40 hover:backdrop-filter"
-          src="blank-profile-picture.webp"
+          class="object-cover rounded-full aspect-square w-40 hover:backdrop-filter filter hover:opacity-50 cursor-pointer"
+          src="api/user/picture"
           alt="Profile"
+          (click)="router.navigate(['/profile/edit'])"
         />
         <div
           class="p-1 rounded-full bg-[var(--bg-header)] absolute right-4 bottom-0"
         >
           <button
             aria-label="Edit"
-            class="bg-gray-400 rounded-full aspect-square w-10"
+            class="bg-gray-400 rounded-full aspect-square w-10 hover:bg-opacity-50"
+            (click)="router.navigate(['/profile/edit'])"
           >
             <mat-icon class="translate-y-1">edit</mat-icon>
           </button>
         </div>
       </div>
       <span class="content-center text-4xl">{{ profile.userName }}</span>
+      <span class="content-center text-4xl">{{ profile.bio }}</span>
     </div>
   </div>
 </section>
 
 <section class="bg-gradient-to-r bg-[var(--bg-body)]">
   <div class="container">
-    <form class="min-w-40 max-w-96 w-full">
-      <mat-form-field class="w-full">
-        <mat-label>Bio</mat-label>
-        <input
-          matInput
-          #message
-          maxlength="256"
-          placeholder="A passionate hard worker"
-        />
-        <mat-hint align="start"
-          ><strong>What is on your mind?</strong>
-        </mat-hint>
-        <mat-hint align="end">{{ message.value.length }} / 256</mat-hint>
-      </mat-form-field>
-    </form>
+    <h3>Profile Information</h3>
+    <div>
+      <h4>Name: <span id="displayName"></span></h4>
+      <h4>Email/Contact: <span id="displayContact"></span></h4>
+    </div>
+    <div id="profileInfo"></div>
+    <button id="editProfileBtn">Edit Profile</button>
+    <div id="editProfileFields">
+      <input
+        matInput
+        type="text"
+        id="nameInput"
+        placeholder="Enter new name"
+      /><br />
+      <input
+        matInput
+        type="text"
+        id="collegeInput"
+        placeholder="Enter your college"
+      /><br />
+      <input
+        matInput
+        type="text"
+        id="genderInput"
+        placeholder="Enter your gender"
+      /><br />
+      <input
+        type="date"
+        id="birthDateInput"
+        placeholder="Enter birth date"
+      /><br />
+      <input
+        matInput
+        type="text"
+        id="socialStatusInput"
+        placeholder="Marital Status"
+      /><br />
+      <input
+        matInput
+        type="text"
+        id="workPlaceInput"
+        placeholder="Work Place"
+      /><br />
+      <input
+        matInput
+        type="text"
+        id="residenceInput"
+        placeholder="Residence"
+      /><br />
+      <input
+        matInput
+        type="text"
+        id="jobTypeInput"
+        placeholder="Job Type"
+      /><br />
+      <input
+        matInput
+        type="text"
+        id="contactInput"
+        placeholder="Email or Phone"
+      /><br />
+      <button id="saveProfileBtn">Save</button>
+    </div>
+    <button id="changePasswordBtn">Change Password</button>
+    <div id="changePasswordField">
+      <input
+        type="password"
+        id="newPasswordInput"
+        placeholder="Enter new password"
+      /><br />
+      <button id="savePasswordBtn">Save Password</button>
+    </div>
+    <button id="logoutBtn">Logout</button>
+    <button id="deleteProfileBtn">Delete Profile</button>
   </div>
-
-  <input type="file" id="uploadCoverInput" />
-  <input type="file" id="uploadProfileInput" />
-  <button id="uploadCoverBtn">Upload Cover Photo</button>
-  <button id="uploadProfileBtn">Upload Profile Picture</button>
-  <h3>Profile Information</h3>
-  <div>
-    <h4>Name: <span id="displayName"></span></h4>
-    <h4>Email/Contact: <span id="displayContact"></span></h4>
-  </div>
-  <div id="profileInfo"></div>
-  <button id="editProfileBtn">Edit Profile</button>
-  <div id="editProfileFields">
-    <input
-      matInput
-      type="text"
-      id="nameInput"
-      placeholder="Enter new name"
-    /><br />
-    <input
-      matInput
-      type="text"
-      id="collegeInput"
-      placeholder="Enter your college"
-    /><br />
-    <input
-      matInput
-      type="text"
-      id="genderInput"
-      placeholder="Enter your gender"
-    /><br />
-    <input
-      type="date"
-      id="birthDateInput"
-      placeholder="Enter birth date"
-    /><br />
-    <input
-      matInput
-      type="text"
-      id="socialStatusInput"
-      placeholder="Marital Status"
-    /><br />
-    <input
-      matInput
-      type="text"
-      id="workPlaceInput"
-      placeholder="Work Place"
-    /><br />
-    <input
-      matInput
-      type="text"
-      id="residenceInput"
-      placeholder="Residence"
-    /><br />
-    <input
-      matInput
-      type="text"
-      id="jobTypeInput"
-      placeholder="Job Type"
-    /><br />
-    <input
-      matInput
-      type="text"
-      id="contactInput"
-      placeholder="Email or Phone"
-    /><br />
-    <button id="saveProfileBtn">Save</button>
-  </div>
-  <button id="changePasswordBtn">Change Password</button>
-  <div id="changePasswordField">
-    <input
-      type="password"
-      id="newPasswordInput"
-      placeholder="Enter new password"
-    /><br />
-    <button id="savePasswordBtn">Save Password</button>
-  </div>
-  <button id="logoutBtn">Logout</button>
-  <button id="deleteProfileBtn">Delete Profile</button>
 </section>

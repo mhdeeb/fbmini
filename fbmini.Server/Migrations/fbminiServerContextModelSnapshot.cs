@@ -155,24 +155,7 @@ namespace fbmini.Server.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("fbmini.Server.Models.DB", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("DB");
-                });
-
-            modelBuilder.Entity("fbmini.Server.Models.Products", b =>
+            modelBuilder.Entity("fbmini.Server.Models.FileModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -180,33 +163,26 @@ namespace fbmini.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ContentType")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<byte[]>("FileData")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("FileName")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UploadDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("fbmini.Server.Models.Test", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Test");
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("fbmini.Server.Models.User", b =>
@@ -257,6 +233,9 @@ namespace fbmini.Server.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<int>("UserDataId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -271,7 +250,39 @@ namespace fbmini.Server.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("UserDataId");
+
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("fbmini.Server.Models.UserData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Bio")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CoverId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PictureId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CoverId")
+                        .IsUnique()
+                        .HasFilter("[CoverId] IS NOT NULL");
+
+                    b.HasIndex("PictureId")
+                        .IsUnique()
+                        .HasFilter("[PictureId] IS NOT NULL");
+
+                    b.ToTable("UserData");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -323,6 +334,34 @@ namespace fbmini.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("fbmini.Server.Models.User", b =>
+                {
+                    b.HasOne("fbmini.Server.Models.UserData", "UserData")
+                        .WithMany()
+                        .HasForeignKey("UserDataId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserData");
+                });
+
+            modelBuilder.Entity("fbmini.Server.Models.UserData", b =>
+                {
+                    b.HasOne("fbmini.Server.Models.FileModel", "Cover")
+                        .WithOne()
+                        .HasForeignKey("fbmini.Server.Models.UserData", "CoverId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("fbmini.Server.Models.FileModel", "Picture")
+                        .WithOne()
+                        .HasForeignKey("fbmini.Server.Models.UserData", "PictureId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Cover");
+
+                    b.Navigation("Picture");
                 });
 #pragma warning restore 612, 618
         }

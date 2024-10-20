@@ -6,11 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
-
-type User = {
-  userName: string;
-  email: string;
-};
+import { User } from '../../utility/types';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -20,14 +17,14 @@ type User = {
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent {
-  public profile: User = {
-    userName: '',
-    email: '',
-  };
+  public profile = <User>{};
 
   snackbar = inject(MatSnackBar);
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    public readonly router: Router
+  ) {}
 
   getProfile() {
     this.http.get<User>('api/User').subscribe({

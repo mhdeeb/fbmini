@@ -6,6 +6,7 @@ import { ProfileComponent } from '../components/profile/profile.component';
 import { AuthGuard, NoAuthGuard } from '../components/auth/AuthGuard';
 import { TestComponent } from '../components/test/test.component';
 import { notFoundComponent } from '../components/not-found/not-found.component';
+import { ProfileEditComponent } from '../components/profile/edit/edit.component';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,10 @@ export const routes: Routes = [
     path: 'profile',
     component: ProfileComponent,
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'profile/edit',
+    component: ProfileEditComponent,
   },
   {
     path: 'login',

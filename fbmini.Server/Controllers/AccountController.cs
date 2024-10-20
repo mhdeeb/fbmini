@@ -21,7 +21,7 @@ public class AccountController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var user = new User { UserName = model.Username };
+        var user = new User { UserName = model.Username, UserData = new UserData{ } };
         var result = await _userManager.CreateAsync(user, model.Password);
 
         if (result.Succeeded)
@@ -36,7 +36,7 @@ public class AccountController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
         if (_signInManager.IsSignedIn(User))
-            return Unauthorized(new { Message = "User already logged in" });
+            return BadRequest(new { Message = "User already logged in" });
 
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -55,7 +55,7 @@ public class AccountController : ControllerBase
     public async Task<IActionResult> Logout()
     {
         if (!_signInManager.IsSignedIn(User))
-            return Unauthorized(new { Message = "User not logged in" });
+            return BadRequest(new { Message = "User not logged in" });
 
         await _signInManager.SignOutAsync();
         return Ok(new { Message = "Logged out successfully" });
