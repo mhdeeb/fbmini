@@ -58,22 +58,18 @@ export class PostComponent {
   }
 
   votePost(value: number) {
-    this.http.post(`api/user/vote/${value}/${this.post.id}`, {}).subscribe({
-      next: (vote) => {
-        this.http.get<VoteView>(`api/user/vote/${this.post.id}`).subscribe({
-          next: (vote) => {
-            this.post.likes = vote.likes;
-            this.post.dislikes = vote.dislikes;
-          },
-          error: (error) => {
-            console.error(error);
-          },
-        });
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
+    this.http
+      .post<VoteView>(`api/user/vote/${value}/${this.post.id}`, {})
+      .subscribe({
+        next: (vote) => {
+          this.post.likes = vote.likes;
+          this.post.dislikes = vote.dislikes;
+          this.post.vote = vote.vote;
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      });
   }
 
   sharePost() {

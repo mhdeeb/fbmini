@@ -522,7 +522,9 @@ namespace fbmini.Server.Controllers
             context.Posts.Update(post);
             await context.SaveChangesAsync();
 
-            return Ok(new { Message = "Vote casted" });
+            
+
+            return Ok(new { Likes = post.Likers.Count, Dislikes = post.Dislikers.Count, Vote = 0 });
         }
 
         [Authorize]

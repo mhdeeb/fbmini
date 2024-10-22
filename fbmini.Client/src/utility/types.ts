@@ -39,4 +39,5 @@ export type PostView = {
 export type VoteView = {
   likes: number;
   dislikes: number;
+  vote: number;
 };
