@@ -5,11 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-{
-    builder.Services.AddDbContext<fbminiServerContext>(options =>
-    options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=fbmini-database;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"));
-} else
+try
 {
     var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
 
@@ -17,8 +13,11 @@ if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development
 
     builder.Services.AddDbContext<fbminiServerContext>(options =>
         options.UseSqlServer(builder.Configuration["AzureDbConnection"] ?? throw new InvalidOperationException("Connection string 'fbminiServerContext' not found.")));
+} catch
+{
+    builder.Services.AddDbContext<fbminiServerContext>(options =>
+    options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=fbmini-database;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"));
 }
-
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -54,8 +53,8 @@ if (app.Environment.IsDevelopment())
     var dbContext = scope.ServiceProvider.GetRequiredService<fbminiServerContext>();
     try
     {
-        dbContext.Database.EnsureDeleted();
-        dbContext.Database.Migrate();
+        //dbContext.Database.EnsureDeleted();
+        //dbContext.Database.Migrate();
         Console.WriteLine("Database migrated successfully.");
     }
     catch (Exception ex)

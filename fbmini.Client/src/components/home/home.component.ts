@@ -24,14 +24,14 @@ export class HomeComponent {
     public dialog: MatDialog
   ) {}
 
-  public profile = <User>{};
+  // public posts;
 
   snackbar = inject(MatSnackBar);
 
-  listProfile() {
-    this.http.get<User>('api/User').subscribe({
-      next: (result) => {
-        this.profile = result;
+  getPosts() {
+    this.http.get<User>('api/user/post').subscribe({
+      next: (posts) => {
+        // this.posts = posts;
       },
       error: (error) => {
         console.error(error);
@@ -44,6 +44,6 @@ export class HomeComponent {
   }
 
   ngOnInit() {
-    this.listProfile();
+    this.getPosts();
   }
 }

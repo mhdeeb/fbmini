@@ -13,3 +13,10 @@ export class UserView {
   bio?: string;
   phoneNumber?: string;
 }
+
+export class PostView {
+  userName?: string;
+  email?: string;
+  bio?: string;
+  phoneNumber?: string;
+}

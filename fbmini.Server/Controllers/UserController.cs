@@ -32,6 +32,26 @@ namespace fbmini.Server.Controllers
         public int? ParentPost { get; set; }
     }
 
+    public class PostShowView()
+    {
+        public required int Id { get; set; }
+        public required string Title { get; set; }
+        public string? Content { get; set; }
+        public required DateTime Date { get; set; }
+        public IFormFile? Attachment { get; set; }
+        public int? ParentPost { get; set; }
+        public required UserShowView Poster { get; set; }
+        public class UserShowView
+        {
+            public required string UserName { get; set; }
+            public IFormFile? Picture { get; set; }
+        }
+        public int Likes { get; set; }
+        public int Dislikes { get; set; }
+        public int? Vote { get; set; }
+        public required List<int> SubPostsIds { get; set; }
+    }
+
     [ApiController]
     [Route("api/[controller]")]
     public class UserController(UserManager<User> userManager, fbminiServerContext context) : ControllerBase
@@ -68,7 +88,7 @@ namespace fbmini.Server.Controllers
 
         [Authorize]
         [HttpGet("list")]
-        public async Task<IActionResult> GetList()
+        public async Task<IActionResult> GetUsernames()
         {
             var users = await context.Users
             .Select(u => u.UserName)
@@ -119,7 +139,7 @@ namespace fbmini.Server.Controllers
 
         [Authorize]
         [HttpGet("{username}")]
-        public async Task<ActionResult<UserView>> Get(string username)
+        public async Task<ActionResult<UserView>> GetUser(string username)
         {
             var user = await context.Users.Include(i => i.UserData).FirstOrDefaultAsync(user => user.UserName == username);
 
@@ -333,98 +353,24 @@ namespace fbmini.Server.Controllers
             return Ok(new { Message = "Post created successfully", PostId = post.Id });
         }
 
-        [HttpGet("posts/{postId}")]
-        public async Task<IActionResult> GetT(int postId)
+        private object MapPostDetails(PostModel post)
         {
+            var userId = GetUserID();
 
-            var postTree =  context.Posts
-                .Include(p => p.SubPosts)
-                .Include(p => p.Attachment)
-                .AsEnumerable()
-                .FirstOrDefault(x => x.Id == postId);
+            // TODO
+            //new PostShowView {
+            //    Id = post.Id,
+            //    Title = post.Title,
+            //    Content = post.Content,
+            //    Date = post.Date,
+            //    Poster =
+            //    new PostShowView.UserShowView {
+            //       UserName = post.Poster.UserName,
+            //       Picture = File(post.Poster.UserData.Picture.FileData, post.Poster.UserData.Picture.ContentType)
+            //    },
 
+            //}
 
-            Console.WriteLine(postTree.Content);
-            if (postTree.Attachment != null)
-                Console.WriteLine(postTree.Attachment.FileName);
-
-            foreach (var p in postTree.SubPosts)
-            {
-                Console.WriteLine(p.Content);
-                if (p.Attachment != null)
-                    Console.WriteLine(p.Attachment.FileName);
-                foreach (var p2 in p.SubPosts)
-                {
-                    Console.WriteLine(p2.Content);
-                    if (p2.Attachment != null)
-                        Console.WriteLine(p2.Attachment.FileName);
-                    foreach (var p3 in p2.SubPosts)
-                    {
-                        Console.WriteLine(p3.Content);
-                        if (p3.Attachment != null)
-                            Console.WriteLine(p3.Attachment.FileName);
-
-                    }
-                }
-            }
-               
-            return Ok();
-        }
-
-
-        [Authorize]
-        [HttpGet("post/{postId}")]
-        public async Task<IActionResult> Get(int postId)
-        {
-            var post = await context.Posts
-                .Include(p => p.Poster)
-                    .ThenInclude(u => u.UserData)
-                        .ThenInclude(ud=>ud.Cover)
-                .Include(p => p.Poster.UserData.Picture)
-                .Include(p => p.Attachment)
-                .Include(p => p.Likers)
-                .Include(p => p.Dislikers)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.Id == postId);
-
-            if (post == null)
-                return NotFound();
-
-            // Load sub-posts recursively
-            await LoadSubPostsRecursively(post);
-
-            // Map the post details to the response
-            var postDetails = MapPostDetails(post);
-
-            return Ok(postDetails);
-        }
-
-        private async Task LoadSubPostsRecursively(PostModel post)
-        {
-            // Load sub-posts for the current post
-            await context.Entry(post)
-                .Collection(p => p.SubPosts)
-                .Query()
-                .Include(sp => sp.Poster)
-                    .ThenInclude(u => u.UserData)
-                .Include(sp => sp.Attachment)
-                .Include(sp => sp.Likers)
-                .Include(sp => sp.Dislikers)
-                .LoadAsync();
-
-            // Recursively load sub-posts for each child post
-            foreach (var subPost in post.SubPosts)
-            {
-                // Continue loading sub-posts if there are any
-                if (subPost.SubPosts != null && subPost.SubPosts.Count > 0)
-                {
-                    await LoadSubPostsRecursively(subPost);
-                }
-            }
-        }
-
-        private static object MapPostDetails(PostModel post)
-        {
             return new
             {
                 post.Id,
@@ -434,22 +380,149 @@ namespace fbmini.Server.Controllers
                 Poster = new
                 {
                     post.Poster.UserName,
-                    post.Poster.Email,
-                    Bio = post.Poster.UserData?.Bio
+                    Picture = post.Poster.UserData.Picture != null ? new
+                    {
+                        post.Poster.UserData.Picture.ContentType,
+                        post.Poster.UserData.Picture.FileData,
+                    } : null
                 },
                 Attachment = post.Attachment != null ? new
                 {
                     post.Attachment.FileName,
                     post.Attachment.ContentType,
-                    post.Attachment.Size
+                    post.Attachment.Size,
+                    post.Attachment.FileData,
                 } : null,
-                Likers = post.Likers.Select(l => l.UserName).ToList(),
-                Dislikers = post.Dislikers.Select(d => d.UserName).ToList(),
-                // Recursively map sub-posts
-                SubPosts = post.SubPosts.Select(sub => MapPostDetails(sub)).ToList()
+                Likes = post.Likers.Count,
+                Dislikes = post.Dislikers.Count,
+                Vote = post.Likers.Any(e => e.Id == userId) ? 1 : post.Dislikers.Any(e => e.Id == userId) ? 0 : (int?)null,
+                SubPostsIds = post.SubPosts.Select(p => p.Id).ToList(),
             };
         }
 
+        private async Task<object?> GetPostFromId(int postId)
+        {
+            var post = await context.Posts
+                        .Include(p => p.Poster)
+                            .ThenInclude(u => u.UserData)
+                                .ThenInclude(ud => ud.Cover)
+                        .Include(p => p.Poster.UserData.Picture)
+                        .Include(p => p.Attachment)
+                        .Include(p => p.Likers)
+                        .Include(p => p.Dislikers)
+                        .Include(p => p.SubPosts)
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(p => p.Id == postId);
 
+            if (post == null)
+                return null;
+
+            return MapPostDetails(post);
+        }
+
+        [Authorize]
+        [HttpGet("post")]
+        public async Task<IActionResult> GetPosts()
+        {
+            var posts = await context.Posts
+            .Include(p => p.Poster)
+                .ThenInclude(u => u.UserData)
+                    .ThenInclude(ud => ud.Cover)
+            .Include(p => p.Poster.UserData.Picture)
+            .Include(p => p.Attachment)
+            .Include(p => p.Likers)
+            .Include(p => p.Dislikers)
+            .Include(p => p.SubPosts)
+            .AsNoTracking()
+            .Where(p => p.ParentPostId == null)
+            .ToListAsync();
+
+            return Ok(posts.Select(MapPostDetails).ToList());
+        }
+
+        [Authorize]
+        [HttpGet("post/{postId}")]
+        public async Task<IActionResult> GetPost(int postId)
+        {
+            var result = await GetPostFromId(postId);
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("subpost/{postId}")]
+        public async Task<IActionResult> GetComments(int postId)
+        {
+            var post = await context.Posts
+                .Include(p=>p.SubPosts)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == postId);
+
+            if (post == null)
+                return NotFound();
+            
+            var results = new List<object?>();
+
+            foreach (var p in post.SubPosts)
+                results.Add(await GetPostFromId(p.Id));
+
+            return Ok(results);
+        }
+
+        [Authorize]
+        [HttpPost("vote/{value}/{postId}")]
+        public async Task<IActionResult> PostVote(int value, int postId)
+        {
+            var userId = GetUserID();
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var user = await context.Users
+                .Include(u => u.LikedPosts)
+                .Include(u => u.DislikedPosts)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return Unauthorized();
+
+            var post = await context.Posts
+                .Include(p => p.Likers)
+                .Include(p => p.Dislikers)
+                .FirstOrDefaultAsync(p => p.Id == postId);
+
+            if (post == null)
+                return NotFound();
+
+            switch(value)
+            {
+                case 0:
+                    if (!user.DislikedPosts.Remove(post))
+                    {
+                        user.LikedPosts.Remove(post);
+                        user.DislikedPosts.Add(post);
+                    }
+                    break;
+
+                case 1:
+                    if (!user.LikedPosts.Remove(post))
+                    {
+                        user.DislikedPosts.Remove(post);
+                        user.LikedPosts.Add(post);
+                    }
+                    break;
+                default:
+                    return BadRequest();
+            }
+
+            context.Users.Update(user);
+            context.Posts.Update(post);
+            await context.SaveChangesAsync();
+
+            return Ok(new { Message = "Vote casted" });
+        }
     }
 }
