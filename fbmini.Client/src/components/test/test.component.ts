@@ -40,10 +40,29 @@ export class TestComponent {
     const dialogRef = this.dialog.open(BackdropDialogComponent, {
       disableClose: true,
     });
-    this.authService.login('admin', 'Admin@0', true).subscribe({
+    this.authService.login('test', 'Test@1', true).subscribe({
       next: (response) => {
         dialogRef.close();
         pop_up(this.snackbar, 'Successfully logged in', PopUp.SUCCESS);
+      },
+      error: (error: HttpErrorResponse) => {
+        dialogRef.close();
+        pop_up(this.snackbar, error.error.message, PopUp.ERROR);
+      },
+      complete: () => {
+        dialogRef.close();
+      },
+    });
+  }
+
+  register(): void {
+    const dialogRef = this.dialog.open(BackdropDialogComponent, {
+      disableClose: true,
+    });
+    this.authService.register('test', 'Test@1').subscribe({
+      next: (response) => {
+        dialogRef.close();
+        pop_up(this.snackbar, 'Successfully registered', PopUp.SUCCESS);
       },
       error: (error: HttpErrorResponse) => {
         dialogRef.close();

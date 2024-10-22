@@ -7,28 +7,31 @@ namespace fbmini.Server.Models
     {
         public fbminiServerContext(DbContextOptions<fbminiServerContext> options)
             : base(options)
-        {
-        }
+        {}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<UserData>()
-                .HasOne(u => u.Picture)
-                .WithOne()
-                .HasForeignKey<UserData>(u => u.PictureId)
+            builder.Entity<PostModel>()
+                .HasOne(p => p.Poster)
+                .WithMany()
+                .HasForeignKey(p => p.PosterId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<PostModel>()
+                .HasMany(p => p.Likers)
+                .WithMany(u => u.LikedPosts)
+                .UsingEntity(j => j.ToTable("PostLikers"));
 
-            builder.Entity<UserData>()
-                .HasOne(u => u.Cover)
-                .WithOne()
-                .HasForeignKey<UserData>(u => u.CoverId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<PostModel>()
+                .HasMany(p => p.Dislikers)
+                .WithMany(u => u.DislikedPosts)
+                .UsingEntity(j => j.ToTable("PostDislikers"));
         }
 
         public DbSet<UserData> UserData { get; set; }
         public DbSet<FileModel> Files { get; set; }
+        public DbSet<PostModel> Posts { get; set; }
     }
 }

@@ -5,9 +5,20 @@ using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
+if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+{
+    builder.Services.AddDbContext<fbminiServerContext>(options =>
+    options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=fbmini-database;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"));
+} else
+{
+    var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
 
-builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+    builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+
+    builder.Services.AddDbContext<fbminiServerContext>(options =>
+        options.UseSqlServer(builder.Configuration["AzureDbConnection"] ?? throw new InvalidOperationException("Connection string 'fbminiServerContext' not found.")));
+}
+
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -26,9 +37,6 @@ builder.Services.AddAuthentication(options => {
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
-builder.Services.AddDbContext<fbminiServerContext>(options =>
-    options.UseSqlServer(builder.Configuration["AzureDbConnection"] ?? throw new InvalidOperationException("Connection string 'fbminiServerContext' not found.")));
-
 builder.Services.AddIdentityCore<User>()
     .AddSignInManager()
     .AddEntityFrameworkStores<fbminiServerContext>();
@@ -41,6 +49,19 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<fbminiServerContext>();
+    try
+    {
+        dbContext.Database.EnsureDeleted();
+        dbContext.Database.Migrate();
+        Console.WriteLine("Database migrated successfully.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred during migration: {ex.Message}");
+    }
 }
 
 app.UseStaticFiles();

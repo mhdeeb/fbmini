@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using fbmini.Server.Models;
 
@@ -11,9 +12,11 @@ using fbmini.Server.Models;
 namespace fbmini.Server.Migrations
 {
     [DbContext(typeof(fbminiServerContext))]
-    partial class fbminiServerContextModelSnapshot : ModelSnapshot
+    [Migration("20241021134238_Initial2")]
+    partial class Initial2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -326,6 +329,9 @@ namespace fbmini.Server.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("UserDataId")
+                        .IsUnique();
+
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
@@ -348,16 +354,13 @@ namespace fbmini.Server.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CoverId");
 
                     b.HasIndex("PictureId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("UserData");
                 });
@@ -470,6 +473,17 @@ namespace fbmini.Server.Migrations
                     b.Navigation("Poster");
                 });
 
+            modelBuilder.Entity("fbmini.Server.Models.User", b =>
+                {
+                    b.HasOne("fbmini.Server.Models.UserData", "UserData")
+                        .WithOne("User")
+                        .HasForeignKey("fbmini.Server.Models.User", "UserDataId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserData");
+                });
+
             modelBuilder.Entity("fbmini.Server.Models.UserData", b =>
                 {
                     b.HasOne("fbmini.Server.Models.FileModel", "Cover")
@@ -480,17 +494,9 @@ namespace fbmini.Server.Migrations
                         .WithMany()
                         .HasForeignKey("PictureId");
 
-                    b.HasOne("fbmini.Server.Models.User", "User")
-                        .WithOne("UserData")
-                        .HasForeignKey("fbmini.Server.Models.UserData", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Cover");
 
                     b.Navigation("Picture");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("fbmini.Server.Models.PostModel", b =>
@@ -498,15 +504,12 @@ namespace fbmini.Server.Migrations
                     b.Navigation("SubPosts");
                 });
 
-            modelBuilder.Entity("fbmini.Server.Models.User", b =>
-                {
-                    b.Navigation("UserData")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("fbmini.Server.Models.UserData", b =>
                 {
                     b.Navigation("Posts");
+
+                    b.Navigation("User")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
