@@ -23,12 +23,12 @@ export type PostView = {
     filename: string;
     contentType: string;
     size: number;
-    fileData: BinaryData;
+    fileData: string;
   };
   parent_post?: number;
   poster: {
     userName: string;
-    picture: { content_type: string; file_data: BinaryData };
+    picture: { contentType: string; fileData: string };
   };
   likes: number;
   dislikes: number;
@@ -40,4 +40,3 @@ export type VoteView = {
   likes: number;
   dislikes: number;
 };
-
