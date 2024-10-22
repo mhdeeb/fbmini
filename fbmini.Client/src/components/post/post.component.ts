@@ -4,6 +4,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { CommonModule } from '@angular/common';
+import { PostView, VoteView } from '../../utility/types';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-post',
@@ -19,10 +21,28 @@ import { CommonModule } from '@angular/common';
   ],
 })
 export class PostComponent {
-  @Input() post: any;
+  @Input()
+  post!: PostView;
 
-  likePost() {
-    console.log('Post liked!');
+  constructor(private readonly http: HttpClient) {}
+
+  votePost(value: number) {
+    this.http.post(`api/user/vote/${value}/${this.post.id}`, {}).subscribe({
+      next: (vote) => {
+        this.http.get<VoteView>(`api/user/vote/${this.post.id}`).subscribe({
+          next: (vote) => {
+            this.post.likes = vote.likes;
+            this.post.dislikes = vote.dislikes;
+          },
+          error: (error) => {
+            console.error(error);
+          },
+        });
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
   }
 
   sharePost() {

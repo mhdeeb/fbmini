@@ -32,25 +32,25 @@ namespace fbmini.Server.Controllers
         public int? ParentPost { get; set; }
     }
 
-    public class PostShowView()
-    {
-        public required int Id { get; set; }
-        public required string Title { get; set; }
-        public string? Content { get; set; }
-        public required DateTime Date { get; set; }
-        public IFormFile? Attachment { get; set; }
-        public int? ParentPost { get; set; }
-        public required UserShowView Poster { get; set; }
-        public class UserShowView
-        {
-            public required string UserName { get; set; }
-            public IFormFile? Picture { get; set; }
-        }
-        public int Likes { get; set; }
-        public int Dislikes { get; set; }
-        public int? Vote { get; set; }
-        public required List<int> SubPostsIds { get; set; }
-    }
+    //public class PostShowView()
+    //{
+    //    public required int Id { get; set; }
+    //    public required string Title { get; set; }
+    //    public string? Content { get; set; }
+    //    public required DateTime Date { get; set; }
+    //    public IFormFile? Attachment { get; set; }
+    //    public int? ParentPost { get; set; }
+    //    public required UserShowView Poster { get; set; }
+    //    public class UserShowView
+    //    {
+    //        public required string UserName { get; set; }
+    //        public IFormFile? Picture { get; set; }
+    //    }
+    //    public int Likes { get; set; }
+    //    public int Dislikes { get; set; }
+    //    public int? Vote { get; set; }
+    //    public required List<int> SubPostsIds { get; set; }
+    //}
 
     [ApiController]
     [Route("api/[controller]")]
@@ -523,6 +523,21 @@ namespace fbmini.Server.Controllers
             await context.SaveChangesAsync();
 
             return Ok(new { Message = "Vote casted" });
+        }
+
+        [Authorize]
+        [HttpGet("vote/{postId}")]
+        public async Task<IActionResult> GetVote(int value, int postId)
+        {
+            var post = await context.Posts
+                .Include(p => p.Likers)
+                .Include(p => p.Dislikers)
+                .FirstOrDefaultAsync(p => p.Id == postId);
+
+            if (post == null)
+                return NotFound();
+
+            return Ok(new { Likes = post.Likers.Count, Dislikes = post.Dislikers.Count });
         }
     }
 }

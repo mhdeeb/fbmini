@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { User } from '../../utility/types';
+import { PostView, User } from '../../utility/types';
 import { PostComponent } from '../post/post.component';
 
 @Component({
@@ -24,14 +24,14 @@ export class HomeComponent {
     public dialog: MatDialog
   ) {}
 
-  // public posts;
+  public posts: PostView[] = [];
 
   snackbar = inject(MatSnackBar);
 
   getPosts() {
-    this.http.get<User>('api/user/post').subscribe({
+    this.http.get<PostView[]>('api/user/post').subscribe({
       next: (posts) => {
-        // this.posts = posts;
+        this.posts = posts;
       },
       error: (error) => {
         console.error(error);
