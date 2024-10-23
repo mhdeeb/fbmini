@@ -19,12 +19,15 @@
     <mat-card-subtitle>{{ post.date }}</mat-card-subtitle>
   </mat-card-header>
 
-  <img
-    mat-card-image
-    *ngIf="ContentImageUrl"
-    [src]="ContentImageUrl"
-    alt="Post"
-  />
+  <div class="bg-[#18191a]">
+    <img
+      mat-card-image
+      *ngIf="ContentImageUrl"
+      [src]="ContentImageUrl"
+      alt="Post"
+      class="mx-auto"
+    />
+  </div>
 
   <mat-card-content>
     <p>{{ post.content }}</p>

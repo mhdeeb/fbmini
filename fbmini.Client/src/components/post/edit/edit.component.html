@@ -41,12 +41,18 @@
       accept="image/*"
       placeholder="attachment"
       (change)="onPictureSelect($event)"
-      class="ps-4"
     />
 
     <mat-card-content>
-      <img *ngIf="imagePreview" [src]="imagePreview" alt="Post" />
-      <mat-form-field class="w-full">
+      <div class="bg-[#18191a]">
+        <img
+          *ngIf="imagePreview"
+          [src]="imagePreview"
+          alt="Post"
+          class="max-h-96 object-contain mx-auto"
+        />
+      </div>
+      <mat-form-field class="w-full" subscriptSizing="dynamic">
         <mat-label>Content</mat-label>
         <textarea
           matInput
