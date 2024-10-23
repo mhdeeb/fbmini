@@ -8,7 +8,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { UserView, User } from '../../../utility/types';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import {
   MatDialogActions,
   MatDialogClose,
@@ -62,6 +67,8 @@ export class ProfileEditDialog {
     this.http.get<User>('api/User').subscribe({
       next: (result) => {
         this.form.setValue(result);
+        this.form.addControl('picture', new FormControl(null));
+        this.form.addControl('cover', new FormControl(null));
         this.form.markAsPristine();
       },
       error: (error) => {
@@ -112,7 +119,7 @@ export class ProfileEditDialog {
   onPictureSelect(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      this.form.patchValue({ Attachment: file });
+      this.form.patchValue({ picture: file });
 
       const reader = new FileReader();
       reader.onload = () => {
@@ -120,15 +127,16 @@ export class ProfileEditDialog {
       };
       reader.readAsDataURL(file);
     } else {
-      this.form.patchValue({ Attachment: null });
+      this.form.patchValue({ picture: null });
       this.picturePreview = null;
     }
+    this.form.get('picture')?.markAsDirty();
   }
 
   onCoverSelect(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      this.form.patchValue({ Attachment: file });
+      this.form.patchValue({ cover: file });
 
       const reader = new FileReader();
       reader.onload = () => {
@@ -136,9 +144,10 @@ export class ProfileEditDialog {
       };
       reader.readAsDataURL(file);
     } else {
-      this.form.patchValue({ Attachment: null });
+      this.form.patchValue({ cover: null });
       this.coverPreview = null;
     }
+    this.form.get('cover')?.markAsDirty();
   }
 
   onSubmit() {
@@ -147,7 +156,6 @@ export class ProfileEditDialog {
         disableClose: true,
       });
       let formData = new FormData();
-
       for (const value in this.form.value)
         if (this.form.get(value)?.dirty)
           formData.append(value, this.form.get(value)?.value);
