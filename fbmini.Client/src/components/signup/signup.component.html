@@ -1,4 +1,4 @@
-<div class="bg-white p-8 rounded-lg shadow-lg max-w-md text-black">
+<div class="bg-white p-8 rounded-lg shadow-lg text-black max-w-md">
   <h2 class="text-3xl font-bold mb-6 text-center">Create an Account</h2>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
     <mat-form-field class="w-full">
@@ -37,7 +37,7 @@
     </mat-form-field>
     <div class="min-h-24">
       <ul
-        class="error-list"
+        class="text-red-600 list-disc text-sm list-inside"
         *ngIf="
           isInputFocused &&
           !form.get('password')?.hasError('required') &&

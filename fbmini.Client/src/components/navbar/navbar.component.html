@@ -1,4 +1,7 @@
-<mat-toolbar color="primary">
+<mat-toolbar
+  color="primary"
+  [@slideInOut]="isNavbarVisible ? 'visible' : 'hidden'"
+>
   <button class="title" mat-button routerLink="">FB Mini</button>
 
   <button
@@ -6,15 +9,35 @@
     mat-raised-button
     color="accent"
     (click)="createPost()"
+    class="desktop-post"
   >
     + Post
   </button>
 
   <span class="spacer"></span>
 
-  <app-search-bar *ngIf="isAuth" />
+  <button
+    *ngIf="isAuth"
+    mat-icon-button
+    (click)="searchUser()"
+    class="mobile-post"
+  >
+    <mat-icon>search</mat-icon>
+  </button>
+
+  <app-search-bar *ngIf="isAuth" class="desktop-search" />
 
   <span class="spacer"></span>
+
+  <button
+    *ngIf="isAuth"
+    mat-icon-button
+    color="accent"
+    (click)="createPost()"
+    class="mobile-post"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
 
   <div class="desktop-menu">
     <button
@@ -36,16 +59,30 @@
     <button mat-button routerLink="/test" routerLinkActive="active-link">
       Test
     </button>
+    @if (isAuth) {
     <button mat-button (click)="logout()" routerLinkActive="active-link">
       Log out
     </button>
+    } @else {
+    <button mat-button routerLink="/login" routerLinkActive="active-link">
+      Log in
+    </button>
+    <button mat-button routerLink="/signup" routerLinkActive="active-link">
+      Sign up
+    </button>
+    }
   </div>
 
   <mat-menu #menu="matMenu">
     <button *ngIf="isAuth" mat-menu-item routerLink="/home">Home</button>
     <button *ngIf="isAuth" mat-menu-item routerLink="/profile">Profile</button>
     <button mat-menu-item routerLink="/test">Test</button>
+    @if (isAuth) {
     <button mat-menu-item (click)="logout()">Log out</button>
+    } @else {
+    <button mat-menu-item routerLink="/login">Log in</button>
+    <button mat-menu-item routerLink="/signup">Sign up</button>
+    }
   </mat-menu>
 
   <button mat-icon-button [matMenuTriggerFor]="menu" class="mobile-menu">

@@ -1,8 +1,14 @@
 :host {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  transition: transform 0.3s ease;
   z-index: 1000;
-  width: 100%;
+}
+
+:host .hidden {
+  transform: translateY(-100%);
 }
 
 mat-toolbar {
@@ -36,11 +42,31 @@ mat-toolbar {
   display: none;
 }
 
+.mobile-post {
+  display: none;
+}
+
 @media (max-width: 768px) {
-  .desktop-menu {
+  .desktop-menu,
+  .desktop-search,
+  .desktop-post {
     display: none;
   }
+
+  .mobile-post,
   .mobile-menu {
     display: inline-flex;
   }
+}
+
+.sidenav-container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 250px;
+}
+
+.content {
+  padding: 16px;
 }

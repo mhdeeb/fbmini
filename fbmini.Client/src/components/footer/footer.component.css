@@ -1,4 +1,4 @@
-.footer {
+.desktop-footer {
   background-color: #00000080;
 
   a {
@@ -11,6 +11,11 @@
   }
 }
 
+.mobile-footer {
+  display: none;
+  background-color: #00000080;
+}
+
 .footer-content {
   display: flex;
   align-items: center;
@@ -20,4 +25,13 @@
 
 .spacer {
   flex: 1 1 auto;
+}
+
+@media (max-width: 768px) {
+  .desktop-footer {
+    display: none;
+  }
+  .mobile-footer {
+    display: inline-flex;
+  }
 }

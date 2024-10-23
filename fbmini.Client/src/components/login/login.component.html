@@ -3,7 +3,7 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
     <mat-form-field class="w-full">
       <mat-label>Username</mat-label>
-      <input matInput formControlName="username" placeholder="Enter username" />
+      <input matInput formControlName="username" placeholder="Enter Username" />
       <mat-error *ngIf="form.get('username')?.hasError('required')"
         >Username is required
       </mat-error>

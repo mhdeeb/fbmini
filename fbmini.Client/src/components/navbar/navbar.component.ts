@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -12,6 +12,15 @@ import { pop_up, PopUp } from '../../utility/popup';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { PostEditDialog } from '../post/edit/edit.component';
 import { CommonModule } from '@angular/common';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { SearchDialog } from '../search-dialog/search-dialog.component';
 
 @Component({
   selector: 'app-navbar',
@@ -25,17 +34,35 @@ import { CommonModule } from '@angular/common';
     RouterModule,
     SearchBarComponent,
     CommonModule,
+    MatSidenavModule,
   ],
   standalone: true,
+  animations: [
+    trigger('slideInOut', [
+      state('visible', style({ transform: 'translateY(0)' })),
+      state('hidden', style({ transform: 'translateY(-100%)' })),
+      transition('visible <=> hidden', animate('0.3s ease-in-out')),
+    ]),
+  ],
 })
 export class NavbarComponent {
   isAuth: boolean = false;
+  isNavbarVisible = true;
+  lastScrollTop = 0;
 
   constructor(
     private readonly authService: AuthService,
     public dialog: MatDialog,
     private readonly snackbar: MatSnackBar
   ) {}
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const currentScroll = window.scrollY || document.documentElement.scrollTop;
+    if (currentScroll > this.lastScrollTop) this.isNavbarVisible = false;
+    else this.isNavbarVisible = true;
+    this.lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+  }
 
   ngOnInit() {
     this.authService.isAuthenticated().subscribe((isAuth) => {
@@ -45,6 +72,10 @@ export class NavbarComponent {
 
   createPost(): void {
     this.dialog.open(PostEditDialog, { disableClose: true });
+  }
+
+  searchUser() {
+    this.dialog.open(SearchDialog);
   }
 
   logout(): void {

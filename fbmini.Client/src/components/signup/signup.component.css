@@ -1,13 +1,7 @@
-.error-list {
-  list-style: disc;
-  color: red;
-  font-size: 12px;
-  padding-inline-start: 2rem;
-}
-
 :host {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-grow: 1;
+  padding-inline: 5rem;
 }
