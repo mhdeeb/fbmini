@@ -11,7 +11,6 @@ import {
 import { TestComponent } from '../components/test/test.component';
 import { notFoundComponent } from '../components/not-found/not-found.component';
 import { NgModule } from '@angular/core';
-import { UserComponent } from '../components/profile/user/user.component';
 
 export const routes: Routes = [
   {
@@ -28,11 +27,13 @@ export const routes: Routes = [
     path: 'profile',
     component: ProfileComponent,
     canActivate: [AuthGuard],
+    data: { owner: true },
   },
   {
     path: 'user/:username',
-    component: UserComponent,
+    component: ProfileComponent,
     canActivate: [UserPreviewGuard],
+    data: { owner: false },
   },
   {
     path: 'login',

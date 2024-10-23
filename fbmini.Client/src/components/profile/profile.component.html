@@ -2,9 +2,9 @@
   <div
     class="mx-10 rounded-md bg-cover bg-center relative h-96 mt-10 bg-gradient-to-r from-[var(--bg-gradient2-from)] to-[var(--bg-gradient2-to)]"
   >
-    <div *ngIf="coverUrl">
+    <div *ngIf="Urls.cover">
       <img
-        [src]="coverUrl"
+        [src]="Urls.cover"
         alt="Cover"
         draggable="false"
         class="object-cover object-center h-96 w-full rounded-md"
@@ -13,11 +13,11 @@
     <div class="flex gap-5 absolute z-10 -bottom-32 left-5">
       <div class="rounded-full p-2 bg-[var(--bg-header)] relative">
         <div
-          *ngIf="profileUrl; else noImage"
+          *ngIf="Urls.picture"
           class="object-cover rounded-full aspect-square w-40"
         >
           <img
-            [src]="profileUrl"
+            [src]="Urls.picture"
             alt="Profile"
             draggable="false"
             class="object-cover rounded-full aspect-square w-40 select-none"
@@ -29,6 +29,7 @@
           ></div>
         </ng-template>
         <div
+          *ngIf="isOwner"
           class="p-1 rounded-full bg-[var(--bg-header)] absolute right-4 bottom-0"
         >
           <button
@@ -43,8 +44,12 @@
       <span class="content-center text-4xl mt-10"
         >{{ profile.userName }}
         <div class="font-normal text-base opacity-50">
-          <div>{{ profile.email }}</div>
-          <div>{{ profile.phoneNumber }}</div>
+          <div *ngIf="profile.email" class="flex gap-2">
+            <mat-icon>email</mat-icon> <span>{{ profile.email }}</span>
+          </div>
+          <div *ngIf="profile.phoneNumber" class="flex gap-2">
+            <mat-icon>phone</mat-icon> <span>{{ profile.phoneNumber }}</span>
+          </div>
         </div>
         <div class="text-sm text-slate-400">
           {{ profile.bio }}

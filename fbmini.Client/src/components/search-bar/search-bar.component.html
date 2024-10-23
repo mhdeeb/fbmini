@@ -1,11 +1,15 @@
 <form (submit)="onSubmit()" autocomplete="off">
   <mat-form-field subscriptSizing="dynamic">
-    <mat-label>Username</mat-label>
+    <mat-label>search user</mat-label>
     <input
-      type="text"
-      placeholder="username"
-      aria-label="username"
+      type="search"
       matInput
+      autocomplete="off"
+      autocorrect="off"
+      spellcheck="false"
+      aria-label="Search"
+      placeholder="search"
+      aria-label="search"
       [formControl]="searchQuery"
       [matAutocomplete]="auto"
     />
