@@ -30,7 +30,7 @@ import { ProfileEditDialog } from './edit/edit.component';
 export class ProfileComponent {
   public profile = <User>{};
   isOwner: boolean = false;
-  userName: string = '';
+  userName: string | null = '';
   Urls: any = {};
 
   constructor(
@@ -87,6 +87,15 @@ export class ProfileComponent {
         this.userName = params['username'];
       }
     });
+
+    if (!this.isOwner)
+      this.route.paramMap.subscribe((params) => {
+        this.userName = params.get('username');
+        this.getProfile();
+        this.loadImage('cover');
+        this.loadImage('picture');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
 
     this.getProfile();
     this.loadImage('picture');
