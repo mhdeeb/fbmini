@@ -1,67 +1,57 @@
-<div class="flex justify-center items-center min-h-screen">
-  <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full text-black">
-    <h2 class="text-3xl font-bold mb-6 text-center">Sign In</h2>
-    <form (ngSubmit)="onSubmit()" [formGroup]="form">
-      <mat-form-field class="w-full">
-        <mat-label>Username</mat-label>
-        <input
-          matInput
-          formControlName="username"
-          placeholder="Enter username"
-        />
-        <mat-error *ngIf="form.get('username')?.hasError('required')"
-          >Username is required
-        </mat-error>
-      </mat-form-field>
+<div class="bg-white p-8 rounded-lg shadow-lg max-w-md text-black">
+  <h2 class="text-3xl font-bold mb-6 text-center">Sign In</h2>
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <mat-form-field class="w-full">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username" placeholder="Enter username" />
+      <mat-error *ngIf="form.get('username')?.hasError('required')"
+        >Username is required
+      </mat-error>
+    </mat-form-field>
 
-      <mat-form-field class="w-full">
-        <mat-label>Password</mat-label>
-        <input
-          matInput
-          [type]="showPassword ? 'text' : 'password'"
-          placeholder="Enter Password"
-          formControlName="password"
-          (focus)="isInputFocused = true"
-          (blur)="isInputFocused = false"
-        />
-        <button
-          mat-icon-button
-          matSuffix
-          (click)="toggleHide($event)"
-          [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="showPassword"
-          type="button"
-        >
-          <mat-icon>{{
-            showPassword ? "visibility" : "visibility_off"
-          }}</mat-icon>
-        </button>
-        <mat-error *ngIf="form.get('password')?.hasError('required')"
-          >Password is required</mat-error
-        >
-      </mat-form-field>
-
-      <mat-checkbox
-        class="w-full"
-        color="primary"
-        formControlName="remember_me"
-      >
-        Remember Me
-      </mat-checkbox>
-
+    <mat-form-field class="w-full">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        [type]="showPassword ? 'text' : 'password'"
+        placeholder="Enter Password"
+        formControlName="password"
+        (focus)="isInputFocused = true"
+        (blur)="isInputFocused = false"
+      />
       <button
-        class="w-full my-5"
-        mat-raised-button
-        color="primary"
-        type="submit"
-        [disabled]="form.invalid"
+        mat-icon-button
+        matSuffix
+        (click)="toggleHide($event)"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="showPassword"
+        type="button"
       >
-        Login
+        <mat-icon>{{
+          showPassword ? "visibility" : "visibility_off"
+        }}</mat-icon>
       </button>
-
-      <a href="signup" class="text-blue-600 underline hover:text-blue-400"
-        >Don't have an account?</a
+      <mat-error *ngIf="form.get('password')?.hasError('required')"
+        >Password is required</mat-error
       >
-    </form>
-  </div>
+    </mat-form-field>
+
+    <mat-checkbox class="w-full" color="primary" formControlName="remember_me">
+      Remember Me
+    </mat-checkbox>
+
+    <button
+      class="w-full my-5"
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="form.invalid"
+    >
+      Login
+    </button>
+
+    <a href="signup" class="text-blue-600 underline hover:text-blue-400"
+      >Don't have an account?</a
+    >
+  </form>
 </div>

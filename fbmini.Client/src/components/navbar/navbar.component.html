@@ -1,21 +1,36 @@
 <mat-toolbar color="primary">
   <button class="title" mat-button routerLink="">FB Mini</button>
 
-  <button mat-raised-button color="accent" (click)="createPost()">
+  <button
+    *ngIf="isAuth"
+    mat-raised-button
+    color="accent"
+    (click)="createPost()"
+  >
     + Post
   </button>
 
   <span class="spacer"></span>
 
-  <app-search-bar />
+  <app-search-bar *ngIf="isAuth" />
 
   <span class="spacer"></span>
 
   <div class="desktop-menu">
-    <button mat-button routerLink="/home" routerLinkActive="active-link">
+    <button
+      *ngIf="isAuth"
+      mat-button
+      routerLink="/home"
+      routerLinkActive="active-link"
+    >
       Home
     </button>
-    <button mat-button routerLink="/profile" routerLinkActive="active-link">
+    <button
+      *ngIf="isAuth"
+      mat-button
+      routerLink="/profile"
+      routerLinkActive="active-link"
+    >
       Profile
     </button>
     <button mat-button routerLink="/test" routerLinkActive="active-link">
@@ -27,8 +42,8 @@
   </div>
 
   <mat-menu #menu="matMenu">
-    <button mat-menu-item routerLink="/home">Home</button>
-    <button mat-menu-item routerLink="/profile">Profile</button>
+    <button *ngIf="isAuth" mat-menu-item routerLink="/home">Home</button>
+    <button *ngIf="isAuth" mat-menu-item routerLink="/profile">Profile</button>
     <button mat-menu-item routerLink="/test">Test</button>
     <button mat-menu-item (click)="logout()">Log out</button>
   </mat-menu>

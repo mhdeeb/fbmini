@@ -21,6 +21,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { BackdropDialogComponent } from '../../backdrop/backdrop.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { pop_up, PopUp } from '../../../utility/popup';
 
 @Component({
   templateUrl: './edit.component.html',
@@ -49,7 +51,8 @@ export class PostEditDialog {
     private readonly fb: FormBuilder,
     private readonly dialogRef: MatDialogRef<PostEditDialog>,
     private readonly http: HttpClient,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private readonly snackbar: MatSnackBar
   ) {
     this.form = this.fb.group({
       Title: ['', Validators.required],
@@ -91,7 +94,8 @@ export class PostEditDialog {
         },
         error: (error) => {
           dialogRef.close();
-          console.error(error);
+          console.log(error);
+          pop_up(this.snackbar, error.error.message, PopUp.ERROR);
         },
       });
     }

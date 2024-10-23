@@ -6,3 +6,7 @@ section {
   --bg-gradient3-from: #09203f;
   --bg-gradient3-to: #537895;
 }
+
+:host {
+  flex-grow: 1;
+}

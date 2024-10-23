@@ -11,6 +11,7 @@ import { BackdropDialogComponent } from '../backdrop/backdrop.component';
 import { pop_up, PopUp } from '../../utility/popup';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { PostEditDialog } from '../post/edit/edit.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
@@ -23,15 +24,24 @@ import { PostEditDialog } from '../post/edit/edit.component';
     MatMenuModule,
     RouterModule,
     SearchBarComponent,
+    CommonModule,
   ],
   standalone: true,
 })
 export class NavbarComponent {
+  isAuth: boolean = false;
+
   constructor(
     private readonly authService: AuthService,
     public dialog: MatDialog,
     private readonly snackbar: MatSnackBar
   ) {}
+
+  ngOnInit() {
+    this.authService.isAuthenticated().subscribe((isAuth) => {
+      this.isAuth = isAuth;
+    });
+  }
 
   createPost(): void {
     this.dialog.open(PostEditDialog, { disableClose: true });
