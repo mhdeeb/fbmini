@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { PostView, User } from '../../utility/types';
+import { PostView } from '../../utility/types';
 import { PostComponent } from '../post/post.component';
 
 @Component({

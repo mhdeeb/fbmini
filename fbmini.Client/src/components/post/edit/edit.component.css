@@ -5,6 +5,19 @@
   color: black;
 }
 
+mat-card-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+mat-card-actions button {
+  color: #3f51b5;
+  font-size: large;
+}
+mat-card img {
+  max-width: 40rem;
+}
+
 .container {
   margin-inline: auto;
   padding-inline: 3rem;

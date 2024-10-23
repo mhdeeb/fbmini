@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BackdropDialogComponent } from '../backdrop/backdrop.component';
 import { pop_up, PopUp } from '../../utility/popup';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { PostEditDialog } from '../post/edit/edit.component';
 
 @Component({
   selector: 'app-navbar',
@@ -26,12 +27,15 @@ import { SearchBarComponent } from '../search-bar/search-bar.component';
   standalone: true,
 })
 export class NavbarComponent {
-  snackbar = inject(MatSnackBar);
-
   constructor(
     private readonly authService: AuthService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private readonly snackbar: MatSnackBar
   ) {}
+
+  createPost(): void {
+    this.dialog.open(PostEditDialog, { disableClose: true });
+  }
 
   logout(): void {
     const dialogRef = this.dialog.open(BackdropDialogComponent, {

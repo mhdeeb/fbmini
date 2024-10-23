@@ -7,8 +7,8 @@
 
 .user-avatar {
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   background-position: center;
   background-size: cover;
 }
@@ -28,6 +28,6 @@ mat-card-actions button {
 }
 
 mat-card img {
-  max-height: 400px;
-  object-fit: cover;
+  max-height: 20rem;
+  object-fit: contain;
 }

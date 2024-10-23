@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { pop_up, PopUp } from '../../../utility/popup';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,10 +9,18 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { UserView, User } from '../../../utility/types';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-// import { AuthService } from '../../auth/auth.component';
-// import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import {
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialog,
+} from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
 import { BackdropDialogComponent } from '../../backdrop/backdrop.component';
+import { ImageService } from '../../../utility/imageService';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-profile-edit',
@@ -22,21 +31,28 @@ import { BackdropDialogComponent } from '../../backdrop/backdrop.component';
     MatIconModule,
     MatInputModule,
     MatCardModule,
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatDialogClose,
+    MatDividerModule,
+    CommonModule,
   ],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.css',
 })
-export class ProfileEditComponent {
+export class ProfileEditDialog {
   form: FormGroup;
-  snackbar = inject(MatSnackBar);
-  selectedPicture: File | null = null;
-  selectedCover: File | null = null;
+  picturePreview: string | ArrayBuffer | null | SafeUrl = null;
+  coverPreview: string | ArrayBuffer | null | SafeUrl = null;
 
   constructor(
     private readonly http: HttpClient,
     private readonly fb: FormBuilder,
-    // private readonly authService: AuthService,
-    // private readonly router: Router,
+    private readonly imageService: ImageService,
+    private readonly sanitizer: DomSanitizer,
+    private readonly dialogRef: MatDialogRef<ProfileEditDialog>,
+    private readonly snackbar: MatSnackBar,
     public dialog: MatDialog
   ) {
     this.form = this.fb.group(new UserView());
@@ -54,41 +70,103 @@ export class ProfileEditComponent {
     });
   }
 
+  loadProfileImage(): void {
+    this.imageService.getImage('api/user/picture').subscribe({
+      next: (blob) => {
+        if (blob) {
+          const objectURL = URL.createObjectURL(blob);
+          this.picturePreview =
+            this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        } else {
+          console.error('No image data available');
+        }
+      },
+      error: (error) => {
+        console.error('Error in component:', error);
+      },
+    });
+  }
+
+  loadCoverImage(): void {
+    this.imageService.getImage('api/user/cover').subscribe({
+      next: (blob) => {
+        if (blob) {
+          const objectURL = URL.createObjectURL(blob);
+          this.coverPreview = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        } else {
+          console.error('No image data available');
+        }
+      },
+      error: (error) => {
+        console.error('Error in component:', error);
+      },
+    });
+  }
+
   ngOnInit() {
     this.getProfile();
+    this.loadCoverImage();
+    this.loadProfileImage();
   }
 
   onPictureSelect(event: any): void {
-    this.selectedPicture = event.target.files[0];
+    const file = event.target.files[0];
+    if (file) {
+      this.form.patchValue({ Attachment: file });
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.picturePreview = reader.result;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      this.form.patchValue({ Attachment: null });
+      this.picturePreview = null;
+    }
   }
 
   onCoverSelect(event: any): void {
-    this.selectedCover = event.target.files[0];
+    const file = event.target.files[0];
+    if (file) {
+      this.form.patchValue({ Attachment: file });
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.coverPreview = reader.result;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      this.form.patchValue({ Attachment: null });
+      this.coverPreview = null;
+    }
   }
 
   onSubmit() {
-    const dialogRef = this.dialog.open(BackdropDialogComponent, {
-      disableClose: true,
-    });
-    let formData = new FormData();
+    if (this.form.valid) {
+      const dialogRef = this.dialog.open(BackdropDialogComponent, {
+        disableClose: true,
+      });
+      let formData = new FormData();
 
-    for (const value in this.form.value)
-      if (this.form.get(value)?.dirty)
-        formData.append(value, this.form.get(value)?.value);
+      for (const value in this.form.value)
+        if (this.form.get(value)?.dirty)
+          formData.append(value, this.form.get(value)?.value);
 
-    if (this.selectedPicture) formData.append('picture', this.selectedPicture);
+      this.http.post('api/User', formData).subscribe({
+        next: (result: any) => {
+          dialogRef.close();
+          this.dialogRef.close(true);
+          pop_up(this.snackbar, result.message, PopUp.SUCCESS);
+        },
+        error: (error) => {
+          dialogRef.close();
+          pop_up(this.snackbar, error.error.message, PopUp.ERROR);
+        },
+      });
+    }
+  }
 
-    if (this.selectedCover) formData.append('cover', this.selectedCover);
-
-    this.http.post('api/User', formData).subscribe({
-      next: (result: any) => {
-        dialogRef.close();
-        pop_up(this.snackbar, result.message, PopUp.SUCCESS);
-      },
-      error: (error) => {
-        dialogRef.close();
-        pop_up(this.snackbar, error.error.message, PopUp.ERROR);
-      },
-    });
+  onClose() {
+    this.dialogRef.close(false);
   }
 }

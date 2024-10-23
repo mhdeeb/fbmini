@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { pop_up, PopUp } from '../../utility/popup';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 import { ImageService } from '../../utility/imageService';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { ProfileEditDialog } from './edit/edit.component';
 
 @Component({
   selector: 'app-profile',
@@ -30,13 +32,13 @@ export class ProfileComponent {
   profileUrl: SafeUrl | null = null;
   coverUrl: SafeUrl | null = null;
 
-  snackbar = inject(MatSnackBar);
-
   constructor(
-    private imageService: ImageService,
+    private readonly imageService: ImageService,
     private readonly http: HttpClient,
     public readonly router: Router,
-    private sanitizer: DomSanitizer
+    private readonly sanitizer: DomSanitizer,
+    public dialog: MatDialog,
+    public snackbar: MatSnackBar
   ) {}
 
   getProfile() {
@@ -86,5 +88,18 @@ export class ProfileComponent {
     this.getProfile();
     this.loadCoverImage();
     this.loadProfileImage();
+  }
+
+  editProfile() {
+    this.dialog
+      .open(ProfileEditDialog, { disableClose: true })
+      .afterClosed()
+      .subscribe((updated: boolean) => {
+        if (updated) {
+          this.getProfile();
+          this.loadCoverImage();
+          this.loadProfileImage();
+        }
+      });
   }
 }

@@ -3,10 +3,13 @@ import { HomeComponent } from '../components/home/home.component';
 import { LoginComponent } from '../components/login/login.component';
 import { SignupComponent } from '../components/signup/signup.component';
 import { ProfileComponent } from '../components/profile/profile.component';
-import { AuthGuard, NoAuthGuard } from '../components/auth/AuthGuard';
+import {
+  AuthGuard,
+  NoAuthGuard,
+  UserPreviewGuard,
+} from '../components/auth/AuthGuard';
 import { TestComponent } from '../components/test/test.component';
 import { notFoundComponent } from '../components/not-found/not-found.component';
-import { ProfileEditComponent } from '../components/profile/edit/edit.component';
 import { NgModule } from '@angular/core';
 import { UserComponent } from '../components/profile/user/user.component';
 
@@ -27,13 +30,9 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'profile/edit',
-    component: ProfileEditComponent,
-  },
-  {
     path: 'user/:username',
     component: UserComponent,
-    canActivate: [AuthGuard],
+    canActivate: [UserPreviewGuard],
   },
   {
     path: 'login',

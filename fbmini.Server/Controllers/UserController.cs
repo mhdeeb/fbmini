@@ -435,6 +435,7 @@ namespace fbmini.Server.Controllers
             .Include(p => p.SubPosts)
             .AsNoTracking()
             .Where(p => p.ParentPostId == null)
+            .OrderByDescending(p => p.Date)
             .ToListAsync();
 
             return Ok(posts.Select(MapPostDetails).ToList());
@@ -522,14 +523,12 @@ namespace fbmini.Server.Controllers
             context.Posts.Update(post);
             await context.SaveChangesAsync();
 
-            
-
             return Ok(new { Likes = post.Likers.Count, Dislikes = post.Dislikers.Count, Vote = 0 });
         }
 
         [Authorize]
         [HttpGet("vote/{postId}")]
-        public async Task<IActionResult> GetVote(int value, int postId)
+        public async Task<IActionResult> GetVote(int postId)
         {
             var post = await context.Posts
                 .Include(p => p.Likers)
@@ -540,6 +539,25 @@ namespace fbmini.Server.Controllers
                 return NotFound();
 
             return Ok(new { Likes = post.Likers.Count, Dislikes = post.Dislikers.Count });
+        }
+
+
+
+        [HttpGet("name")]
+        public async Task<IActionResult> GetUsername()
+        {
+            var userId = GetUserID();
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var user = await context.Users.Select(u => new { u.Id, u.UserName })
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return Unauthorized();
+
+            return Ok(new { user.UserName });
         }
     }
 }

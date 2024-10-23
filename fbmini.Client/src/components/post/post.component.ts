@@ -72,10 +72,6 @@ export class PostComponent {
       });
   }
 
-  sharePost() {
-    console.log('Post shared!');
-  }
-
   commentPost() {
     console.log('Comment button clicked!');
   }

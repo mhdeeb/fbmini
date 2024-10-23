@@ -16,7 +16,7 @@ export class UserView {
 
 export type PostView = {
   id: number;
-  title?: string;
+  title: string;
   content?: string;
   date: Date;
   attachment: {

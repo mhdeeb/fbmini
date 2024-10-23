@@ -1,6 +1,10 @@
 <mat-toolbar color="primary">
   <button class="title" mat-button routerLink="">FB Mini</button>
 
+  <button mat-raised-button color="accent" (click)="createPost()">
+    + Post
+  </button>
+
   <span class="spacer"></span>
 
   <app-search-bar />

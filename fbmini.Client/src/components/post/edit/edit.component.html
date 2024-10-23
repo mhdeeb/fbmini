@@ -1,0 +1,65 @@
+<form
+  class="container bg-gradient-to-br from-blue-600 to-green-500"
+  (submit)="post()"
+  [formGroup]="form"
+>
+  <mat-card class="social-post w-full flex flex-col gap-5">
+    <mat-card-header>
+      <button
+        type="button"
+        mat-icon-button
+        mat-dialog-close
+        color="warn"
+        class="ms-auto"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-card-title>
+        <h1 class="text-black">Create a new post</h1>
+        <mat-form-field class="w-full" subscriptSizing="dynamic">
+          <mat-label>Title</mat-label>
+          <input
+            matInput
+            formControlName="Title"
+            placeholder="Title"
+          /> </mat-form-field
+      ></mat-card-title>
+    </mat-card-header>
+
+    <button
+      type="button"
+      mat-raised-button
+      class="mx-4"
+      (click)="fileInput.click()"
+    >
+      Add attachment
+    </button>
+    <input
+      hidden
+      #fileInput
+      type="file"
+      accept="image/*"
+      placeholder="attachment"
+      (change)="onPictureSelect($event)"
+      class="ps-4"
+    />
+
+    <mat-card-content>
+      <img *ngIf="imagePreview" [src]="imagePreview" alt="Post" />
+      <mat-form-field class="w-full">
+        <mat-label>Content</mat-label>
+        <textarea
+          matInput
+          formControlName="Content"
+          placeholder="Content"
+        ></textarea>
+      </mat-form-field>
+    </mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-actions>
+      <button type="submit" mat-button class="ms-auto me-1 mb-1">Post</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
