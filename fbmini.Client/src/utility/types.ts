@@ -18,7 +18,7 @@ export type PostView = {
   id: number;
   title: string;
   content?: string;
-  date: Date;
+  date: string;
   attachment: {
     filename: string;
     contentType: string;
