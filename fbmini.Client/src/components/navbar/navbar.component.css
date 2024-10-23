@@ -1,8 +1,11 @@
-mat-toolbar {
+:host {
   position: sticky;
   top: 0;
   z-index: 1000;
   width: 100%;
+}
+
+mat-toolbar {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   background: rgba(0, 0, 0, 0.5);
