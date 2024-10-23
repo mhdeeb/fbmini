@@ -10,6 +10,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import {
+  MatDialog,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
@@ -19,6 +20,7 @@ import {
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { BackdropDialogComponent } from '../../backdrop/backdrop.component';
 
 @Component({
   templateUrl: './edit.component.html',
@@ -46,7 +48,8 @@ export class PostEditDialog {
   constructor(
     private readonly fb: FormBuilder,
     private readonly dialogRef: MatDialogRef<PostEditDialog>,
-    private readonly http: HttpClient
+    private readonly http: HttpClient,
+    public dialog: MatDialog
   ) {
     this.form = this.fb.group({
       Title: ['', Validators.required],
@@ -74,16 +77,20 @@ export class PostEditDialog {
   post() {
     if (this.form.valid) {
       let formData = new FormData();
-
+      const dialogRef = this.dialog.open(BackdropDialogComponent, {
+        disableClose: true,
+      });
       for (const value in this.form.value)
         formData.append(value, this.form.get(value)?.value);
 
       this.http.post('api/user/post', formData).subscribe({
         next: (res) => {
           this.dialogRef.close();
+          dialogRef.close();
           location.reload();
         },
         error: (error) => {
+          dialogRef.close();
           console.error(error);
         },
       });
