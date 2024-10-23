@@ -54,9 +54,11 @@ export class PostComponent {
         this.post.poster.picture.fileData,
         this.post.poster.picture.contentType
       );
+    } else {
+      this.posterImageUrl = 'blank-profile-picture.webp';
     }
 
-    const date = new Date(this.post.date);
+    const date = new Date(this.post.date + 'Z');
 
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',

@@ -7,14 +7,13 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ImageService {
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getImage(url: string): Observable<Blob | null> {
     return this.http.get(url, { responseType: 'blob' }).pipe(
       catchError((error) => {
         if (error.status === 404) {
           console.error('Image not found, loading fallback image');
-          // Replace with your fallback image path
           return this.getFallbackImage();
         } else {
           console.error('Error fetching image:', error);
