@@ -10,3 +10,35 @@ section {
 :host {
   flex-grow: 1;
 }
+
+.profile-picture-container {
+  display: flex;
+  gap: 1.25rem;
+  position: relative;
+  width: 100%;
+  height: 12rem;
+}
+
+.profile-picture {
+  position: absolute;
+  z-index: 10;
+  top: -5rem;
+  left: 4rem;
+}
+
+@media (max-width: 768px) {
+  .profile-picture {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  /* .profile-picture-container {
+    align-content: center;
+  } */
+  /* .profile-picture-container {
+    flex-direction: column;
+    bottom: -20rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+  } */
+}
