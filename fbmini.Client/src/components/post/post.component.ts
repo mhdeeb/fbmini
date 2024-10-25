@@ -6,6 +6,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { CommonModule } from '@angular/common';
 import { PostView, VoteView } from '../../utility/types';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { pop_up, PopUp } from '../../utility/popup';
 
 @Component({
   selector: 'app-post',
@@ -26,7 +28,10 @@ export class PostComponent {
   ContentImageUrl?: string;
   posterImageUrl?: string;
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly snackbar: MatSnackBar
+  ) {}
 
   b64ToURL(b: string, contentType: string) {
     const byteCharacters = atob(b);
@@ -89,6 +94,6 @@ export class PostComponent {
   }
 
   commentPost() {
-    console.log('Comment button clicked!');
+    pop_up(this.snackbar, 'Comments are not implemented yet', PopUp.WARNING);
   }
 }
