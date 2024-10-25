@@ -62,9 +62,6 @@
     >
       Profile
     </button>
-    <button mat-button routerLink="/test" routerLinkActive="active-link">
-      Test
-    </button>
     @if (isAuth) {
     <button mat-button (click)="logout()" routerLinkActive="active-link">
       Log out
@@ -84,7 +81,6 @@
       Home
     </button>
     <button *ngIf="isAuth" mat-menu-item routerLink="/profile">Profile</button>
-    <button mat-menu-item routerLink="/test">Test</button>
     @if (isAuth) {
     <button mat-menu-item (click)="logout()">Log out</button>
     } @else {

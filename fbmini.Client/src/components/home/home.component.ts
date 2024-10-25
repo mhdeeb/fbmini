@@ -9,22 +9,26 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { PostView } from '../../utility/types';
 import { PostComponent } from '../post/post.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterOutlet, MatButtonModule, CommonModule, PostComponent],
+  imports: [
+    RouterOutlet,
+    MatButtonModule,
+    CommonModule,
+    PostComponent,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
-  constructor(
-    private readonly http: HttpClient,
-    private readonly authService: AuthService,
-    public dialog: MatDialog
-  ) {}
+  constructor(private readonly http: HttpClient, public dialog: MatDialog) {}
 
   public posts: PostView[] = [];
+  public isLoaded = false;
 
   snackbar = inject(MatSnackBar);
 
@@ -32,15 +36,12 @@ export class HomeComponent {
     this.http.get<PostView[]>('api/user/post').subscribe({
       next: (posts) => {
         this.posts = posts;
+        this.isLoaded = true;
       },
       error: (error) => {
         console.error(error);
       },
     });
-  }
-
-  getRange(start: number, end: number): number[] {
-    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
 
   ngOnInit() {

@@ -99,7 +99,7 @@ export class SignupComponent {
             .subscribe({
               next: (response) => {
                 this.router.navigate(['/profile']);
-                pop_up(this._snackBar, 'Account Created', PopUp.SUCCESS);
+                location.reload();
               },
               error: (error: HttpErrorResponse) => {
                 dialogRef.close();

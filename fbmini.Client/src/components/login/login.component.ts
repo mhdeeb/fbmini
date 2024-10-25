@@ -71,7 +71,7 @@ export class LoginComponent {
       .subscribe({
         next: (response) => {
           this.router.navigate(['/home']);
-          pop_up(this._snackBar, 'Successfully logged in', PopUp.SUCCESS);
+          location.reload();
         },
         error: (error: HttpErrorResponse) => {
           dialogRef.close();
