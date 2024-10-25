@@ -1,4 +1,3 @@
-const { Console } = require("console");
 const { env } = require("process");
 
 const target = env.ASPNETCORE_HTTPS_PORT

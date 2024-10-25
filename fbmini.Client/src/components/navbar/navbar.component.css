@@ -46,7 +46,7 @@ mat-toolbar {
   display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 800px) {
   .desktop-menu,
   .desktop-search,
   .desktop-post {

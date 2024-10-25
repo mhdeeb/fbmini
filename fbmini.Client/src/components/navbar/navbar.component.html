@@ -2,7 +2,13 @@
   color="primary"
   [@slideInOut]="isNavbarVisible ? 'visible' : 'hidden'"
 >
-  <button class="title" mat-button routerLink="">FB Mini</button>
+  <app-svg-logo
+    [width]="'128'"
+    [height]="'128'"
+    [color]="'white'"
+    routerLink=""
+    class="cursor-pointer pr-2"
+  ></app-svg-logo>
 
   <button
     *ngIf="isAuth"
@@ -74,7 +80,9 @@
   </div>
 
   <mat-menu #menu="matMenu">
-    <button *ngIf="isAuth" mat-menu-item routerLink="/home">Home</button>
+    <button type="button" *ngIf="isAuth" mat-menu-item routerLink="/home">
+      Home
+    </button>
     <button *ngIf="isAuth" mat-menu-item routerLink="/profile">Profile</button>
     <button mat-menu-item routerLink="/test">Test</button>
     @if (isAuth) {

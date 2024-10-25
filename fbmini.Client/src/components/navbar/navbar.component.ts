@@ -21,6 +21,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { SearchDialog } from '../search-dialog/search-dialog.component';
+import { SvgLogoComponent } from '../svg-logo/svg-logo.component';
 
 @Component({
   selector: 'app-navbar',
@@ -35,6 +36,7 @@ import { SearchDialog } from '../search-dialog/search-dialog.component';
     SearchBarComponent,
     CommonModule,
     MatSidenavModule,
+    SvgLogoComponent,
   ],
   standalone: true,
   animations: [
