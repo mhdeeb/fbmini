@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterOutlet } from '@angular/router';
+import { AuthService } from '../auth/auth.component';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -32,7 +33,7 @@ export class HomeComponent {
   snackbar = inject(MatSnackBar);
 
   getPosts() {
-    this.http.get<PostView[]>('api/user/list').subscribe({
+    this.http.get<PostView[]>('api/user/post').subscribe({
       next: (posts) => {
         this.posts = posts;
         this.isLoaded = true;

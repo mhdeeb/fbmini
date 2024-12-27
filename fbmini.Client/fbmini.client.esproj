@@ -8,7 +8,6 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\fbmini.Client\browser\</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="src\components\NewFolder\**" />
-    <TypeScriptConfiguration Remove="src\components\NewFolder\**" />
+    <Folder Include="src\components\NewFolder\" />
   </ItemGroup>
 </Project>

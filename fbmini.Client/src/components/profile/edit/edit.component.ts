@@ -64,7 +64,7 @@ export class ProfileEditDialog {
   }
 
   getProfile() {
-    this.http.get<User>('api/user/profile').subscribe({
+    this.http.get<User>('api/User').subscribe({
       next: (result) => {
         this.form.setValue(result);
         this.form.addControl('picture', new FormControl(null));

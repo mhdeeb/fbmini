@@ -80,7 +80,7 @@ export class PostComponent {
 
   votePost(value: number) {
     this.http
-      .post<VoteView>(`api/post/vote/${this.post.id}/${value}`, {})
+      .post<VoteView>(`api/user/vote/${value}/${this.post.id}`, {})
       .subscribe({
         next: (vote) => {
           this.post.likes = vote.likes;

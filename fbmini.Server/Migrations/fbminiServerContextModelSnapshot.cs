@@ -206,6 +206,9 @@ namespace fbmini.Server.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("UploadDate")
                         .HasColumnType("datetime2");
 

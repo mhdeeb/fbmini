@@ -27,12 +27,13 @@ export const routes: Routes = [
     path: 'profile',
     component: ProfileComponent,
     canActivate: [AuthGuard],
+    data: { owner: true },
   },
   {
     path: 'user/:username',
     component: ProfileComponent,
-    canActivate: [AuthGuard],
-    //canActivate: [UserPreviewGuard],
+    canActivate: [UserPreviewGuard],
+    data: { owner: false },
   },
   {
     path: 'login',
