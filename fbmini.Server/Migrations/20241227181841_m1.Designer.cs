@@ -12,8 +12,8 @@ using fbmini.Server.Models;
 namespace fbmini.Server.Migrations
 {
     [DbContext(typeof(fbminiServerContext))]
-    [Migration("20241022194348_m")]
-    partial class m
+    [Migration("20241227181841_m1")]
+    partial class m1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -208,9 +208,6 @@ namespace fbmini.Server.Migrations
                     b.Property<string>("FileName")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
-
-                    b.Property<long>("Size")
-                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("UploadDate")
                         .HasColumnType("datetime2");

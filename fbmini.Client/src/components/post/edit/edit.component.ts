@@ -86,7 +86,7 @@ export class PostEditDialog {
       for (const value in this.form.value)
         formData.append(value, this.form.get(value)?.value);
 
-      this.http.post('api/user/post', formData).subscribe({
+      this.http.post('api/post/create', formData).subscribe({
         next: (res) => {
           this.dialogRef.close();
           dialogRef.close();
