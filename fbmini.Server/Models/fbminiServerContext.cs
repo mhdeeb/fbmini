@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace fbmini.Server.Models
 {
-    public class fbminiServerContext : IdentityDbContext<User>
+    public class fbminiServerContext : IdentityDbContext<UserModel>
     {
         public fbminiServerContext(DbContextOptions<fbminiServerContext> options)
             : base(options)
@@ -30,7 +30,7 @@ namespace fbmini.Server.Models
                 .UsingEntity(j => j.ToTable("PostDislikers"));
         }
 
-        public DbSet<UserData> UserData { get; set; }
+        public DbSet<UserDataModel> UserData { get; set; }
         public DbSet<FileModel> Files { get; set; }
         public DbSet<PostModel> Posts { get; set; }
     }

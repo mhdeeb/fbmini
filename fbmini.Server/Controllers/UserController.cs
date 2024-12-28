@@ -10,39 +10,39 @@ namespace fbmini.Server.Controllers
     [ApiController]
     [Authorize]
     [Route("api/[controller]")]
-    public class UserController(UserManager<User> userManager, fbminiServerContext context) : HomeController
+    public class UserController(UserManager<UserModel> userManager, fbminiServerContext context) : HomeController
     {
-        private async Task<UserView?> GetUserAsync(Expression<Func<User, bool>> func)
+        private async Task<UserContentResult?> GetUserAsync(Expression<Func<UserModel, bool>> func)
         {
             var user = await context.Users.Include(i => i.UserData).ThenInclude(i => i.Picture).Include(i => i.UserData.Cover).FirstOrDefaultAsync(func);
 
             if (user == null)
                 return null;
 
-            var userView = user.ToView();
+            var userContentResult = user.ToContentResult();
 
             var userId = GetUserID();
 
             if (userId == user.Id)
-                userView.IsOwner = true;
+                userContentResult.IsOwner = true;
             else
-                userView.IsOwner = false;
+                userContentResult.IsOwner = false;
 
-            return userView;
+            return userContentResult;
         }
 
         [HttpGet("Profile")]
-        public async Task<ActionResult<UserView>> GetProfile()
+        public async Task<ActionResult<UserContentResult>> GetProfile()
         {
             var userId = GetUserID();
 
-            var userView = (await GetUserAsync(user => user.Id == userId))!;
+            var userContentResult = (await GetUserAsync(user => user.Id == userId))!;
 
-            return Ok(userView);
+            return Ok(userContentResult);
         }
 
         [HttpPost("Profile")]
-        public async Task<IActionResult> UpdateProfile([FromForm] UserView userView)
+        public async Task<IActionResult> UpdateProfile([FromForm] UserForm userForm)
         {
             var userId = GetUserID();
 
@@ -54,9 +54,9 @@ namespace fbmini.Server.Controllers
             if (user == null)
                 return Unauthorized();
 
-            if (userView.PhoneNumber != null)
+            if (userForm.PhoneNumber != null)
             {
-                var result = await userManager.SetPhoneNumberAsync(user, userView.PhoneNumber);
+                var result = await userManager.SetPhoneNumberAsync(user, userForm.PhoneNumber);
 
                 if (!result.Succeeded)
                 {
@@ -67,9 +67,9 @@ namespace fbmini.Server.Controllers
                 }
             }
 
-            if (userView.Email != null)
+            if (userForm.Email != null)
             {
-                var result = await userManager.SetEmailAsync(user, userView.Email);
+                var result = await userManager.SetEmailAsync(user, userForm.Email);
 
                 if (!result.Succeeded)
                 {
@@ -86,45 +86,26 @@ namespace fbmini.Server.Controllers
             if (user == null)
                 return Unauthorized();
 
-            if (userView.Bio != null)
-                user.UserData.Bio = userView.Bio;
+            if (userForm.Bio != null)
+                user.UserData.Bio = userForm.Bio;
 
-            if (userView.Picture != null)
-            {
-                using var stream = new MemoryStream();
-                await userView.Picture.CopyToAsync(stream);
-                if (user.UserData.Picture == null)
-                    user.UserData.Picture = new FileModel
-                    {
-                        FileName = userView.Picture.FileName,
-                        ContentType = userView.Picture.ContentType,
-                        FileData = stream.ToArray()
-                    };
-                else
-                {
-                    user.UserData.Picture.FileName = userView.Picture.FileName;
-                    user.UserData.Picture.ContentType = userView.Picture.ContentType;
-                    user.UserData.Picture.FileData = stream.ToArray();
-                }
+            if (userForm.Picture != null) {
+                var picture = await FileModel.FromFormAsync(userForm.Picture, userId);
+
+                if (user.UserData.Picture != null)
+                    picture.Id = user.UserData.Picture.Id;
+
+                user.UserData.Picture = picture;
             }
-            
-            if (userView.Cover != null)
+
+            if (userForm.Cover != null)
             {
-                using var stream = new MemoryStream();
-                await userView.Cover.CopyToAsync(stream);
-                if (user.UserData.Cover == null)
-                    user.UserData.Cover = new FileModel
-                    {
-                        FileName = userView.Cover.FileName,
-                        ContentType = userView.Cover.ContentType,
-                        FileData = stream.ToArray()
-                    };
-                else
-                {
-                    user.UserData.Cover.FileName = userView.Cover.FileName;
-                    user.UserData.Cover.ContentType = userView.Cover.ContentType;
-                    user.UserData.Cover.FileData = stream.ToArray();
-                }
+                var cover = await FileModel.FromFormAsync(userForm.Cover, userId);
+
+                if (user.UserData.Cover != null)
+                    cover.Id = user.UserData.Cover.Id;
+
+                user.UserData.Cover = cover;
             }
 
             context.Users.Update(user);
@@ -145,14 +126,14 @@ namespace fbmini.Server.Controllers
         }
 
         [HttpGet("Profile/{username}")]
-        public async Task<ActionResult<UserView>> GetProfileByUsername(string username)
+        public async Task<ActionResult<UserContentResult>> GetProfileByUsername(string username)
         {
-            var userView = await GetUserAsync(user => user.UserName == username);
+            var userContentResult = await GetUserAsync(user => user.UserName == username);
 
-            if (userView == null)
+            if (userContentResult == null)
                 return BadRequest();
 
-            return Ok(userView);
+            return Ok(userContentResult);
         }
     }
 }

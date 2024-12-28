@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Azure.Identity;
 using fbmini.Server.Models;
+using fbmini.Server.Controllers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace fbmini.Server
 {
@@ -48,7 +50,15 @@ namespace fbmini.Server
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
-            builder.Services.AddIdentityCore<User>()
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("FileAccessPolicy", policy =>
+                    policy.Requirements.Add(new FileAccessRequirement()));
+            });
+
+            builder.Services.AddSingleton<IAuthorizationHandler, FileAuthorizationHandler>();
+
+            builder.Services.AddIdentityCore<UserModel>()
                 .AddRoles<IdentityRole>()
                 .AddSignInManager()
                 .AddEntityFrameworkStores<fbminiServerContext>();

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace fbmini.Server.Models
 {
-    public class UserData
+    public class UserDataModel
     {
         [Key]
         public int Id { get; set; }
@@ -13,7 +13,7 @@ namespace fbmini.Server.Models
         public string UserId { get; set; } = null!;
         [Required]
         [ForeignKey("UserId")]
-        public User User { get; set; } = null!;
+        public UserModel User { get; set; } = null!;
 
         public int? PictureId { get; set; }
         [ForeignKey("PictureId")]

@@ -57,6 +57,8 @@ namespace fbmini.Server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    OwnerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccessType = table.Column<int>(type: "int", nullable: false),
                     FileName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     ContentType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     FileData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
@@ -217,7 +219,7 @@ namespace fbmini.Server.Migrations
                     PosterId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ParentPostId = table.Column<int>(type: "int", nullable: true),
                     AttachmentId = table.Column<int>(type: "int", nullable: true),
-                    UserDataId = table.Column<int>(type: "int", nullable: true)
+                    UserDataModelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -239,8 +241,8 @@ namespace fbmini.Server.Migrations
                         principalTable: "Posts",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Posts_UserData_UserDataId",
-                        column: x => x.UserDataId,
+                        name: "FK_Posts_UserData_UserDataModelId",
+                        column: x => x.UserDataModelId,
                         principalTable: "UserData",
                         principalColumn: "Id");
                 });
@@ -358,9 +360,9 @@ namespace fbmini.Server.Migrations
                 column: "PosterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_UserDataId",
+                name: "IX_Posts_UserDataModelId",
                 table: "Posts",
-                column: "UserDataId");
+                column: "UserDataModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserData_CoverId",

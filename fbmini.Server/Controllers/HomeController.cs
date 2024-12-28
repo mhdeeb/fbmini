@@ -7,7 +7,12 @@ namespace fbmini.Server.Controllers
     {
         protected string? GetUserID()
         {
-            return User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            return User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        }
+
+        protected string? GetUsername()
+        {
+            return User.Identity?.Name;
         }
     }
 }

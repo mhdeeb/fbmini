@@ -10,7 +10,7 @@ namespace fbmini.Server.Controllers
     [Route("api/[controller]")]
     public class PostController(fbminiServerContext context) : HomeController
     {
-        private async Task<PostView?> GetPostByID(int postId)
+        private async Task<PostContentResult?> GetPostByID(int postId)
         {
             var post = await context.Posts
                         .Include(p => p.Poster)
@@ -27,11 +27,11 @@ namespace fbmini.Server.Controllers
             if (post == null)
                 return null;
 
-            return post.ToView();
+            return post.ToContentResut();
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> CreatePost([FromForm] PostView postView)
+        public async Task<IActionResult> CreatePost([FromForm] PostForm postForm)
         {
             var userId = GetUserID();
 
@@ -42,9 +42,7 @@ namespace fbmini.Server.Controllers
                     .FirstOrDefaultAsync(u => u.Id == userId)
             )!;
 
-            postView.Poster = new UserView { Id = userId };
-
-            var post = await PostModel.FromViewAsync(postView);
+            var post = await PostModel.FromFormAsync(postForm, userId);
 
             await context.Posts.AddAsync(post);
             await context.SaveChangesAsync();
@@ -57,7 +55,7 @@ namespace fbmini.Server.Controllers
         }
 
         [HttpPost("Create/{parentId}")]
-        public async Task<IActionResult> CreateComment([FromForm] PostView postView, int parentId)
+        public async Task<IActionResult> CreateComment([FromForm] PostForm postForm, int parentId)
         {
             var parentPost = await context.Posts
                     .Include(p => p.SubPosts)
@@ -75,9 +73,7 @@ namespace fbmini.Server.Controllers
                     .FirstOrDefaultAsync(u => u.Id == userId)
             )!;
 
-            postView.Poster = new UserView { Id = userId };
-
-            var post = await PostModel.FromViewAsync(postView);
+            var post = await PostModel.FromFormAsync(postForm, userId);
 
             post.ParentPost = parentPost;
             parentPost.SubPosts.Add(post);
@@ -172,7 +168,7 @@ namespace fbmini.Server.Controllers
         }
 
         [HttpGet("Get/{postId}")]
-        public async Task<ActionResult<PostView>> GetPost(int postId)
+        public async Task<ActionResult<PostContentResult>> GetPost(int postId)
         {
             var result = await GetPostByID(postId);
 
@@ -183,7 +179,7 @@ namespace fbmini.Server.Controllers
         }
 
         [HttpGet("List")]
-        public async Task<ActionResult<List<PostView>>> GetPosts()
+        public async Task<ActionResult<List<PostContentResult>>> GetPosts()
         {
             var posts = await context.Posts
                 .AsNoTracking()
@@ -197,21 +193,21 @@ namespace fbmini.Server.Controllers
                 .Include(p => p.Likers)
                 .Include(p => p.Dislikers)
                 .Include(p => p.SubPosts)
-                .Select(p => p.ToView())
+                .Select(p => p.ToContentResut())
                 .ToListAsync();
 
             return Ok(posts);
         }
 
         [HttpGet("List/{postId}")]
-        public async Task<ActionResult<List<PostView>>> GetComments(int postId)
+        public async Task<ActionResult<List<PostContentResult>>> GetComments(int postId)
         {
             var results = await context.Posts
                 .AsNoTracking()
                 .Where(p => p.Id == postId)
                 .Select(p => new
                 {
-                    SubPosts = p.SubPosts.Select(subPost => subPost.ToView()).ToList()
+                    SubPosts = p.SubPosts.Select(subPost => subPost.ToContentResut()).ToList()
                 })
                 .FirstOrDefaultAsync();
 
