@@ -14,9 +14,8 @@ export class AuthService {
     rememberMe: boolean
   ): Observable<any> {
     return this.http.post(
-      `/api/account/login?useCookies=true&useSessionCookies=true`,
-      { username, password, rememberMe },
-      { withCredentials: true }
+      `/api/account/login`,
+      { username, password, rememberMe }
     );
   }
 
@@ -33,12 +32,10 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    return this.http.post(`/api/account/logout`, {}, { withCredentials: true });
+    return this.http.post(`/api/account/logout`, {});
   }
 
   isAuthenticated() {
-    return this.http.get<boolean>(`/api/account/isAuth`, {
-      withCredentials: true,
-    });
+    return this.http.get<boolean>(`/api/account/isAuth`);
   }
 }

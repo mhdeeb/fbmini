@@ -28,44 +28,41 @@
       <button type="button" mat-raised-button (click)="pictureInput.click()">
         Change Picture
       </button>
-      <input
-        hidden
-        #pictureInput
-        type="file"
-        accept="image/*"
-        placeholder="attachment"
-        (change)="onPictureSelect($event)"
-        class="ps-4"
-      />
+      <input hidden
+             #pictureInput
+             type="file"
+             accept="image/*"
+             placeholder="attachment"
+             (change)="onFileSelected($event, 'picture')"
+             class="ps-4" />
 
       <button type="button" mat-raised-button (click)="coverInput.click()">
         Change Cover
       </button>
-      <input
-        hidden
-        #coverInput
-        type="file"
-        accept="image/*"
-        placeholder="attachment"
-        (change)="onCoverSelect($event)"
-        class="ps-4"
-      />
+      <input hidden
+             #coverInput
+             type="file"
+             accept="image/*"
+             placeholder="attachment"
+             (change)="onFileSelected($event, 'cover')"
+             class="ps-4" />
 
-      <div class="relative w-auto h-40 mt-5 mb-20">
-        <img
-          *ngIf="coverPreview"
-          [src]="coverPreview"
-          alt="Cover"
-          draggable="false"
-          class="absolute object-cover object-center w-full h-full rounded-md"
-        />
-        <img
-          *ngIf="picturePreview"
-          [src]="picturePreview"
-          alt="Profile"
-          draggable="false"
-          class="absolute object-cover rounded-full aspect-square w-20 select-none z-10 -bottom-14 left-5 p-1 bg-white"
-        />
+      <div class="relative w-auto h-40 mt-5 mb-20 rounded-md bg-gradient-to-r from-[var(--bg-gradient2-from)] to-[var(--bg-gradient2-to)]">
+          <div>
+              <img [src]="previews.cover"
+                   alt="Cover"
+                   *ngIf="previews.cover"
+                   draggable="false"
+                   class="absolute object-cover object-center w-full h-full rounded-md" />
+              <div *ngIf="!previews.cover" class="h-96 w-full">
+                  <!-- Image failed to load or is loading... -->
+              </div>
+          </div>
+
+          <img [src]="previews.picture ?? 'blank-profile-picture.webp'"
+               alt="Profile"
+               draggable="false"
+               class="absolute object-cover rounded-full aspect-square w-20 select-none z-10 -bottom-14 left-5 p-1 bg-white" />
       </div>
 
       <mat-form-field class="w-full" subscriptSizing="dynamic">

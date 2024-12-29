@@ -195,7 +195,6 @@ namespace fbmini.Server.Controllers
                 .Include(p => p.SubPosts)
                 .Select(p => p.ToContentResut())
                 .ToListAsync();
-
             return Ok(posts);
         }
 

@@ -31,14 +31,21 @@ namespace fbmini.Server.Controllers
             return userContentResult;
         }
 
+        [HttpGet("Profile/{username}")]
+        public async Task<ActionResult<UserContentResult>> GetProfileByUsername(string username)
+        {
+            var userContentResult = await GetUserAsync(user => user.UserName == username);
+
+            if (userContentResult == null)
+                return BadRequest();
+
+            return Ok(userContentResult);
+        }
+
         [HttpGet("Profile")]
         public async Task<ActionResult<UserContentResult>> GetProfile()
         {
-            var userId = GetUserID();
-
-            var userContentResult = (await GetUserAsync(user => user.Id == userId))!;
-
-            return Ok(userContentResult);
+            return await GetProfileByUsername(GetUsername()!);
         }
 
         [HttpPost("Profile")]
@@ -81,7 +88,7 @@ namespace fbmini.Server.Controllers
             }
 
             // update user object to reflect the previous changes
-            user = await context.Users.Include(user => user.UserData).FirstOrDefaultAsync(user => user.Id == userId);
+            user = await context.Users.Include(user => user.UserData).ThenInclude(ud => ud.Picture).Include(user => user.UserData.Cover).FirstOrDefaultAsync(user => user.Id == userId);
 
             if (user == null)
                 return Unauthorized();
@@ -93,7 +100,7 @@ namespace fbmini.Server.Controllers
                 var picture = await FileModel.FromFormAsync(userForm.Picture, userId);
 
                 if (user.UserData.Picture != null)
-                    picture.Id = user.UserData.Picture.Id;
+                    user.UserData.Picture.AccessType = AccessType.Private;
 
                 user.UserData.Picture = picture;
             }
@@ -103,7 +110,7 @@ namespace fbmini.Server.Controllers
                 var cover = await FileModel.FromFormAsync(userForm.Cover, userId);
 
                 if (user.UserData.Cover != null)
-                    cover.Id = user.UserData.Cover.Id;
+                    user.UserData.Cover.AccessType = AccessType.Private;
 
                 user.UserData.Cover = cover;
             }
@@ -123,17 +130,6 @@ namespace fbmini.Server.Controllers
                                 .ToListAsync();
 
             return Ok(users);
-        }
-
-        [HttpGet("Profile/{username}")]
-        public async Task<ActionResult<UserContentResult>> GetProfileByUsername(string username)
-        {
-            var userContentResult = await GetUserAsync(user => user.UserName == username);
-
-            if (userContentResult == null)
-                return BadRequest();
-
-            return Ok(userContentResult);
         }
     }
 }

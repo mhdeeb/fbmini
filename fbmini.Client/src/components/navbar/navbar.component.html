@@ -69,21 +69,21 @@
       <button mat-button routerLink="/signup" routerLinkActive="active-link">
           Sign up
       </button>
-      <button mat-button routerLink="/test" routerLinkActive="active-link">Test</button>
       }
+      <button mat-button routerLink="/test" routerLinkActive="active-link">Test</button>
   </div>
 
   <mat-menu #menu="matMenu">
-      <button type="button" *ngIf="isAuth" mat-menu-item routerLink="/home">
-          Home
-      </button>
-      <button *ngIf="isAuth" mat-menu-item routerLink="/profile">Profile</button>
-      @if (isAuth) {
+    <button type="button" *ngIf="isAuth" mat-menu-item routerLink="/home">
+      Home
+    </button>
+    <button *ngIf="isAuth" mat-menu-item routerLink="/profile">Profile</button>
+    @if (isAuth) {
       <button mat-menu-item (click)="logout()" >Log out</button>
-      } @else {
+    } @else {
       <button mat-menu-item routerLink="/login">Log in</button>
       <button mat-menu-item routerLink="/signup">Sign up</button>
-      }
+    }
   </mat-menu>
 
   <button mat-icon-button [matMenuTriggerFor]="menu" class="mobile-menu">

@@ -10,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BackdropDialogComponent } from '../backdrop/backdrop.component';
 import { pop_up, PopUp } from '../../utility/popup';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
-import { PostEditDialog } from '../post/edit/edit.component';
+import { PostEditDialog } from '../post-edit/post-edit.component';
 import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import {

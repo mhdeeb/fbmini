@@ -2,18 +2,18 @@ import { Component, inject } from '@angular/core';
 import { pop_up, PopUp } from '../../utility/popup';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
-import { AuthService } from '../auth/auth.component';
+import { AuthService } from '../../components/auth/auth.component';
 import { MatDialog } from '@angular/material/dialog';
-import { BackdropDialogComponent } from '../backdrop/backdrop.component';
+import { BackdropDialogComponent } from '../../components/backdrop/backdrop.component';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  templateUrl: './test.component.html',
-  styleUrl: './test.component.css',
+  templateUrl: './test.page.html',
+  styleUrl: './test.page.css',
   imports: [MatButtonModule],
   standalone: true,
 })
-export class TestComponent {
+export class TestPage {
   constructor(
     private readonly authService: AuthService,
     public dialog: MatDialog

@@ -1,5 +1,6 @@
 ﻿using fbmini.Server.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace fbmini.Server.Controllers
 {
@@ -7,7 +8,9 @@ namespace fbmini.Server.Controllers
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, FileAccessRequirement requirement, FileModel file)
         {
-            if (context.User.Identity?.Name == file.OwnerId || file.AccessType == AccessType.Public)
+            string? id = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (id == file.OwnerId || file.AccessType == AccessType.Public)
             {
                 context.Succeed(requirement);
             }

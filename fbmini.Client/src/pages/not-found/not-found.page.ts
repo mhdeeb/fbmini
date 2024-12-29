@@ -5,9 +5,9 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   imports: [MatCardModule, MatIconModule, MatButtonModule],
   standalone: true,
-  templateUrl: './not-found.component.html',
-  styleUrl: './not-found.component.css',
+  templateUrl: './not-found.page.html',
+  styleUrl: './not-found.page.css',
 })
-export class notFoundComponent {
+export class notFoundPage {
   constructor() {}
 }

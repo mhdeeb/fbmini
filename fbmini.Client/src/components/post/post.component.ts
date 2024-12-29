@@ -48,20 +48,8 @@ export class PostComponent {
   }
 
   ngOnInit() {
-    if (this.post.attachment) {
-      this.ContentImageUrl = this.b64ToURL(
-        this.post.attachment.fileData,
-        this.post.attachment.contentType
-      );
-    }
-    if (this.post.poster.picture) {
-      this.posterImageUrl = this.b64ToURL(
-        this.post.poster.picture.fileData,
-        this.post.poster.picture.contentType
-      );
-    } else {
-      this.posterImageUrl = 'blank-profile-picture.webp';
-    }
+    this.ContentImageUrl = this.post.attachmentUrl;
+    this.posterImageUrl = this.post.poster.pictureUrl ?? 'blank-profile-picture.webp';
 
     const date = new Date(this.post.date + 'Z');
 

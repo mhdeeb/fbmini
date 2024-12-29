@@ -1,15 +1,15 @@
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from '../components/home/home.component';
-import { LoginComponent } from '../components/login/login.component';
-import { SignupComponent } from '../components/signup/signup.component';
-import { ProfileComponent } from '../components/profile/profile.component';
+import { HomePage } from '../pages/home/home.page';
+import { LoginPage } from '../pages/login/login.page';
+import { SignupPage } from '../pages/signup/signup.page';
+import { ProfilePage } from '../pages/profile/profile.page';
 import {
   AuthGuard,
   NoAuthGuard,
   UserPreviewGuard,
 } from '../components/auth/AuthGuard';
-import { TestComponent } from '../components/test/test.component';
-import { notFoundComponent } from '../components/not-found/not-found.component';
+import { TestPage } from '../pages/test/test.page';
+import { notFoundPage } from '../pages/not-found/not-found.page';
 import { NgModule } from '@angular/core';
 
 export const routes: Routes = [
@@ -20,35 +20,35 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    component: HomeComponent,
+    component: HomePage,
     canActivate: [AuthGuard],
   },
   {
     path: 'profile',
-    component: ProfileComponent,
+    component: ProfilePage,
     canActivate: [AuthGuard],
   },
   {
     path: 'user/:username',
-    component: ProfileComponent,
+    component: ProfilePage,
     canActivate: [AuthGuard],
     //canActivate: [UserPreviewGuard],
   },
   {
     path: 'login',
-    component: LoginComponent,
+    component: LoginPage,
     canActivate: [NoAuthGuard],
   },
   {
     path: 'signup',
-    component: SignupComponent,
+    component: SignupPage,
     canActivate: [NoAuthGuard],
   },
   {
     path: 'test',
-    component: TestComponent,
+    component: TestPage,
   },
-  { path: '**', component: notFoundComponent },
+  { path: '**', component: notFoundPage },
 ];
 
 @NgModule({

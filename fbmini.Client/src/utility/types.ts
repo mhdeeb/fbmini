@@ -3,15 +3,17 @@ export class User {
   email?: string;
   bio?: string;
   phoneNumber?: string;
-  picture?: any;
-  cover?: any;
+  pictureUrl?: string;
+  coverUrl?: string;
+  isOwner?: boolean;
 }
 
 export class UserView {
-  userName?: string;
   email?: string;
   bio?: string;
   phoneNumber?: string;
+  picture?: File;
+  cover?: File;
 }
 
 export type PostView = {
@@ -19,16 +21,10 @@ export type PostView = {
   title: string;
   content?: string;
   date: string;
-  attachment: {
-    filename: string;
-    contentType: string;
-    size: number;
-    fileData: string;
-  };
-  parent_post?: number;
+  attachmentUrl: string;
   poster: {
     userName: string;
-    picture: { contentType: string; fileData: string };
+    pictureUrl: string;
   };
   likes: number;
   dislikes: number;
