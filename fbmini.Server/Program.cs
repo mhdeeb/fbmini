@@ -76,7 +76,7 @@ namespace fbmini.Server
 
             try
             {
-                dbContext.Database.EnsureDeleted();
+                //dbContext.Database.EnsureDeleted();
                 dbContext.Database.Migrate();
                 Console.WriteLine("Database migrated successfully.");
             }
