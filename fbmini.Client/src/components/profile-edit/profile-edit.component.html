@@ -1,107 +1,92 @@
-<form
-  class="container bg-gradient-to-br from-blue-600 to-green-500"
-  (submit)="onSubmit()"
-  [formGroup]="form"
->
-  <mat-card class="social-post w-full flex flex-col gap-5">
-    <mat-card-header>
-      <button
-        type="button"
-        mat-icon-button
-        color="warn"
-        class="ms-auto"
-        (click)="onClose()"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-      <mat-card-title>
-        <h1 class="text-black">Edit profile</h1>
-      </mat-card-title>
-    </mat-card-header>
+<form class="container bg-gradient-to-br from-blue-600 to-green-500"
+      (submit)="onSubmit()"
+      [formGroup]="form">
+    <mat-card class="social-post w-full flex flex-col gap-5">
+        <mat-card-header>
+            <button type="button"
+                    mat-icon-button
+                    color="warn"
+                    class="ms-auto"
+                    (click)="onClose()">
+                <mat-icon>close</mat-icon>
+            </button>
+            <mat-card-title>
+                <h1 class="text-black">Edit profile</h1>
+            </mat-card-title>
+        </mat-card-header>
 
-    <div class="px-5 flex flex-col gap-1">
-      <mat-form-field class="w-full" subscriptSizing="dynamic">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" placeholder="Email" />
-      </mat-form-field>
+        <div class="px-5 flex flex-col gap-1">
+            <input hidden
+                   #pictureInput
+                   type="file"
+                   accept="image/*"
+                   placeholder="attachment"
+                   (change)="onFileSelected($event, 'picture')" />
 
-      <button type="button" mat-raised-button (click)="pictureInput.click()">
-        Change Picture
-      </button>
-      <input hidden
-             #pictureInput
-             type="file"
-             accept="image/*"
-             placeholder="attachment"
-             (change)="onFileSelected($event, 'picture')"
-             class="ps-4" />
+            <input hidden
+                   #coverInput
+                   type="file"
+                   accept="image/*"
+                   placeholder="attachment"
+                   (change)="onFileSelected($event, 'cover')" />
 
-      <button type="button" mat-raised-button (click)="coverInput.click()">
-        Change Cover
-      </button>
-      <input hidden
-             #coverInput
-             type="file"
-             accept="image/*"
-             placeholder="attachment"
-             (change)="onFileSelected($event, 'cover')"
-             class="ps-4" />
+            <div (click)="coverInput.click()"
+                 class="relative w-full h-40 rounded-md overflow-hidden cursor-pointer group bg-gradient-to-r from-[var(--bg-gradient2-from)] to-[var(--bg-gradient2-to)]">
+                <div class="absolute inset-0 transition-all duration-300 group-hover:bg-black/50 pointer-events-none"></div>
 
-      <div class="relative w-auto h-40 mt-5 mb-20 rounded-md bg-gradient-to-r from-[var(--bg-gradient2-from)] to-[var(--bg-gradient2-to)]">
-          <div>
-              <img [src]="previews.cover"
-                   alt="Cover"
-                   *ngIf="previews.cover"
-                   draggable="false"
-                   class="absolute object-cover object-center w-full h-full rounded-md" />
-              <div *ngIf="!previews.cover" class="h-96 w-full">
-                  <!-- Image failed to load or is loading... -->
-              </div>
-          </div>
+                <img [src]="previews.cover"
+                     *ngIf="previews.cover"
+                     alt="Cover"
+                     draggable="false"
+                     class="absolute object-cover object-center w-full h-full transition-all duration-300 group-hover:brightness-50" />
 
-          <img [src]="previews.picture ?? 'blank-profile-picture.webp'"
-               alt="Profile"
-               draggable="false"
-               class="absolute object-cover rounded-full aspect-square w-20 select-none z-10 -bottom-14 left-5 p-1 bg-white" />
-      </div>
+                <div class="absolute inset-0 flex items-center justify-center text-white text-lg transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+                    Select a cover image
+                </div>
+            </div>
 
-      <mat-form-field class="w-full" subscriptSizing="dynamic">
-        <mat-label>Phone Number</mat-label>
-        <input
-          matInput
-          formControlName="phoneNumber"
-          placeholder="Phone Number"
-        />
-      </mat-form-field>
+            <div class="-mt-10 ml-6">
+                <img [src]="previews.picture ?? 'blank-profile-picture.webp'"
+                     alt="Profile"
+                     (click)="pictureInput.click()"
+                     draggable="false"
+                     class="relative z-1 object-cover rounded-full p-1 bg-white cursor-pointer aspect-square w-20 transition-all duration-300 hover:brightness-50" />
+            </div>
 
-      <mat-form-field class="w-full">
-        <mat-label>Bio</mat-label>
-        <textarea
-          matInput
-          formControlName="bio"
-          maxlength="256"
-          placeholder="Talk about yourself"
-        ></textarea>
-        <mat-hint align="start"
-          ><strong>What is on your mind?</strong>
-        </mat-hint>
-        <mat-hint align="end"
-          >{{ form.get("bio")?.value?.length }} / 256</mat-hint
-        >
-      </mat-form-field>
-    </div>
+            <mat-form-field class="w-full" subscriptSizing="dynamic">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" placeholder="Email" />
+            </mat-form-field>
 
-    <mat-divider></mat-divider>
+            <mat-form-field class="w-full" subscriptSizing="dynamic">
+                <mat-label>Phone Number</mat-label>
+                <input matInput
+                       formControlName="phoneNumber"
+                       placeholder="Phone Number" />
+            </mat-form-field>
 
-    <mat-card-actions>
-      <button
-        mat-raised-button
-        type="submit"
-        color="primary"
-        class="flex-grow text-lg m-2"
-      >
-        Save
-      </button>
-    </mat-card-actions>
-  </mat-card>
+            <mat-form-field class="w-full">
+                <mat-label>Bio</mat-label>
+                <textarea matInput
+                          formControlName="bio"
+                          maxlength="256"
+                          placeholder="Talk about yourself"></textarea>
+                <mat-hint align="start">
+                    <strong>What is on your mind?</strong>
+                </mat-hint>
+                <mat-hint align="end">{{ form.get("bio")?.value?.length }} / 256</mat-hint>
+            </mat-form-field>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <mat-card-actions>
+            <button mat-raised-button
+                    type="submit"
+                    color="primary"
+                    class="flex-grow text-lg m-2">
+                Save
+            </button>
+        </mat-card-actions>
+    </mat-card>
 </form>
