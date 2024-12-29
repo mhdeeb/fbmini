@@ -6,7 +6,6 @@ import { ProfilePage } from '../pages/profile/profile.page';
 import {
   AuthGuard,
   NoAuthGuard,
-  UserPreviewGuard,
 } from '../components/auth/AuthGuard';
 import { TestPage } from '../pages/test/test.page';
 import { notFoundPage } from '../pages/not-found/not-found.page';
@@ -32,7 +31,6 @@ export const routes: Routes = [
     path: 'user/:username',
     component: ProfilePage,
     canActivate: [AuthGuard],
-    //canActivate: [UserPreviewGuard],
   },
   {
     path: 'login',

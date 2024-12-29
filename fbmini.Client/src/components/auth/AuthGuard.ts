@@ -48,30 +48,3 @@ export class NoAuthGuard implements CanActivate {
     );
   }
 }
-
-@Injectable({
-  providedIn: 'root',
-})
-export class UserPreviewGuard implements CanActivate {
-  constructor(
-    private readonly router: Router,
-    private readonly http: HttpClient
-  ) {}
-
-  canActivate(
-    _route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> {
-    return this.http.get<{ userName: string }>('api/user/name').pipe(
-      map((result: { userName: string }) => {
-        if (state.url.split('/').pop() === result.userName)
-          return this.router.createUrlTree(['/profile']);
-        return true;
-      }),
-      catchError((error) => {
-        console.error(error);
-        return of(this.router.createUrlTree(['/home']));
-      })
-    );
-  }
-}
