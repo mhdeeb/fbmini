@@ -68,7 +68,7 @@ export class PostComponent {
 
   votePost(value: number) {
     this.http
-      .post<VoteView>(`api/user/vote/${value}/${this.post.id}`, {})
+      .post<VoteView>(`api/post/vote/${this.post.id}/${value}`, {})
       .subscribe({
         next: (vote) => {
           this.post.likes = vote.likes;

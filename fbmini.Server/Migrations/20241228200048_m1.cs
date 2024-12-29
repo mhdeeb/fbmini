@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace fbmini.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class m : Migration
+    public partial class m1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,7 +61,6 @@ namespace fbmini.Server.Migrations
                     AccessType = table.Column<int>(type: "int", nullable: false),
                     FileName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     ContentType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Size = table.Column<long>(type: "bigint", nullable: false),
                     FileData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     UploadDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },

@@ -12,13 +12,8 @@ using fbmini.Server.Models;
 namespace fbmini.Server.Migrations
 {
     [DbContext(typeof(fbminiServerContext))]
-<<<<<<<< HEAD:fbmini.Server/Migrations/20241022194348_m.Designer.cs
-    [Migration("20241022194348_m")]
-    partial class m
-========
     [Migration("20241228200048_m1")]
     partial class m1
->>>>>>>> new:fbmini.Server/Migrations/20241228200048_m1.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -217,14 +212,9 @@ namespace fbmini.Server.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-<<<<<<<< HEAD:fbmini.Server/Migrations/20241022194348_m.Designer.cs
-                    b.Property<long>("Size")
-                        .HasColumnType("bigint");
-========
                     b.Property<string>("OwnerId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
->>>>>>>> new:fbmini.Server/Migrations/20241228200048_m1.Designer.cs
 
                     b.Property<DateTime>("UploadDate")
                         .HasColumnType("datetime2");

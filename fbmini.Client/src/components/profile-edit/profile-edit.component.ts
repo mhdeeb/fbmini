@@ -65,7 +65,7 @@ export class ProfileEditDialog {
   }
 
   getProfile() {
-    this.http.get<User>('api/User').subscribe({
+    this.http.get<User>('api/user/profile').subscribe({
       next: (result) => {
         this.form.patchValue({
           email: result.email,
