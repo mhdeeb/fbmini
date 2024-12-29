@@ -2,13 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterOutlet } from '@angular/router';
-import { AuthService } from '../auth/auth.component';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { PostView } from '../../utility/types';
-import { PostComponent } from '../post/post.component';
+import { PostComponent } from '../../components/post/post.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
@@ -21,10 +20,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     PostComponent,
     MatProgressSpinnerModule,
   ],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  templateUrl: './home.page.html',
+  styleUrl: './home.page.css',
 })
-export class HomeComponent {
+export class HomePage {
   constructor(private readonly http: HttpClient, public dialog: MatDialog) {}
 
   public posts: PostView[] = [];
@@ -33,7 +32,7 @@ export class HomeComponent {
   snackbar = inject(MatSnackBar);
 
   getPosts() {
-    this.http.get<PostView[]>('api/user/post').subscribe({
+    this.http.get<PostView[]>('api/post/list').subscribe({
       next: (posts) => {
         this.posts = posts;
         this.isLoaded = true;

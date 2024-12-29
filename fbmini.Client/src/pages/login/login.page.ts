@@ -9,11 +9,11 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormField, MatInputModule } from '@angular/material/input';
-import { AuthService } from '../auth/auth.component';
+import { AuthService } from '../../components/auth/auth.component';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BackdropDialogComponent } from '../backdrop/backdrop.component';
+import { BackdropDialogComponent } from '../../components/backdrop/backdrop.component';
 import { MatDialog } from '@angular/material/dialog';
 import { pop_up, PopUp } from '../../utility/popup';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,10 +30,10 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     MatIconModule,
   ],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  templateUrl: './login.page.html',
+  styleUrls: ['./login.page.css'],
 })
-export class LoginComponent {
+export class LoginPage {
   form: FormGroup;
   showPassword: boolean = false;
   rememberMe: boolean = false;

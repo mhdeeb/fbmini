@@ -11,12 +11,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormField, MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth/auth.component';
+import { AuthService } from '../../components/auth/auth.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
-import { BackdropDialogComponent } from '../backdrop/backdrop.component';
+import { BackdropDialogComponent } from '../../components/backdrop/backdrop.component';
 import { pop_up, PopUp } from '../../utility/popup';
 
 function validateInput(c: FormControl) {
@@ -51,10 +51,10 @@ function validateInput(c: FormControl) {
     MatButtonModule,
     MatIconModule,
   ],
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css'],
+  templateUrl: './signup.page.html',
+  styleUrls: ['./signup.page.css'],
 })
-export class SignupComponent {
+export class SignupPage {
   form: FormGroup;
   showPassword: boolean = false;
   isInputFocused: boolean = false;

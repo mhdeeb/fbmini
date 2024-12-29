@@ -20,14 +20,14 @@ import {
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { BackdropDialogComponent } from '../../backdrop/backdrop.component';
+import { BackdropDialogComponent } from '../backdrop/backdrop.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { pop_up, PopUp } from '../../../utility/popup';
+import { pop_up, PopUp } from '../../utility/popup';
 
 @Component({
-  templateUrl: './edit.component.html',
   selector: 'app-post-edit',
-  styleUrl: './edit.component.css',
+  templateUrl: './post-edit.component.html',
+  styleUrl: './post-edit.component.css',
   standalone: true,
   imports: [
     MatDialogTitle,

@@ -46,34 +46,31 @@
   </button>
 
   <div class="desktop-menu">
-    <button
-      *ngIf="isAuth"
-      mat-button
-      routerLink="/home"
-      routerLinkActive="active-link"
-    >
-      Home
-    </button>
-    <button
-      *ngIf="isAuth"
-      mat-button
-      routerLink="/profile"
-      routerLinkActive="active-link"
-    >
-      Profile
-    </button>
-    @if (isAuth) {
-    <button mat-button (click)="logout()" routerLinkActive="active-link">
-      Log out
-    </button>
-    } @else {
-    <button mat-button routerLink="/login" routerLinkActive="active-link">
-      Log in
-    </button>
-    <button mat-button routerLink="/signup" routerLinkActive="active-link">
-      Sign up
-    </button>
-    }
+      <button *ngIf="isAuth"
+              mat-button
+              routerLink="/home"
+              routerLinkActive="active-link">
+          Home
+      </button>
+      <button *ngIf="isAuth"
+              mat-button
+              routerLink="/profile"
+              routerLinkActive="active-link">
+          Profile
+      </button>
+      @if (isAuth) {
+      <button mat-button (click)="logout()" routerLinkActive="active-link">
+          Log out
+      </button>
+      } @else {
+      <button mat-button routerLink="/login" routerLinkActive="active-link">
+          Log in
+      </button>
+      <button mat-button routerLink="/signup" routerLinkActive="active-link">
+          Sign up
+      </button>
+      }
+      <button mat-button routerLink="/test" routerLinkActive="active-link">Test</button>
   </div>
 
   <mat-menu #menu="matMenu">
@@ -82,10 +79,10 @@
     </button>
     <button *ngIf="isAuth" mat-menu-item routerLink="/profile">Profile</button>
     @if (isAuth) {
-    <button mat-menu-item (click)="logout()">Log out</button>
+      <button mat-menu-item (click)="logout()" >Log out</button>
     } @else {
-    <button mat-menu-item routerLink="/login">Log in</button>
-    <button mat-menu-item routerLink="/signup">Sign up</button>
+      <button mat-menu-item routerLink="/login">Log in</button>
+      <button mat-menu-item routerLink="/signup">Sign up</button>
     }
   </mat-menu>
 

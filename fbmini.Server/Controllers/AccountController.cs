@@ -1,25 +1,40 @@
 ﻿using fbmini.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace fbmini.Server.Controllers
 {
+    public class LoginForm
+    {
+        public required string Username { get; set; }
+        public required string Password { get; set; }
+        public bool RememberMe { get; set; }
+    }
+
+    public class RegisterForm
+    {
+        public required string Username { get; set; }
+        public required string Password { get; set; }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController(UserManager<User> userManager, SignInManager<User> signInManager, fbminiServerContext context) : ControllerBase
+    [Authorize]
+    public class AccountController(UserManager<UserModel> userManager, SignInManager<UserModel> signInManager, fbminiServerContext context) : ControllerBase
     {
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromBody] RegisterForm registerForm)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = new User { UserName = model.Username };
-            var result = await userManager.CreateAsync(user, model.Password);
+            var user = new UserModel { UserName = registerForm.Username };
+            var result = await userManager.CreateAsync(user, registerForm.Password);
             if (result.Succeeded)
             {
-                var userData = new UserData { UserId = user.Id };
+                var userData = new UserDataModel { UserId = user.Id };
                 context.UserData.Add(userData);
                 await context.SaveChangesAsync();
                 user = await context.Users.FindAsync(user.Id);
@@ -34,7 +49,8 @@ namespace fbmini.Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] LoginForm loginForm)
         {
             if (signInManager.IsSignedIn(User))
                 return BadRequest(new { Message = "User already logged in" });
@@ -42,7 +58,7 @@ namespace fbmini.Server.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+            var result = await signInManager.PasswordSignInAsync(loginForm.Username, loginForm.Password, loginForm.RememberMe, false);
 
             if (result.Succeeded)
             {
@@ -63,25 +79,12 @@ namespace fbmini.Server.Controllers
         }
 
         [HttpGet("isAuth")]
+        [AllowAnonymous]
         public IActionResult AuthCheck()
         {
             if (signInManager.IsSignedIn(User))
                 return Ok(true);
             return Ok(false);
         }
-    }
-
-
-    public class LoginModel
-    {
-        public required string Username { get; set; }
-        public required string Password { get; set; }
-        public bool RememberMe { get; set; }
-    }
-
-    public class RegisterModel
-    {
-        public required string Username { get; set; }
-        public required string Password { get; set; }
     }
 }
