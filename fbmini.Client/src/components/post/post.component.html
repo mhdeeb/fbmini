@@ -1,23 +1,25 @@
 <mat-card class="social-post">
-  <mat-card-header>
-    <div
-      mat-card-avatar
-      class="user-avatar"
-      [ngStyle]="{ 'background-image': 'url(' + posterImageUrl + ')' }"
-    >
-      <a href="user/{{ post.poster.userName }}" class="w-full h-full block"></a>
-    </div>
+    <mat-card-header>
+        <div mat-card-avatar
+             class="user-avatar"
+             [ngStyle]="{ 'background-image': 'url(' + posterImageUrl + ')' }">
+            <a href="user/{{ post.poster.userName }}" class="w-full h-full block"></a>
+        </div>
 
-    <mat-card-title>{{ post.title }}</mat-card-title>
-    <mat-card-subtitle
-      ><a
-        href="user/{{ post.poster.userName }}"
-        class="text-blue-500 hover:underline"
-        >&#x40;{{ post.poster.userName }}</a
-      >
-    </mat-card-subtitle>
-    <mat-card-subtitle>{{ post.date }}</mat-card-subtitle>
-  </mat-card-header>
+        <mat-card-title>{{ post.title }}</mat-card-title>
+        <mat-card-subtitle>
+            <a href="user/{{ post.poster.userName }}"
+               class="text-blue-500 hover:underline">&#x40;{{ post.poster.userName }}</a>
+        </mat-card-subtitle>
+        <mat-card-subtitle>{{ post.date }}</mat-card-subtitle>
+        <button class="ml-auto"
+                *ngIf="this.post.canEdit"
+                mat-icon-button
+                color="warn"
+                (click)="confirmDeletePost()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-card-header>
 
   <div class="bg-[#18191a]">
     <img

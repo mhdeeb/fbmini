@@ -97,7 +97,21 @@ namespace fbmini.Server
             // ========================================================================
             // Create Admin user
 
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserModel>>();
 
+            var user = new UserModel { UserName = "admin@admin.com", Email = "admin@admin.com" };
+            var result = await userManager.CreateAsync(user, "Admin@0");
+            await userManager.AddToRoleAsync(user, roles[0]);
+            if (result.Succeeded)
+            {
+                var userData = new UserDataModel { UserId = user.Id };
+                dbContext.UserData.Add(userData);
+                await dbContext.SaveChangesAsync();
+                user = await dbContext.Users.FindAsync(user.Id);
+                user!.UserDataId = userData.Id;
+                dbContext.Users.Update(user);
+                await dbContext.SaveChangesAsync();
+            }
         }
 
         static async Task ConfigApp(WebApplication app)

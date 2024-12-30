@@ -19,7 +19,7 @@ namespace fbmini.Server.Models
         public string? Bio { get; set; }
         public string? PictureUrl { get; set; }
         public string? CoverUrl { get; set; }
-        public bool? IsOwner { get; set; }
+        public bool? CanEdit { get; set; }
     }
 
     public class UserModel : IdentityUser
@@ -30,7 +30,7 @@ namespace fbmini.Server.Models
         public ICollection<PostModel> LikedPosts { get; set; } = [];
         public ICollection<PostModel> DislikedPosts { get; set; } = [];
 
-        public UserContentResult ToContentResult()
+        public UserContentResult ToContentResult(bool canEdit)
         {
             return new UserContentResult
             {
@@ -40,6 +40,7 @@ namespace fbmini.Server.Models
                 Bio = UserData.Bio,
                 PictureUrl = UserData.Picture?.GetUrl(),
                 CoverUrl = UserData.Cover?.GetUrl(),
+                CanEdit = canEdit
             };
         }
     }

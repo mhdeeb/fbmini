@@ -19,14 +19,9 @@ namespace fbmini.Server.Controllers
             if (user == null)
                 return null;
 
-            var userContentResult = user.ToContentResult();
+            var canEdit = GetUserID()! == user.Id || IsInRole("Manager") || IsInRole("Admin");
 
-            var userId = GetUserID();
-
-            if (userId == user.Id)
-                userContentResult.IsOwner = true;
-            else
-                userContentResult.IsOwner = false;
+            var userContentResult = user.ToContentResult(canEdit);
 
             return userContentResult;
         }
@@ -48,18 +43,25 @@ namespace fbmini.Server.Controllers
             return await GetProfileByUsername(GetUsername()!);
         }
 
-        [HttpPost("Profile")]
-        public async Task<IActionResult> UpdateProfile([FromForm] UserForm userForm)
+        [HttpPatch("Profile/{userName}")]
+        public async Task<IActionResult> UpdateProfile([FromForm] UserForm userForm, string? userName)
         {
-            var userId = GetUserID();
+            UserModel? user;
 
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
+            if (userName == null)
+                user = (await userManager.FindByIdAsync(GetUserID()!));
+            else
+            {
+                if (!IsInRole("Admin"))
+                    return Unauthorized();
 
-            var user = await userManager.FindByIdAsync(userId);
+                user = (await userManager.FindByNameAsync(userName));
+            }
 
             if (user == null)
-                return Unauthorized();
+                return BadRequest();
+
+            var userId = user.Id;
 
             if (userForm.PhoneNumber != null)
             {
@@ -88,7 +90,11 @@ namespace fbmini.Server.Controllers
             }
 
             // update user object to reflect the previous changes
-            user = await context.Users.Include(user => user.UserData).ThenInclude(ud => ud.Picture).Include(user => user.UserData.Cover).FirstOrDefaultAsync(user => user.Id == userId);
+            user = await context.Users
+                .Include(user => user.UserData)
+                .ThenInclude(ud => ud.Picture)
+                .Include(user => user.UserData.Cover)
+                .FirstOrDefaultAsync(user => user.Id == userId);
 
             if (user == null)
                 return Unauthorized();
@@ -120,6 +126,12 @@ namespace fbmini.Server.Controllers
             context.SaveChanges();
 
             return Ok(new { message = "Profile updated" });
+        }
+
+        [HttpPatch("Profile")]
+        public async Task<IActionResult> UpdateProfile([FromForm] UserForm userForm)
+        {
+            return await UpdateProfile(userForm, GetUsername());
         }
 
         [HttpGet("List")]

@@ -22,6 +22,7 @@ namespace fbmini.Server.Models
         public int? Dislikes { get; set; }
         public List<int>? SubPostsIds { get; set; }
         public UserContentResult? Poster { get; set; }
+        public bool? CanEdit { get; set; }
     };
 
     public class PostModel
@@ -49,8 +50,9 @@ namespace fbmini.Server.Models
         public ICollection<UserModel> Dislikers { get; } = [];
         public ICollection<PostModel> SubPosts { get; } = [];
 
-        public PostContentResult ToContentResut()
+        public PostContentResult ToContentResult(bool canEdit)
         {
+            Console.WriteLine("hmm");
             return new PostContentResult
             {
                 Id = Id,
@@ -62,6 +64,7 @@ namespace fbmini.Server.Models
                 Dislikes = Dislikers.Count,
                 SubPostsIds = SubPosts.Select(p => p.Id).ToList(),
                 Poster = new UserContentResult { UserName = Poster.UserName, PictureUrl = Poster?.UserData?.Picture?.GetUrl() },
+                CanEdit = canEdit
             };
         }
 

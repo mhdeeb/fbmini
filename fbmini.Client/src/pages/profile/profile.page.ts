@@ -47,7 +47,7 @@ export class ProfilePage {
         }))
       )
       .subscribe(({ first, second }) => {
-        this.http.get<User>(`api/user/profile/${first == 'user' ? second : ''}`).subscribe({
+        this.http.get<User>(`api/user/profile/${first == 'user' && second ? second : ''}`).subscribe({
           next: (result) => {
             this.profile = result;
           },
@@ -64,7 +64,7 @@ export class ProfilePage {
 
   editProfile() {
     this.dialog
-      .open(ProfileEditDialog, { disableClose: true })
+      .open(ProfileEditDialog, { disableClose: true, data: this.profile })
       .afterClosed()
       .subscribe((updated: boolean) => {
         if (updated) {

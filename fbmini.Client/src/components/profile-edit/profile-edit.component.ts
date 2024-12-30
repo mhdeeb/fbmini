@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { pop_up, PopUp } from '../../utility/popup';
@@ -7,10 +7,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
-import { UserView, User } from '../../utility/types';
+import { User, UserView } from '../../utility/types';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
@@ -21,6 +20,7 @@ import {
   MatDialogRef,
   MatDialogTitle,
   MatDialog,
+  MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { BackdropDialogComponent } from '../backdrop/backdrop.component';
@@ -59,33 +59,20 @@ export class ProfileEditDialog {
     private readonly fb: FormBuilder,
     private readonly dialogRef: MatDialogRef<ProfileEditDialog>,
     private readonly snackbar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: User
   ) {
     this.form = this.fb.group(new UserView());
-  }
-
-  getProfile() {
-    this.http.get<User>('api/user/profile').subscribe({
-      next: (result) => {
-        this.form.patchValue({
-          email: result.email,
-          bio: result.bio,
-          phoneNumber: result.phoneNumber,
-        });
-
-        this.previews.picture = result.pictureUrl ?? null;
-        this.previews.cover = result.coverUrl ?? null;
-
-        this.form.markAsPristine();
-      },
-      error: (error) => {
-        pop_up(this.snackbar, error.error.message, PopUp.ERROR);
-      },
+    this.form.patchValue({
+      email: data.email,
+      bio: data.bio,
+      phoneNumber: data.phoneNumber,
     });
-  }
 
-  ngOnInit() {
-    this.getProfile();
+    this.previews.picture = data.pictureUrl ?? null;
+    this.previews.cover = data.coverUrl ?? null;
+
+    this.form.markAsPristine();
   }
 
   onFileSelected(event: any, id: string): void {
@@ -119,9 +106,7 @@ export class ProfileEditDialog {
         if (this.form.get(value)?.dirty)
           formData.append(value, this.form.get(value)?.value);
 
-      console.log(formData);
-
-      this.http.post('api/user/profile', formData).subscribe({
+      this.http.patch(`api/user/profile/${this.data.userName}`, formData).subscribe({
         next: (result: any) => {
           dialogRef.close();
           this.dialogRef.close(true);

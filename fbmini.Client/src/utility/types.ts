@@ -5,7 +5,7 @@ export class User {
   phoneNumber?: string;
   pictureUrl?: string;
   coverUrl?: string;
-  isOwner?: boolean;
+  canEdit?: boolean;
 }
 
 export class UserView {
@@ -30,6 +30,7 @@ export type PostView = {
   dislikes: number;
   vote: number;
   subPostsIds: number[];
+  canEdit: boolean;
 };
 
 export type VoteView = {

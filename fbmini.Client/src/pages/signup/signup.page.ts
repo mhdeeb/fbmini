@@ -98,7 +98,7 @@ export class SignupPage {
             )
             .subscribe({
               next: (response) => {
-                this.router.navigate(['/profile']);
+                this.router.navigate(['/user']);
                 location.reload();
               },
               error: (error: HttpErrorResponse) => {

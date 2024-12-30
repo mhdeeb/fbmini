@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using fbmini.Server.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace fbmini.Server.Controllers
@@ -13,6 +14,11 @@ namespace fbmini.Server.Controllers
         protected string? GetUsername()
         {
             return User.Identity?.Name;
+        }
+
+        protected bool IsInRole(string role)
+        {
+            return User.IsInRole(role);
         }
     }
 }

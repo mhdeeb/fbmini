@@ -1,7 +1,13 @@
+@use '@angular/material' as mat;
+
 @import "../public/css/theme.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  @include mat.dialog-overrides(( actions-alignment: right ));
+}
 
 .mat-mdc-snack-bar-container {
   // --mdc-snackbar-container-shape: 4px;

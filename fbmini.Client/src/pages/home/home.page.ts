@@ -46,4 +46,8 @@ export class HomePage {
   ngOnInit() {
     this.getPosts();
   }
+
+  removePost(post: PostView) {
+    this.posts = this.posts.filter(p => p !== post);
+  }
 }

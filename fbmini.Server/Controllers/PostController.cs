@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using System.Data;
 
 namespace fbmini.Server.Controllers
 {
@@ -10,26 +12,6 @@ namespace fbmini.Server.Controllers
     [Route("api/[controller]")]
     public class PostController(fbminiServerContext context) : HomeController
     {
-        private async Task<PostContentResult?> GetPostByID(int postId)
-        {
-            var post = await context.Posts
-                        .Include(p => p.Poster)
-                            .ThenInclude(u => u.UserData)
-                                .ThenInclude(ud => ud.Cover)
-                        .Include(p => p.Poster.UserData.Picture)
-                        .Include(p => p.Attachment)
-                        .Include(p => p.Likers)
-                        .Include(p => p.Dislikers)
-                        .Include(p => p.SubPosts)
-                        .AsNoTracking()
-                        .FirstOrDefaultAsync(p => p.Id == postId);
-
-            if (post == null)
-                return null;
-
-            return post.ToContentResut();
-        }
-
         [HttpPost("Create")]
         public async Task<IActionResult> CreatePost([FromForm] PostForm postForm)
         {
@@ -111,7 +93,7 @@ namespace fbmini.Server.Controllers
             });
         }
 
-        [HttpPost("Vote/{postId}/{value}")]
+        [HttpPatch("Vote/{postId}/{value}")]
         public async Task<IActionResult> PostVote(int postId, int? value)
         {
             var userId = GetUserID();
@@ -170,20 +152,36 @@ namespace fbmini.Server.Controllers
         [HttpGet("Get/{postId}")]
         public async Task<ActionResult<PostContentResult>> GetPost(int postId)
         {
-            var result = await GetPostByID(postId);
+            var post = await context.Posts
+            .AsNoTracking()
+            .Include(p => p.Poster)
+                .ThenInclude(u => u.UserData)
+                    .ThenInclude(ud => ud.Cover)
+            .Include(p => p.Poster.UserData.Picture)
+            .Include(p => p.Attachment)
+            .Include(p => p.Likers)
+            .Include(p => p.Dislikers)
+            .Include(p => p.SubPosts)
+            .FirstOrDefaultAsync(p => p.Id == postId);
 
-            if (result == null)
+            if (post == null)
                 return NotFound();
 
-            return Ok(result);
+            var canEdit = GetUserID()! == post.PosterId || IsInRole("Manager") || IsInRole("Admin");
+
+            return Ok(post.ToContentResult(canEdit));
         }
 
-        [HttpGet("List")]
-        public async Task<ActionResult<List<PostContentResult>>> GetPosts()
+
+        [HttpGet("List/{postId}")]
+        public async Task<ActionResult<List<PostContentResult>>> GetPosts(int? postId)
         {
+            var userId = GetUserID();
+            var isManagerOrAdmin = IsInRole("Manager") || IsInRole("Admin");
+
             var posts = await context.Posts
                 .AsNoTracking()
-                .Where(p => p.ParentPostId == null)
+                .Where(p => p.ParentPostId == postId)
                 .OrderByDescending(p => p.Date)
                 .Include(p => p.Poster)
                     .ThenInclude(u => u.UserData)
@@ -193,27 +191,35 @@ namespace fbmini.Server.Controllers
                 .Include(p => p.Likers)
                 .Include(p => p.Dislikers)
                 .Include(p => p.SubPosts)
-                .Select(p => p.ToContentResut())
+                .Select(p => p.ToContentResult(userId == p.PosterId || isManagerOrAdmin))
                 .ToListAsync();
+
             return Ok(posts);
         }
 
-        [HttpGet("List/{postId}")]
-        public async Task<ActionResult<List<PostContentResult>>> GetComments(int postId)
+        [HttpGet("List")]
+        public async Task<ActionResult<List<PostContentResult>>> GetPosts()
         {
-            var results = await context.Posts
-                .AsNoTracking()
-                .Where(p => p.Id == postId)
-                .Select(p => new
-                {
-                    SubPosts = p.SubPosts.Select(subPost => subPost.ToContentResut()).ToList()
-                })
-                .FirstOrDefaultAsync();
+            return await GetPosts(null);
+        }
 
-            if (results == null || results.SubPosts == null)
+        [HttpDelete("Delete/{postId}")]
+        public async Task<ActionResult<PostContentResult>> DeletePost(int postId)
+        {
+            var post = await context.Posts
+            .FirstOrDefaultAsync(p => p.Id == postId);
+
+            if (post == null)
                 return NotFound();
 
-            return Ok(results.SubPosts);
+            if (!(GetUserID() == post.PosterId || IsInRole("Manager") || IsInRole("Admin")))
+                return Unauthorized();
+
+            context.Posts.Remove(post);
+
+            await context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

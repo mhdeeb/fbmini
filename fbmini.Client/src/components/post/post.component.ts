@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,8 @@ import { PostView, VoteView } from '../../utility/types';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { pop_up, PopUp } from '../../utility/popup';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-post',
@@ -25,8 +27,12 @@ import { pop_up, PopUp } from '../../utility/popup';
 export class PostComponent {
   @Input()
   post!: PostView;
+
+  @Output() remove = new EventEmitter<void>();
+
   ContentImageUrl?: string;
   posterImageUrl?: string;
+  readonly dialog = inject(MatDialog);
 
   constructor(
     private readonly http: HttpClient,
@@ -68,7 +74,7 @@ export class PostComponent {
 
   votePost(value: number) {
     this.http
-      .post<VoteView>(`api/post/vote/${this.post.id}/${value}`, {})
+      .patch<VoteView>(`api/post/vote/${this.post.id}/${value}`, {})
       .subscribe({
         next: (vote) => {
           this.post.likes = vote.likes;
@@ -83,5 +89,20 @@ export class PostComponent {
 
   commentPost() {
     pop_up(this.snackbar, 'Comments are not implemented yet', PopUp.WARNING);
+  }
+
+  confirmDeletePost() {
+    this.dialog.open(ConfirmDialogComponent, {}).afterClosed().subscribe((close) => {
+      if (close)
+        this.http.delete(`api/post/delete/${this.post.id}`).subscribe({
+          next: () => {
+            pop_up(this.snackbar, 'Post Deleted', PopUp.INFO);
+            this.remove.emit();
+          },
+          error: (error) => {
+            pop_up(this.snackbar, error.error.message, PopUp.ERROR);
+          },
+        });
+    });
   }
 }
