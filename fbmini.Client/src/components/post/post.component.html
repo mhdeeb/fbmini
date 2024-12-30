@@ -2,7 +2,7 @@
     <mat-card-header>
         <div mat-card-avatar
              class="user-avatar"
-             [ngStyle]="{ 'background-image': 'url(' + posterImageUrl + ')' }">
+             [ngStyle]="{ 'background-image': 'url(' + imageUrl + ')' }">
             <a href="user/{{ post.poster.userName }}" class="w-full h-full block"></a>
         </div>
 
@@ -20,32 +20,29 @@
             <mat-icon>close</mat-icon>
         </button>
     </mat-card-header>
+    <div class="bg-[#18191a]">
+        <img mat-card-image
+             *ngIf="this.post.attachmentUrl"
+             [src]="this.post.attachmentUrl"
+             alt="Post"
+             class="mx-auto" />
+    </div>
 
-  <div class="bg-[#18191a]">
-    <img
-      mat-card-image
-      *ngIf="ContentImageUrl"
-      [src]="ContentImageUrl"
-      alt="Post"
-      class="mx-auto"
-    />
-  </div>
+    <mat-card-content>
+        <p class="p-5 text-lg">{{ post.content }}</p>
+    </mat-card-content>
 
-  <mat-card-content>
-    <p class="p-5 text-lg">{{ post.content }}</p>
-  </mat-card-content>
+    <mat-divider></mat-divider>
 
-  <mat-divider></mat-divider>
-
-  <mat-card-actions>
-    <button mat-button (click)="votePost(1)">
-      <mat-icon>thumb_up</mat-icon> {{ post.likes }}
-    </button>
-    <button mat-button (click)="votePost(0)">
-      <mat-icon>thumb_down</mat-icon> {{ post.dislikes }}
-    </button>
-    <button mat-button (click)="commentPost()">
-      {{ post.subPostsIds.length }} <mat-icon>comment</mat-icon>
-    </button>
-  </mat-card-actions>
+    <mat-card-actions>
+        <button mat-button (click)="votePost(1)">
+            <mat-icon>thumb_up</mat-icon> {{ post.likes }}
+        </button>
+        <button mat-button (click)="votePost(0)">
+            <mat-icon>thumb_down</mat-icon> {{ post.dislikes }}
+        </button>
+        <button mat-button (click)="commentPost()">
+            {{ post.subPostsIds.length }} <mat-icon>comment</mat-icon>
+        </button>
+    </mat-card-actions>
 </mat-card>

@@ -6,7 +6,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   imports: [MatProgressSpinnerModule],
   standalone: true,
   template: `
-    <div class="backdrop-dialog-content">
+    <div class="custom flex items-center justify-center">
       <mat-spinner></mat-spinner>
     </div>
   `,

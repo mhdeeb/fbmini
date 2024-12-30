@@ -1,0 +1,20 @@
+.mat-mdc-raised-button > .mat-icon {
+  margin: 0;
+}
+
+.social-post {
+  margin: 20px auto;
+  min-width: 500px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: black;
+}
+
+.container {
+  margin-inline: auto;
+  padding-inline: 3rem;
+}
+
+div {
+  --bg-header: #242526;
+  --bg-body: #18191a;
+}

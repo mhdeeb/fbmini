@@ -11,11 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import {
   MatDialog,
-  MatDialogActions,
   MatDialogClose,
-  MatDialogContent,
   MatDialogRef,
-  MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,9 +27,6 @@ import { pop_up, PopUp } from '../../utility/popup';
   styleUrl: './post-edit.component.css',
   standalone: true,
   imports: [
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
     MatDialogClose,
     MatButtonModule,
     MatCardModule,

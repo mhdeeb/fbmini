@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -9,12 +8,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PostView } from '../../utility/types';
 import { PostComponent } from '../../components/post/post.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PopUp, pop_up } from '../../utility/popup';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    RouterOutlet,
     MatButtonModule,
     CommonModule,
     PostComponent,
@@ -38,7 +37,7 @@ export class HomePage {
         this.isLoaded = true;
       },
       error: (error) => {
-        console.error(error);
+        pop_up(this.snackbar, error, PopUp.ERROR);
       },
     });
   }
@@ -48,6 +47,6 @@ export class HomePage {
   }
 
   removePost(post: PostView) {
-    this.posts = this.posts.filter(p => p !== post);
+    this.posts = this.posts.filter((p) => p !== post);
   }
 }

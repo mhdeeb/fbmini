@@ -24,7 +24,7 @@ export type PostView = {
   attachmentUrl: string;
   poster: {
     userName: string;
-    pictureUrl: string;
+    pictureUrl?: string;
   };
   likes: number;
   dislikes: number;

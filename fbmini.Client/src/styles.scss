@@ -1,19 +1,62 @@
 @use '@angular/material' as mat;
+@use 'styles/_theme-colors.scss' as theme;
 
-@import "../public/css/theme.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
+html {
   @include mat.dialog-overrides(( actions-alignment: right ));
+
+  @include mat.theme((
+    color: (
+      theme-type: dark,
+      primary: theme.$primary-palette,
+      tertiary: theme.$tertiary-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+
+  // .light {
+  //   @include mat.theme((
+  //     color: (
+  //       theme-type: light,
+  //       // primary: mat.$violet-palette,
+  //       // tertiary: mat.$orange-palette,
+  //     ),
+  //     typography: Roboto,
+  //     density: 0,
+  //   ));
+  // }
+}
+
+:root {
+  background: var(--mat-sys-background);
+  color: var(--mat-sys-on-surface);
+
+  --mat-dialog-container-min-width: 0;
+  --mat-sys-surface: #1a1a1a;
+}
+
+.custom-card-content {
+  display: flex !important;
+  gap: 2rem;
+  padding-block: 2rem !important;
+  // justify-content: space-evenly;
+  flex-direction: column;
+  // overflow-y: auto;
+}
+
+.mat-mdc-icon-button {
+  font-size: 16px !important;
 }
 
 .mat-mdc-snack-bar-container {
   // --mdc-snackbar-container-shape: 4px;
   // --mdc-snackbar-container-color: #333333;
   // --mat-snack-bar-button-color: #ffd740;
-  // --mdc-snackbar-supporting-text-color: #fff;
+  --mdc-snackbar-supporting-text-color: #fff;
   --mdc-snackbar-supporting-text-font: Arial, Helvetica, sans-serif;
   // --mdc-snackbar-supporting-text-line-height: 20px;
   --mdc-snackbar-supporting-text-size: 16px;
@@ -32,14 +75,4 @@
   &.snack-bar--warning {
     --mdc-snackbar-container-color: #e78012;
   }
-}
-
-html {
-  background: #242526;
-  color: #fff;
-}
-
-.container {
-  margin-inline: auto;
-  padding-inline: 5rem;
 }

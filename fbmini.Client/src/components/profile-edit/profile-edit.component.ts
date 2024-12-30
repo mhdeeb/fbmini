@@ -8,17 +8,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { User, UserView } from '../../utility/types';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import {
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
   MatDialogRef,
-  MatDialogTitle,
   MatDialog,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
@@ -34,10 +26,6 @@ import { BackdropDialogComponent } from '../backdrop/backdrop.component';
     MatIconModule,
     MatInputModule,
     MatCardModule,
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatDialogClose,
     MatDividerModule,
     CommonModule,
   ],
@@ -50,9 +38,9 @@ export class ProfileEditDialog {
     picture: string | ArrayBuffer | null;
     cover: string | ArrayBuffer | null;
   } = {
-      picture: null,
-      cover: null
-    };
+    picture: null,
+    cover: null,
+  };
 
   constructor(
     private readonly http: HttpClient,
@@ -106,17 +94,19 @@ export class ProfileEditDialog {
         if (this.form.get(value)?.dirty)
           formData.append(value, this.form.get(value)?.value);
 
-      this.http.patch(`api/user/profile/${this.data.userName}`, formData).subscribe({
-        next: (result: any) => {
-          dialogRef.close();
-          this.dialogRef.close(true);
-          pop_up(this.snackbar, result.message, PopUp.SUCCESS);
-        },
-        error: (error) => {
-          dialogRef.close();
-          pop_up(this.snackbar, error.error.message, PopUp.ERROR);
-        },
-      });
+      this.http
+        .patch(`api/user/profile/${this.data.userName}`, formData)
+        .subscribe({
+          next: (result: any) => {
+            dialogRef.close();
+            this.dialogRef.close(true);
+            pop_up(this.snackbar, result.message, PopUp.SUCCESS);
+          },
+          error: (error) => {
+            dialogRef.close();
+            pop_up(this.snackbar, error.error.message, PopUp.ERROR);
+          },
+        });
     }
   }
 

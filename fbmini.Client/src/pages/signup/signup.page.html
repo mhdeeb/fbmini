@@ -1,49 +1,31 @@
-<div class="bg-white p-8 rounded-lg shadow-lg text-black max-w-md">
+<div class="p-8 bg-[#19191A] rounded-lg shadow-lg max-w-md">
   <h2 class="text-3xl font-bold mb-6 text-center">Create an Account</h2>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
     <mat-form-field class="w-full">
       <mat-label>Username</mat-label>
       <input matInput formControlName="username" placeholder="Enter Username" />
-      <mat-error *ngIf="form.get('username')?.hasError('required')"
-        >Username is required
+      <mat-error *ngIf="form.get('username')?.hasError('required')">Username is required
       </mat-error>
     </mat-form-field>
 
     <mat-form-field class="w-full">
       <mat-label>Password</mat-label>
-      <input
-        matInput
-        [type]="showPassword ? 'text' : 'password'"
-        placeholder="Enter Password"
-        formControlName="password"
-        (focus)="isInputFocused = true"
-        (blur)="isInputFocused = false"
-      />
-      <button
-        mat-icon-button
-        matSuffix
-        (click)="toggleHide($event)"
-        [attr.aria-label]="'Hide password'"
-        [attr.aria-pressed]="showPassword"
-        type="button"
-      >
+      <input matInput [type]="showPassword ? 'text' : 'password'" placeholder="Enter Password"
+        formControlName="password" (focus)="isInputFocused = true" (blur)="isInputFocused = false" />
+      <button mat-icon-button matSuffix (click)="toggleHide($event)" [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="showPassword" type="button">
         <mat-icon>{{
           showPassword ? "visibility" : "visibility_off"
-        }}</mat-icon>
+          }}</mat-icon>
       </button>
-      <mat-error *ngIf="form.get('password')?.hasError('required')"
-        >Password is required</mat-error
-      >
+      <mat-error *ngIf="form.get('password')?.hasError('required')">Password is required</mat-error>
     </mat-form-field>
     <div class="min-h-24">
-      <ul
-        class="text-red-600 list-disc text-sm list-inside"
-        *ngIf="
+      <ul class="text-red-600 list-disc text-sm list-inside" *ngIf="
           isInputFocused &&
           !form.get('password')?.hasError('required') &&
           form.get('password')?.hasError('pattern')
-        "
-      >
+        ">
         <li *ngIf="form.get('password')?.errors?.['pattern']['count']">
           Must be at least 6 characters
         </li>
@@ -62,18 +44,10 @@
       </ul>
     </div>
 
-    <button
-      class="w-full mb-5"
-      mat-raised-button
-      color="primary"
-      type="submit"
-      [disabled]="form.invalid"
-    >
+    <button class="w-full mb-5" mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
       Sign Up
     </button>
 
-    <a href="login" class="text-blue-600 underline hover:text-blue-400"
-      >Already have an account?</a
-    >
+    <a href="login" class="text-blue-600 underline hover:text-blue-400">Already have an account?</a>
   </form>
 </div>

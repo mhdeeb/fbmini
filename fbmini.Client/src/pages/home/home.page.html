@@ -1,9 +1,9 @@
 @if (isLoaded) {
-    <div class="p-10 flex flex-col gap-5">
-        <app-post [post]="post" *ngFor="let post of posts" (remove)="removePost(post)"></app-post>
-    </div>
+<div class="p-10 pt-20 flex flex-col gap-5">
+  <app-post [post]="post" *ngFor="let post of posts" (remove)="removePost(post)"></app-post>
+</div>
 } @else {
-    <div class="w-full h-screen flex items-center justify-center">
-      <mat-spinner></mat-spinner>
-    </div>
+<div class="w-full h-screen flex items-center justify-center">
+  <mat-spinner></mat-spinner>
+</div>
 }

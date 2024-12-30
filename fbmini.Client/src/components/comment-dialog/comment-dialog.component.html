@@ -1,0 +1,36 @@
+
+<mat-card class="social-post w-full flex flex-col gap-5">
+    <mat-card-header>
+        <button type="button"
+                mat-icon-button
+                color="warn"
+                class="ms-auto"
+                (click)="onClose()">
+            <mat-icon>close</mat-icon>
+        </button>
+        <mat-card-title>
+            <h1 class="text-black">Comments</h1>
+        </mat-card-title>
+    </mat-card-header>
+
+    @if (isLoaded) {
+        <div class="p-10 flex flex-col gap-5">
+            <app-post [post]="post" *ngFor="let post of posts" (remove)="removePost(post)"></app-post>
+        </div>
+    } @else {
+        <div class="w-full h-screen flex items-center justify-center">
+            <mat-spinner></mat-spinner>
+        </div>
+    }
+
+    <mat-divider></mat-divider>
+
+    <mat-card-actions>
+        <button mat-raised-button
+                type="submit"
+                color="primary"
+                class="flex-grow text-lg">
+            <mat-icon>add</mat-icon>
+        </button>
+    </mat-card-actions>
+</mat-card>

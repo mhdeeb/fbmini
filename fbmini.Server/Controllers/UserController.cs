@@ -52,7 +52,7 @@ namespace fbmini.Server.Controllers
                 user = (await userManager.FindByIdAsync(GetUserID()!));
             else
             {
-                if (!IsInRole("Admin"))
+                if (!(GetUsername() == userName || IsInRole("Admin")))
                     return Unauthorized();
 
                 user = (await userManager.FindByNameAsync(userName));

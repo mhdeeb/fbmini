@@ -1,12 +1,3 @@
-section {
-  --bg-header: #242526;
-  --bg-body: #18191a;
-  --bg-gradient2-from: #764ba2;
-  --bg-gradient2-to: #667eea;
-  --bg-gradient3-from: #09203f;
-  --bg-gradient3-to: #537895;
-}
-
 :host {
   flex-grow: 1;
 }
@@ -21,7 +12,7 @@ section {
 
 .profile-picture {
   position: absolute;
-  z-index: 10;
+  z-index: 1;
   top: -5rem;
   left: 4rem;
 }
@@ -31,14 +22,4 @@ section {
     left: 50%;
     transform: translateX(-50%);
   }
-  /* .profile-picture-container {
-    align-content: center;
-  } */
-  /* .profile-picture-container {
-    flex-direction: column;
-    bottom: -20rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-  } */
 }
