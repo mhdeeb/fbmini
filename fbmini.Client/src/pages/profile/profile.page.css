@@ -22,4 +22,8 @@
     left: 50%;
     transform: translateX(-50%);
   }
+
+  .profile-text {
+    display: none;
+  }
 }
