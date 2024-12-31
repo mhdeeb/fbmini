@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace fbmini.Server.Controllers
 {
@@ -14,7 +15,12 @@ namespace fbmini.Server.Controllers
 
     public class RegisterForm
     {
+        [Required]
+        [RegularExpression(@"^[^!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]*$", ErrorMessage = "Username must not contain special characters.")]
         public required string Username { get; set; }
+        [MinLength(6, ErrorMessage = "Minimum length is 6.")]
+        [Required]
+        [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$", ErrorMessage = "Password must contain at least 6 characters, including uppercase, lowercase, a number, and a special character.")]
         public required string Password { get; set; }
     }
 

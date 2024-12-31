@@ -20,11 +20,11 @@ import { BackdropDialogComponent } from '../../components/backdrop/backdrop.comp
 import { pop_up, PopUp } from '../../utility/popup';
 
 function validateInput(c: FormControl) {
-  const COUNT_REGEX = /.{6,}/;
-  const NUMBER_REGEX = /\d/;
-  const SPECIAL_REGEX = /[^A-Za-z0-9]/;
-  const UPPER_REGEX = /[A-Z]/;
-  const LOWER_REGEX = /[a-z]/;
+  const COUNT_REGEX: RegExp = /.{6,}/;
+  const NUMBER_REGEX: RegExp = /\d/;
+  const SPECIAL_REGEX: RegExp = /[^A-Za-z0-9]/;
+  const UPPER_REGEX: RegExp = /[A-Z]/;
+  const LOWER_REGEX: RegExp = /[a-z]/;
 
   let pattern = {
     count: !COUNT_REGEX.test(c.value),
@@ -35,6 +35,14 @@ function validateInput(c: FormControl) {
   };
 
   for (const b of Object.values(pattern)) if (b) return { pattern };
+
+  return null;
+}
+
+function validUsername(c: FormControl) {
+  const NO_SPECIAL_REGEX: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+
+  if (NO_SPECIAL_REGEX.test(c.value)) return { pattern: true };
 
   return null;
 }
@@ -58,6 +66,7 @@ export class SignupPage {
   form: FormGroup;
   showPassword: boolean = false;
   isInputFocused: boolean = false;
+  isUserInputFocused: boolean = false;
   private readonly _snackBar = inject(MatSnackBar);
 
   constructor(
@@ -67,7 +76,7 @@ export class SignupPage {
     public dialog: MatDialog
   ) {
     this.form = this.fb.group({
-      username: ['', [Validators.required]],
+      username: ['', [Validators.required, validUsername]],
       password: ['', [Validators.required, validateInput]],
     });
   }

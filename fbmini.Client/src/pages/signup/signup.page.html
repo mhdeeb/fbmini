@@ -1,13 +1,24 @@
-<div class="p-8 bg-[#19191A] rounded-lg shadow-lg max-w-md">
+<div class="min-w-[26rem] p-8 bg-[#19191A] rounded-lg shadow-lg max-w-md">
   <h2 class="text-3xl font-bold mb-6 text-center">Create an Account</h2>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
     <mat-form-field class="w-full">
       <mat-label>Username</mat-label>
-      <input matInput formControlName="username" placeholder="Enter Username" />
+      <input matInput formControlName="username" (focus)="isUserInputFocused = true" (blur)="isUserInputFocused = false"
+        placeholder="Enter Username" />
       <mat-error *ngIf="form.get('username')?.hasError('required')">Username is required
       </mat-error>
     </mat-form-field>
-
+    <div class="min-h-5">
+      <ul class="text-red-600 list-disc text-sm list-inside" *ngIf="
+          isUserInputFocused &&
+          !form.get('username')?.hasError('required') &&
+          form.get('username')?.hasError('pattern')
+        ">
+        <li *ngIf="form.get('username')?.errors?.['pattern']">
+          Must not contain special characters
+        </li>
+      </ul>
+    </div>
     <mat-form-field class="w-full">
       <mat-label>Password</mat-label>
       <input matInput [type]="showPassword ? 'text' : 'password'" placeholder="Enter Password"
