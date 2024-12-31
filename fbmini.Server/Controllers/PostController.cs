@@ -47,7 +47,7 @@ namespace fbmini.Server.Controllers
             if (parentPost == null)
                 return NotFound(new { Message = "Parent post not found" });
 
-            var userId = GetUserID();
+            var userId = GetUserID()!;
 
             var user =
             (
@@ -71,27 +71,6 @@ namespace fbmini.Server.Controllers
             await context.SaveChangesAsync();
 
             return Ok(new { Message = "Comment created successfully", PostId = post.Id });
-        }
-
-        [HttpGet("Vote/{postId}")]
-        public async Task<IActionResult> GetVote(int postId)
-        {
-            var userId = GetUserID();
-
-            var post = await context.Posts
-                .Include(p => p.Likers)
-                .Include(p => p.Dislikers)
-                .FirstOrDefaultAsync(p => p.Id == postId);
-
-            if (post == null)
-                return NotFound();
-
-            return Ok(
-            new {
-                Likes = post.Likers.Count,
-                Dislikes = post.Dislikers.Count,
-                Vote = post.Likers.Any(e => e.Id == userId) ? 1 : post.Dislikers.Any(e => e.Id == userId) ? 0 : (int?)null
-            });
         }
 
         [HttpPatch("Vote/{postId}/{value}")]
@@ -119,9 +98,9 @@ namespace fbmini.Server.Controllers
                     {
                         user.LikedPosts.Remove(post);
                         user.DislikedPosts.Add(post);
-                        value = 0;
+                        value = -1;
                     }
-                    else value = null;
+                    else value = 0;
                     break;
 
                 case 1:
@@ -131,7 +110,7 @@ namespace fbmini.Server.Controllers
                         user.LikedPosts.Add(post);
                         value = 1;
                     }
-                    else value = null;
+                    else value = 0;
                     break;
                 default:
                     return BadRequest();
@@ -193,13 +172,18 @@ namespace fbmini.Server.Controllers
                 SELECT
                     p.Id AS PostId,
                     COUNT(pl.LikersId) AS Likes,
-                    COUNT(pd.DislikersId) AS Dislikes
+                    COUNT(pd.DislikersId) AS Dislikes,
+                    CASE
+                        WHEN COUNT(CASE WHEN pl.LikersId = '{userId}' THEN 1 END) > 0 THEN 1
+                        WHEN COUNT(CASE WHEN pd.DislikersId = '{userId}' THEN 1 END) > 0 THEN -1
+                        ELSE 0
+                    END AS PosterVote
                 FROM
                     Posts p
                 LEFT JOIN PostLikers AS pl ON p.Id = pl.LikedPostsId
                 LEFT JOIN PostDislikers AS pd ON p.Id = pd.DislikedPostsId
                 WHERE
-                    ParentPostId IS NULL
+                    p.ParentPostId IS NULL
                 GROUP BY p.Id
             ),
             ChildPosts AS(
@@ -222,6 +206,7 @@ namespace fbmini.Server.Controllers
                 u.PictureId     AS PictureId,
                 ld.Likes        AS Likes,
                 ld.Dislikes     AS Dislikes,
+                ld.PosterVote   AS Vote,
                 cp.ChildPostIds AS ChildPostIds,
                 a.Id            AS PosterId
             FROM
@@ -259,8 +244,9 @@ namespace fbmini.Server.Controllers
                         },
                         Likes = (reader.IsDBNull(7) ? null : reader.GetInt32(7)),
                         Dislikes = (reader.IsDBNull(8) ? null : reader.GetInt32(8)),
-                        SubPostsIds = (reader.IsDBNull(9) ? [] : reader.GetString(9).Split(", ").Select(num => int.Parse(num.Trim())).ToList()),
-                        CanEdit = userId == reader.GetString(10) || isManagerOrAdmin
+                        Vote = reader.GetInt32(9),
+                        SubPostsIds = (reader.IsDBNull(10) ? [] : reader.GetString(10).Split(", ").Select(num => int.Parse(num.Trim())).ToList()),
+                        CanEdit = userId == reader.GetString(11) || isManagerOrAdmin
                     });
                 }
             }

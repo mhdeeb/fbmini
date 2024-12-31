@@ -20,6 +20,7 @@ namespace fbmini.Server.Models
         public DateTime? Date { get; set; }
         public int? Likes { get; set; }
         public int? Dislikes { get; set; }
+        public int? Vote { get; set; }
         public List<int>? SubPostsIds { get; set; }
         public UserContentResult? Poster { get; set; }
         public bool? CanEdit { get; set; }

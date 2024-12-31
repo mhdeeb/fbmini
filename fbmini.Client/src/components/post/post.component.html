@@ -26,10 +26,12 @@
 
   <mat-card-actions>
     <button mat-button (click)="votePost(1)">
-      <mat-icon>thumb_up</mat-icon> {{ post.likes }}
+      <mat-icon [fontSet]="post.vote == 1 ? 'material-icons' : 'material-icons-outlined'">thumb_up</mat-icon> {{
+      post.likes }}
     </button>
     <button mat-button (click)="votePost(0)">
-      <mat-icon>thumb_down</mat-icon> {{ post.dislikes }}
+      <mat-icon [fontSet]="post.vote == -1 ? 'material-icons' : 'material-icons-outlined'">thumb_down</mat-icon> {{
+      post.dislikes }}
     </button>
     <button mat-button (click)="commentPost()">
       {{ post.subPostsIds.length }} <mat-icon>comment</mat-icon>
