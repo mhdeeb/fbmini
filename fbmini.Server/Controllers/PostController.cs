@@ -226,7 +226,7 @@ namespace fbmini.Server.Controllers
                 a.Id            AS PosterId
             FROM
                 BasePosts p
-                INNER JOIN  AspNetUsers a    ON p.PosterId = a.Id
+                INNER JOIN  AspNetUsers a     ON p.PosterId = a.Id
                 LEFT JOIN   LikesDislikes ld  ON p.Id = ld.PostId
                 LEFT JOIN   UserData u        ON a.Id = u.UserId
                 LEFT JOIN   ChildPosts cp     ON cp.ParentPostId = p.Id
