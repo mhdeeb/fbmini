@@ -37,15 +37,16 @@ html {
 
   --mat-dialog-container-min-width: 0;
   --mat-sys-surface: #1a1a1a;
+
+  --mdc-filled-text-field-active-indicator-height: 0px;
+  --mdc-filled-text-field-focus-active-indicator-height: 0px;
 }
 
 .custom-card-content {
   display: flex !important;
   gap: 2rem;
   padding-block: 2rem !important;
-  // justify-content: space-evenly;
   flex-direction: column;
-  // overflow-y: auto;
 }
 
 .mat-mdc-icon-button {
