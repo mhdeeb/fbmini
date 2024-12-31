@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileEditDialog } from '../../components/profile-edit/profile-edit.component';
 import { map } from 'rxjs/operators';
+import { FeedComponent } from '../../components/feed/feed.component';
 
 @Component({
   selector: 'app-profile',
@@ -22,12 +23,14 @@ import { map } from 'rxjs/operators';
     MatInputModule,
     MatCardModule,
     CommonModule,
+    FeedComponent,
   ],
   templateUrl: './profile.page.html',
   styleUrl: './profile.page.css',
 })
 export class ProfilePage {
   public profile = <User>{};
+  public isLoaded = false;
 
   constructor(
     private readonly http: HttpClient,
@@ -40,21 +43,26 @@ export class ProfilePage {
   getProfile() {
     this.route.url
       .pipe(
-        map(segments => segments.map(seg => seg.path)),
-        map(paths => ({
+        map((segments) => segments.map((seg) => seg.path)),
+        map((paths) => ({
           first: paths[0] || null,
-          second: paths[1] || null
+          second: paths[1] || null,
         }))
       )
       .subscribe(({ first, second }) => {
-        this.http.get<User>(`api/user/profile/${first == 'user' && second ? second : ''}`).subscribe({
-          next: (result) => {
-            this.profile = result;
-          },
-          error: (error) => {
-            pop_up(this.snackbar, error.error.message, PopUp.ERROR);
-          },
-        });
+        this.http
+          .get<User>(
+            `api/user/profile/${first == 'user' && second ? second : ''}`
+          )
+          .subscribe({
+            next: (result) => {
+              this.profile = result;
+              this.isLoaded = true;
+            },
+            error: (error) => {
+              pop_up(this.snackbar, error.error.message, PopUp.ERROR);
+            },
+          });
       });
   }
 

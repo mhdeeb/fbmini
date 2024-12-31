@@ -17,7 +17,7 @@
         (change)="onFileSelected($event, 'cover')" />
 
       <div onKeyPress (click)="coverInput.click()"
-        class="relative w-full h-40 rounded-md overflow-hidden cursor-pointer group bg-gradient-to-r from-[var(--bg-gradient2-from)] to-[var(--bg-gradient2-to)]">
+        class="relative w-full h-40 rounded-md overflow-hidden cursor-pointer group bg-gradient-to-r from-[#764ba2] to-[#667eea]">
         <div class="absolute inset-0 transition-all duration-300 group-hover:bg-black/50 pointer-events-none"></div>
 
         <img [src]="previews.cover" *ngIf="previews.cover" alt="Cover" draggable="false"

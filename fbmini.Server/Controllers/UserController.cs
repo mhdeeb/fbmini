@@ -18,7 +18,7 @@ namespace fbmini.Server.Controllers
 
             if (user == null)
                 return null;
-
+            
             var canEdit = GetUserID()! == user.Id || IsInRole("Manager") || IsInRole("Admin");
 
             var userContentResult = user.ToContentResult(canEdit);

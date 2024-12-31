@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System;
 
 
 namespace fbmini.Server.Controllers
@@ -152,10 +153,8 @@ namespace fbmini.Server.Controllers
             return Ok(post.ToContentResult(canEdit));
         }
 
-        [HttpGet("List/{postId}")]
-        public async Task<ActionResult<List<PostContentResult>>> GetPosts(int? postId)
+        private async Task<List<PostContentResult>> GetPosts(string where)
         {
-            string selector = postId == null ? "IS NULL" : $"= {postId}";
             List<PostContentResult> posts = [];
             var userId = GetUserID();
             var isManagerOrAdmin = IsInRole("Manager") || IsInRole("Admin");
@@ -166,7 +165,7 @@ namespace fbmini.Server.Controllers
                 FROM
                     Posts
                 WHERE
-                    ParentPostId {selector}
+                    {where}
             ),
             LikesDislikes AS(
                 SELECT
@@ -183,7 +182,7 @@ namespace fbmini.Server.Controllers
                 LEFT JOIN PostLikers AS pl ON p.Id = pl.LikedPostsId
                 LEFT JOIN PostDislikers AS pd ON p.Id = pd.DislikedPostsId
                 WHERE
-                    p.ParentPostId IS NULL
+                    {where}
                 GROUP BY p.Id
             ),
             ChildPosts AS(
@@ -329,13 +328,35 @@ namespace fbmini.Server.Controllers
             //    .Select(p => p.ToContentResult(userId == p.PosterId || isManagerOrAdmin))
             //    .ToListAsync();
 
-            return Ok(posts);
+            return posts;
+        }
+
+        [HttpGet("User/{userName}")]
+        public async Task<ActionResult<PostContentResult>> GetPostsByPoster(string? userName)
+        {
+            var userId = await context.Users
+                .Where(u => u.UserName == userName)
+                .Select(u => u.Id)
+                .FirstAsync();
+            return Ok(await GetPosts(userName == null ? $"PosterId = '{GetUserID()}'" : $"PosterId = '{userId}'"));
+        }
+
+        [HttpGet("User")]
+        public async Task<ActionResult<PostContentResult>> GetPostsByPoster()
+        {
+            return await GetPostsByPoster(GetUserID()!);
+        }
+
+        [HttpGet("List/{parentPostId}")]
+        public async Task<ActionResult<List<PostContentResult>>> GetPostsByParent(int? parentPostId)
+        {
+            return Ok(await GetPosts(parentPostId == null ? "ParentPostId IS NULL" : $"ParentPostId = {parentPostId}"));
         }
 
         [HttpGet("List")]
-        public async Task<ActionResult<List<PostContentResult>>> GetPosts()
+        public async Task<ActionResult<List<PostContentResult>>> GetPostsByParent()
         {
-            return await GetPosts(null);
+            return await GetPostsByParent(null);
         }
 
         [HttpDelete("Delete/{postId}")]

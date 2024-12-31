@@ -1,5 +1,5 @@
 <section class="min-h-[40rem] bg-[#19191A] pt-10">
-  <div class="mx-10 rounded-md bg-cover bg-center relative h-96 mt-10">
+  <div class="mx-10 rounded-md bg-cover bg-center relative h-96 mt-10 bg-gradient-to-r from-[#764ba2] to-[#667eea]">
     <div>
       <img [src]="profile.coverUrl" alt="Cover" draggable="false" *ngIf="profile.coverUrl"
         class="object-cover object-center h-96 w-full rounded-md" />
@@ -37,3 +37,7 @@
     </div>
   </div>
 </section>
+
+@if (isLoaded) {
+<app-feed query="user/{{profile.userName!}}"></app-feed>
+}
