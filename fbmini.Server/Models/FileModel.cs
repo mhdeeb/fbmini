@@ -36,6 +36,10 @@ namespace fbmini.Server.Models
         {
             return $"api/file/blob/{Id}";
         }
+        public static string GetUrl(int Id)
+        {
+            return $"api/file/blob/{Id}";
+        }
         public FileContentResult ToContentResult()
         {
             return new FileContentResult(FileData, ContentType);

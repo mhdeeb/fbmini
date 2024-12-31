@@ -43,7 +43,7 @@ namespace fbmini.Server.Models
         [ForeignKey("ParentPostId")]
         public PostModel? ParentPost { get; set; }
 
-        private int? AttachmentId { get; set; }
+        public int? AttachmentId { get; set; }
         [ForeignKey("AttachmentId")]
         public FileModel? Attachment { get; set; }
         public ICollection<UserModel> Likers { get; } = [];
@@ -52,7 +52,6 @@ namespace fbmini.Server.Models
 
         public PostContentResult ToContentResult(bool canEdit)
         {
-            Console.WriteLine("hmm");
             return new PostContentResult
             {
                 Id = Id,

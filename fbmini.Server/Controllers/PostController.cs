@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Data.SqlClient;
 using System.Data;
+
 
 namespace fbmini.Server.Controllers
 {
@@ -172,27 +173,175 @@ namespace fbmini.Server.Controllers
             return Ok(post.ToContentResult(canEdit));
         }
 
-
         [HttpGet("List/{postId}")]
         public async Task<ActionResult<List<PostContentResult>>> GetPosts(int? postId)
         {
+            string selector = postId == null ? "IS NULL" : $"= {postId}";
+            List<PostContentResult> posts = [];
             var userId = GetUserID();
             var isManagerOrAdmin = IsInRole("Manager") || IsInRole("Admin");
+            string query = $"""
+            WITH BasePosts AS(
+                SELECT
+                    Id, Title, Content, [Date], PosterId, AttachmentId
+                FROM
+                    Posts
+                WHERE
+                    ParentPostId {selector}
+            ),
+            LikesDislikes AS(
+                SELECT
+                    p.Id AS PostId,
+                    COUNT(pl.LikersId) AS Likes,
+                    COUNT(pd.DislikersId) AS Dislikes
+                FROM
+                    Posts p
+                LEFT JOIN PostLikers AS pl ON p.Id = pl.LikedPostsId
+                LEFT JOIN PostDislikers AS pd ON p.Id = pd.DislikedPostsId
+                WHERE
+                    ParentPostId IS NULL
+                GROUP BY p.Id
+            ),
+            ChildPosts AS(
+                SELECT
+                    ParentPostId,
+                    STRING_AGG(Id, ', ') AS ChildPostIds
+                FROM
+                    Posts
+                WHERE
+                    ParentPostId IS NOT NULL
+                GROUP BY ParentPostId
+            )
+            SELECT
+                p.Id            AS PostId,
+                p.Title         AS PostTitle,
+                p.Content       AS PostContent,
+                p.[Date]        AS PostDate,
+                p.AttachmentId  AS AttachmentId,
+                a.UserName      AS PosterUserName,
+                u.PictureId     AS PictureId,
+                ld.Likes        AS Likes,
+                ld.Dislikes     AS Dislikes,
+                cp.ChildPostIds AS ChildPostIds,
+                a.Id            AS PosterId
+            FROM
+                BasePosts p
+                INNER JOIN  AspNetUsers a    ON p.PosterId = a.Id
+                LEFT JOIN   LikesDislikes ld  ON p.Id = ld.PostId
+                LEFT JOIN   UserData u        ON a.Id = u.UserId
+                LEFT JOIN   ChildPosts cp     ON cp.ParentPostId = p.Id
+            ORDER BY
+                p.[Date] DESC;
+            """;
 
-            var posts = await context.Posts
-                .AsNoTracking()
-                .Where(p => p.ParentPostId == postId)
-                .OrderByDescending(p => p.Date)
-                .Include(p => p.Poster)
-                    .ThenInclude(u => u.UserData)
-                    .ThenInclude(ud => ud.Cover)
-                .Include(p => p.Poster.UserData.Picture)
-                .Include(p => p.Attachment)
-                .Include(p => p.Likers)
-                .Include(p => p.Dislikers)
-                .Include(p => p.SubPosts)
-                .Select(p => p.ToContentResult(userId == p.PosterId || isManagerOrAdmin))
-                .ToListAsync();
+            using (var connection = context.Database.GetDbConnection())
+            {
+                await connection.OpenAsync();
+
+                using var command = connection.CreateCommand();
+                command.CommandText = query;
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                {
+                    posts.Add(new PostContentResult
+                    {
+                        Id = (reader.IsDBNull(0) ? null : reader.GetInt32(0)),
+                        Title = reader.GetString(1),
+                        Content = (reader.IsDBNull(2) ? null : reader.GetString(2)),
+                        Date = (reader.IsDBNull(3) ? null : reader.GetDateTime(3)),
+                        AttachmentUrl = (reader.IsDBNull(4) ? null : FileModel.GetUrl(reader.GetInt32(4))),
+                        Poster = new UserContentResult
+                        {
+                            UserName = (reader.IsDBNull(5) ? null : reader.GetString(5)),
+                            PictureUrl = (reader.IsDBNull(6) ? null : FileModel.GetUrl(reader.GetInt32(6)))
+                        },
+                        Likes = (reader.IsDBNull(7) ? null : reader.GetInt32(7)),
+                        Dislikes = (reader.IsDBNull(8) ? null : reader.GetInt32(8)),
+                        SubPostsIds = (reader.IsDBNull(9) ? [] : reader.GetString(9).Split(", ").Select(num => int.Parse(num.Trim())).ToList()),
+                        CanEdit = userId == reader.GetString(10) || isManagerOrAdmin
+                    });
+                }
+            }
+
+            //new PostContentResult
+            //{
+            //    Id = bp.Id,
+            //    Title = bp.Title,
+            //    Content = bp.Content,
+            //    Date = bp.Date,
+            //    AttachmentUrl = attachmentFile != null ? attachmentFile.GetUrl() : null,
+            //    Poster = new UserContentResult
+            //    {
+            //        UserName = user.UserName,
+            //        PictureUrl = pictureFile != null ? pictureFile.GetUrl() : null
+            //    },
+            //    Likes = bp.Likers != null ? bp.Likers.Count() : 0,
+            //    Dislikes = bp.Dislikers != null ? bp.Dislikers.Count() : 0,
+            //    SubPostsIds = bp.SubPosts != null ? bp.SubPosts.ToList() : new List<int>(),
+            //    CanEdit = userId == bp.PosterId || isManagerOrAdmin
+            //}
+
+            //var basePosts = context.Posts
+            //    .Where(p => p.ParentPostId == null)
+            //    .Select(p => new
+            //    {
+            //        p.Id,
+            //        p.Title,
+            //        p.Content,
+            //        p.Date,
+            //        p.PosterId,
+            //        p.AttachmentId,
+            //        p.Likers,
+            //        p.Dislikers,
+            //        SubPosts = p.SubPosts.Select(sp => sp.Id)
+            //    });
+
+            //var query = from bp in basePosts
+            //            join user in context.Users on bp.PosterId equals user.Id
+            //            join userData in context.UserData on user.Id equals userData.UserId into udJoin
+            //            from userData in udJoin.DefaultIfEmpty()
+            //            join pictureFile in context.Files on userData.PictureId equals pictureFile.Id into pfJoin
+            //            from pictureFile in pfJoin.DefaultIfEmpty()
+            //            join attachmentFile in context.Files on bp.AttachmentId equals attachmentFile.Id into afJoin
+            //            from attachmentFile in afJoin.DefaultIfEmpty()
+            //            orderby bp.Date descending
+            //            select new PostContentResult
+            //            {
+            //                Id = bp.Id,
+            //                Title = bp.Title,
+            //                Content = bp.Content,
+            //                Date = bp.Date,
+            //                AttachmentUrl = attachmentFile != null ? attachmentFile.GetUrl() : null,
+            //                Poster = new UserContentResult
+            //                {
+            //                    UserName = user.UserName,
+            //                    PictureUrl = pictureFile != null ? pictureFile.GetUrl() : null
+            //                },
+            //                Likes = bp.Likers != null ? bp.Likers.Count() : 0,
+            //                Dislikes = bp.Dislikers != null ? bp.Dislikers.Count() : 0,
+            //                SubPostsIds = bp.SubPosts != null ? bp.SubPosts.ToList() : new List<int>(),
+            //                CanEdit = userId == bp.PosterId || isManagerOrAdmin
+            //            };
+
+            //var posts = await query.ToListAsync();
+
+
+            //var posts = await context.Posts
+            //    .AsNoTracking()
+            //    .Where(p => p.ParentPostId == postId)
+            //    .OrderByDescending(p => p.Date)
+            //    .Include(p => p.Poster)
+            //        .ThenInclude(u => u.UserData)
+            //        .ThenInclude(ud => ud.Cover)
+            //    .Include(p => p.Poster.UserData.Picture)
+            //    .Include(p => p.Attachment)
+            //    .Include(p => p.Likers)
+            //    .Include(p => p.Dislikers)
+            //    .Include(p => p.SubPosts)
+            //    .Select(p => p.ToContentResult(userId == p.PosterId || isManagerOrAdmin))
+            //    .ToListAsync();
 
             return Ok(posts);
         }
