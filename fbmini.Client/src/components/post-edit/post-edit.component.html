@@ -13,7 +13,7 @@
 
     <input hidden #fileInput type="file" accept="image/*" placeholder="attachment" (change)="onPictureSelect($event)" />
 
-    <mat-card-content class="h-[70vh] custom-card-content">
+    <mat-card-content class="h-[70vh] custom-card-content overflow-y-auto">
       <mat-form-field subscriptSizing="dynamic">
         <mat-label>Title</mat-label>
         <input matInput formControlName="Title" maxlength="24" placeholder="Title" />
