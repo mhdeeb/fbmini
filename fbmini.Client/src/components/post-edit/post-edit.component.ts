@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -10,6 +10,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import {
+  MAT_DIALOG_DATA,
   MatDialog,
   MatDialogClose,
   MatDialogRef,
@@ -46,7 +47,8 @@ export class PostEditDialog {
     private readonly dialogRef: MatDialogRef<PostEditDialog>,
     private readonly http: HttpClient,
     public dialog: MatDialog,
-    private readonly snackbar: MatSnackBar
+    private readonly snackbar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.form = this.fb.group({
       Title: ['', Validators.required],
@@ -79,19 +81,19 @@ export class PostEditDialog {
       });
       for (const value in this.form.value)
         formData.append(value, this.form.get(value)?.value);
-
-      this.http.post('api/post/create', formData).subscribe({
-        next: (res) => {
-          this.dialogRef.close();
-          dialogRef.close();
-          location.reload();
-        },
-        error: (error) => {
-          dialogRef.close();
-          console.log(error);
-          pop_up(this.snackbar, error.error.message, PopUp.ERROR);
-        },
-      });
+      this.http
+        .post(`api/post/create/${this.data.postId ?? ''}`, formData)
+        .subscribe({
+          next: (res) => {
+            this.dialogRef.close();
+            dialogRef.close();
+            location.reload();
+          },
+          error: (error) => {
+            dialogRef.close();
+            pop_up(this.snackbar, error.error.message, PopUp.ERROR);
+          },
+        });
     }
   }
 }

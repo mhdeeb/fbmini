@@ -99,7 +99,7 @@ namespace fbmini.Server
 
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserModel>>();
 
-            var user = new UserModel { UserName = "admin@admin.com", Email = "admin@admin.com" }; // NOTE: this is a toy project.
+            var user = new UserModel { UserName = "admin", Email = "admin@admin.com" }; // NOTE: this is a toy project.
             var result = await userManager.CreateAsync(user, "Admin@0");
             await userManager.AddToRoleAsync(user, roles[0]);
             if (result.Succeeded)

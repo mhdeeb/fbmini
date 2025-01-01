@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { pop_up, PopUp } from '../../utility/popup';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { CommentDialogComponent } from '../comment-dialog/comment-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post',
@@ -36,7 +36,8 @@ export class PostComponent {
 
   constructor(
     private readonly http: HttpClient,
-    private readonly snackbar: MatSnackBar
+    private readonly snackbar: MatSnackBar,
+    private readonly router: Router
   ) {}
 
   ngOnInit() {
@@ -73,8 +74,7 @@ export class PostComponent {
   }
 
   commentPost() {
-    // this.dialog.open(CommentDialogComponent, { data: this.post.id });
-    pop_up(this.snackbar, 'Comments are not implemented yet', PopUp.WARNING);
+    this.router.navigate(['/feed', this.post.id]);
   }
 
   confirmDeletePost() {

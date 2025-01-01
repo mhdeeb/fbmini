@@ -1,0 +1,9 @@
+:host {
+  flex-grow: 1;
+}
+
+.fixed-icon-button {
+  position: fixed;
+  top: 50%;
+  z-index: 1000;
+}

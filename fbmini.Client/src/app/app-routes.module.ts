@@ -3,13 +3,11 @@ import { HomePage } from '../pages/home/home.page';
 import { LoginPage } from '../pages/login/login.page';
 import { SignupPage } from '../pages/signup/signup.page';
 import { ProfilePage } from '../pages/profile/profile.page';
-import {
-  AuthGuard,
-  NoAuthGuard,
-} from '../components/auth/AuthGuard';
+import { AuthGuard, NoAuthGuard } from '../components/auth/AuthGuard';
 import { TestPage } from '../pages/test/test.page';
-import { notFoundPage } from '../pages/not-found/not-found.page';
+import { NotFoundPage } from '../pages/not-found/not-found.page';
 import { NgModule } from '@angular/core';
+import { FeedPage } from '../pages/feed/feed.page';
 
 export const routes: Routes = [
   {
@@ -20,6 +18,11 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomePage,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'feed/:query',
+    component: FeedPage,
     canActivate: [AuthGuard],
   },
   {
@@ -46,7 +49,7 @@ export const routes: Routes = [
     path: 'test',
     component: TestPage,
   },
-  { path: '**', component: notFoundPage },
+  { path: '**', component: NotFoundPage },
 ];
 
 @NgModule({

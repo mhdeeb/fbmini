@@ -153,6 +153,19 @@ namespace fbmini.Server.Controllers
             return Ok(post.ToContentResult(canEdit));
         }
 
+        [HttpGet("Parent/{postId}")]
+        public async Task<ActionResult<int?>> GetParentPostId(int postId)
+        {
+            var post = await context.Posts
+                .Where(p => p.Id == postId)
+                .FirstAsync();
+
+            if (post == null)
+                return NotFound();
+
+            return Ok(new { post.ParentPostId });
+        }
+
         private async Task<List<PostContentResult>> GetPosts(string where)
         {
             List<PostContentResult> posts = [];

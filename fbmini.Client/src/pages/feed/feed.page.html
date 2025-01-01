@@ -1,0 +1,8 @@
+<button mat-fab (click)="goToParent()" class="fixed-icon-button left-5">
+  <mat-icon>arrow_back</mat-icon>
+</button>
+<button mat-fab (click)="comment()" class="fixed-icon-button left-24">
+  <mat-icon>comment</mat-icon>
+</button>
+
+<app-feed query="list/{{ query }}"></app-feed>

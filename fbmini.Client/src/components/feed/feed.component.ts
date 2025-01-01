@@ -36,7 +36,7 @@ export class FeedComponent {
     });
   }
 
-  ngOnInit() {
+  ngOnChanges() {
     this.getPosts();
   }
 
