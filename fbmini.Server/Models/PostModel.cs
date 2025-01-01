@@ -64,7 +64,7 @@ namespace fbmini.Server.Models
                 Dislikes = Dislikers.Count,
                 SubPostsIds = SubPosts.Select(p => p.Id).ToList(),
                 Poster = new UserContentResult { UserName = Poster.UserName, PictureUrl = Poster?.UserData?.Picture?.GetUrl() },
-                CanEdit = canEdit
+                CanEdit = canEdit,
             };
         }
 

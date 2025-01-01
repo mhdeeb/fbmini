@@ -148,9 +148,15 @@ namespace fbmini.Server.Controllers
             if (post == null)
                 return NotFound();
 
-            var canEdit = GetUserID()! == post.PosterId || IsInRole("Manager") || IsInRole("Admin");
+            var userId = GetUserID()!;
 
-            return Ok(post.ToContentResult(canEdit));
+            var canEdit = userId == post.PosterId || IsInRole("Manager") || IsInRole("Admin");
+
+            var result = post.ToContentResult(canEdit);
+
+            result.Vote = post.Likers.Any(u => u.Id == userId) ? 1 : post.Dislikers.Any(u => u.Id == userId) ? -1 : 0; 
+
+            return Ok(result);
         }
 
         [HttpGet("Parent/{postId}")]
