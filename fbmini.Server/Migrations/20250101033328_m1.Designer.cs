@@ -12,7 +12,7 @@ using fbmini.Server.Models;
 namespace fbmini.Server.Migrations
 {
     [DbContext(typeof(fbminiServerContext))]
-    [Migration("20241228200048_m1")]
+    [Migration("20250101033328_m1")]
     partial class m1
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace fbmini.Server.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -244,6 +244,9 @@ namespace fbmini.Server.Migrations
                     b.Property<int?>("ParentPostId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PostModelId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PosterId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -260,6 +263,8 @@ namespace fbmini.Server.Migrations
                     b.HasIndex("AttachmentId");
 
                     b.HasIndex("ParentPostId");
+
+                    b.HasIndex("PostModelId");
 
                     b.HasIndex("PosterId");
 
@@ -457,13 +462,18 @@ namespace fbmini.Server.Migrations
                         .HasForeignKey("AttachmentId");
 
                     b.HasOne("fbmini.Server.Models.PostModel", "ParentPost")
+                        .WithMany()
+                        .HasForeignKey("ParentPostId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("fbmini.Server.Models.PostModel", null)
                         .WithMany("SubPosts")
-                        .HasForeignKey("ParentPostId");
+                        .HasForeignKey("PostModelId");
 
                     b.HasOne("fbmini.Server.Models.UserModel", "Poster")
                         .WithMany()
                         .HasForeignKey("PosterId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("fbmini.Server.Models.UserDataModel", null)

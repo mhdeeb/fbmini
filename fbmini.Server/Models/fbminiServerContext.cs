@@ -17,7 +17,7 @@ namespace fbmini.Server.Models
                 .HasOne(p => p.Poster)
                 .WithMany()
                 .HasForeignKey(p => p.PosterId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<PostModel>()
                 .HasMany(p => p.Likers)
@@ -28,6 +28,12 @@ namespace fbmini.Server.Models
                 .HasMany(p => p.Dislikers)
                 .WithMany(u => u.DislikedPosts)
                 .UsingEntity(j => j.ToTable("PostDislikers"));
+
+            builder.Entity<PostModel>()
+             .HasOne(p => p.ParentPost)
+             .WithMany()
+             .HasForeignKey(p => p.ParentPostId)
+             .OnDelete(DeleteBehavior.NoAction);
         }
 
         public DbSet<UserDataModel> UserData { get; set; }

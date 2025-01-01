@@ -219,6 +219,7 @@ namespace fbmini.Server.Migrations
                     PosterId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ParentPostId = table.Column<int>(type: "int", nullable: true),
                     AttachmentId = table.Column<int>(type: "int", nullable: true),
+                    PostModelId = table.Column<int>(type: "int", nullable: true),
                     UserDataModelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -228,8 +229,7 @@ namespace fbmini.Server.Migrations
                         name: "FK_Posts_AspNetUsers_PosterId",
                         column: x => x.PosterId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Posts_Files_AttachmentId",
                         column: x => x.AttachmentId,
@@ -238,6 +238,11 @@ namespace fbmini.Server.Migrations
                     table.ForeignKey(
                         name: "FK_Posts_Posts_ParentPostId",
                         column: x => x.ParentPostId,
+                        principalTable: "Posts",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Posts_Posts_PostModelId",
+                        column: x => x.PostModelId,
                         principalTable: "Posts",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -358,6 +363,11 @@ namespace fbmini.Server.Migrations
                 name: "IX_Posts_PosterId",
                 table: "Posts",
                 column: "PosterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Posts_PostModelId",
+                table: "Posts",
+                column: "PostModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_UserDataModelId",
