@@ -11,6 +11,7 @@ import { pop_up, PopUp } from '../../utility/popup';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { Router } from '@angular/router';
+import { LinkifyPipe } from '../../utility/linkify.pipe';
 
 @Component({
   selector: 'app-post',
@@ -23,6 +24,7 @@ import { Router } from '@angular/router';
     MatIconModule,
     MatDividerModule,
     CommonModule,
+    LinkifyPipe,
   ],
 })
 export class PostComponent {
@@ -41,6 +43,7 @@ export class PostComponent {
   ) {}
 
   ngOnInit() {
+    console.log(this.post);
     this.imageUrl = this.post.poster.pictureUrl ?? 'blank-profile-picture.webp';
 
     const date = new Date(this.post.date + 'Z');

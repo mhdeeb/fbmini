@@ -77,3 +77,9 @@ html {
     --mdc-snackbar-container-color: #e78012;
   }
 }
+@layer components {
+  /* Override or create a custom component class */
+  .link > a {
+    @apply text-blue-600 underline hover:text-blue-800 hover:no-underline;
+  }
+}

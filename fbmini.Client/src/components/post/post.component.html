@@ -19,7 +19,7 @@
   </div>
 
   <mat-card-content>
-      <p class="p-5 text-lg" >{{ post.content }}</p>
+    <p class="p-5 text-lg link" [innerHTML]="post.content! | linkify"></p>
   </mat-card-content>
 
   <mat-divider></mat-divider>
