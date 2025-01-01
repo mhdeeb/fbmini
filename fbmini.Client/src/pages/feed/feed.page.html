@@ -5,4 +5,12 @@
   <mat-icon>comment</mat-icon>
 </button>
 
-<app-feed query="list/{{ query }}"></app-feed>
+<div class="pt-20">
+  @if(isLoaded) {
+  <app-post [post]="post"></app-post>
+  }
+
+  <mat-divider></mat-divider>
+
+  <app-feed query="list/{{ query }}"></app-feed>
+</div>

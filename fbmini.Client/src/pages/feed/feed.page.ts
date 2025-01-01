@@ -8,28 +8,38 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { PostEditDialog } from '../../components/post-edit/post-edit.component';
+import { PostComponent } from '../../components/post/post.component';
+import { PostView } from '../../utility/types';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   standalone: true,
-  imports: [FeedComponent, MatIconModule, MatButtonModule],
+  imports: [
+    FeedComponent,
+    MatIconModule,
+    MatButtonModule,
+    PostComponent,
+    MatDividerModule,
+  ],
   templateUrl: './feed.page.html',
   styleUrl: './feed.page.css',
 })
 export class FeedPage {
   query!: string;
   parentPostId?: number;
+  post!: PostView;
+  isLoaded: boolean = false;
 
-  fetchParentId(query: string) {
-    this.http
-      .get<{ parentPostId: number }>(`api/post/parent/${query}`)
-      .subscribe({
-        next: (result) => {
-          this.parentPostId = result.parentPostId;
-        },
-        error: (error) => {
-          pop_up(this.snackbar, error.error.message, PopUp.ERROR);
-        },
-      });
+  fetchPost() {
+    this.http.get<PostView>(`api/post/get/${this.query}`).subscribe({
+      next: (result) => {
+        this.post = result;
+        this.isLoaded = true;
+      },
+      error: (error) => {
+        pop_up(this.snackbar, error.error.message, PopUp.ERROR);
+      },
+    });
   }
 
   constructor(
@@ -41,7 +51,18 @@ export class FeedPage {
   ) {
     route.params.subscribe((val) => {
       this.query = val['query'];
-      this.fetchParentId(this.query);
+      this.http
+        .get<{ parentPostId: number }>(`api/post/parent/${this.query}`)
+        .subscribe({
+          next: (result) => {
+            this.parentPostId = result.parentPostId;
+          },
+          error: (error) => {
+            pop_up(this.snackbar, error.error.message, PopUp.ERROR);
+          },
+        });
+      this.isLoaded = false;
+      this.fetchPost();
     });
   }
 
